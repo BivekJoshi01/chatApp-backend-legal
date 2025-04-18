@@ -7,7 +7,6 @@ import AdminPageLayout from "../layout/AdminPageLayout";
 import RegisterPage from "../pages/Auth/Register/RegisterPage";
 import { MenuRoutesConfig } from "./routesConfig";
 import LandingPage from "../pages/Landing/LandingPage";
-import Chat from "../pages/Chat/Chat";
 // ------------------------------------------------------------------------------------------
 
 
@@ -18,7 +17,6 @@ const AppRoutes: React.FC = () => {
       <Routes>
         {/* Root route */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/chat" element={<Chat />} />
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Admin routes */}

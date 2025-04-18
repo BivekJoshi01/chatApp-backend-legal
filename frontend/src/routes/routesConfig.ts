@@ -23,6 +23,8 @@ import StockEntry from "../pages/Setting/StockEntry/StockEntry";
 import AdminDashboard from "../pages/Menu/Home/Dashbaord/AdminDashboard";
 import User from "../pages/Others/User/User";
 
+import Chat from "../pages/Chat/Chat";
+
 export const MenuRoutesConfig = [
   {
     path: "Menu",
@@ -68,6 +70,11 @@ export const MenuRoutesConfig = [
           { path: "Invoice", element: SalesInvoice },
           { path: "Return", element: SalesReturn },
         ],
+      },
+      {
+        path: "Chat",
+        element: Chat,
+        children: [],
       },
     ],
   },

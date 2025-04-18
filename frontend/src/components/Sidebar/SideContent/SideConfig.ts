@@ -13,6 +13,7 @@ import {
   FiBriefcase,
   FiUser,
   FiMapPin,
+  FiMessageCircle,
 } from "react-icons/fi";
 
 export const getRoutesByHeadTab = ({ headTab }: { headTab: string }) => {
@@ -59,6 +60,12 @@ export const getRoutesByHeadTab = ({ headTab }: { headTab: string }) => {
             { Icon: FiClipboard, title: "Invoice" },
             { Icon: FiClipboard, title: "Return" },
           ],
+        },
+        {
+          Icon: FiMessageCircle,
+          title: "Chat",
+          hasSubmenu: false,
+          submenu: [],
         },
       ];
     case "Settings":
