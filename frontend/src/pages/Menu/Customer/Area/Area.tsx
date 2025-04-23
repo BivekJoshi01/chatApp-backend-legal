@@ -16,7 +16,7 @@ const Area: React.FC = () => {
   const [pageSize, setpageSize] = useState(10);
 
 
-  const { data: areaData } = useGetAreaPaginated({
+  const { data: areaData, isLoading } = useGetAreaPaginated({
     pageNumber: pageNumber,
     pageSize: pageSize,
     search: "",
@@ -27,12 +27,12 @@ const Area: React.FC = () => {
       {
         id: nanoid(),
         accessorKey: 'areaShortName',
-        header: 'areaShortName',
+        header: 'Area',
       },
       {
         id: nanoid(),
         accessorKey: 'areaDetail',
-        header: 'areaDetail',
+        header: 'Detail',
       },
     ],
     [],
@@ -57,7 +57,7 @@ const Area: React.FC = () => {
       <CustomTable
         columns={columns}
         data={areaData?.areas}
-        isLoading={false}
+        isLoading={isLoading}
         enableRowNumbers
       />
       <CustomPaginationGetTable

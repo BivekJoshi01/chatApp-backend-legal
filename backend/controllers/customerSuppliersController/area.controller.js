@@ -6,7 +6,7 @@ const addArea = expressAsyncHandler(async (req, res) => {
 
   if (!areaShortName) {
     res.status(400);
-    throw newError("Please Enter area short name".orange);
+    throw newError("Please Enter area short name");
   }
 
   const area = await Area.create({
@@ -17,8 +17,7 @@ const addArea = expressAsyncHandler(async (req, res) => {
   if (area) {
     res.status(201).json({
       _id: area._id,
-      areaDetail: area.areaDetail,
-      areaShortName: area.areaShortName,
+      message: "Area added successfully",
     });
   } else {
     res.status(400);
