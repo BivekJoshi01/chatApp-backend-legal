@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../redux/reducer/navigationSlice";
-import { setUserToken } from "../../utils/cookieHelper";
+import { setLoggedUserId, setUserToken } from "../../utils/cookieHelper";
 
 interface LoginFormData {
   email: string;
@@ -18,12 +18,11 @@ interface RegisterFormData {
 }
 
 interface AuthResponse {
+  _id: string;
+  name: string;
+  email: string;
+  pic: string;
   token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
 }
 
 export const useAuthHook = () => {
@@ -44,7 +43,8 @@ export const useAuthHook = () => {
         throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      setLoggedUserId(response._id);
       navigate("Menu/Home");
       toast.success("Login Successful");
     },

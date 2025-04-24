@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Plan from "../components/Sidebar/SideContent/Plan";
+import { useDispatch } from "react-redux";
+import { getUserId } from "../utils/cookieHelper";
+import { getUserById } from "../api/auth/auth-api";
+import { setUser } from "../redux/reducer/authSlice";
 
 const AdminPageLayout: React.FC = () => {
+    const dispatch = useDispatch();
+
+    let called = false;
+    useEffect(() => {
+      if (called) return;
+      called = true;
+    
+      const fetchUser = async () => {
+        const userId = getUserId();
+        if (userId) {
+          const userData = await getUserById(userId);
+          dispatch(setUser(userData));
+        }
+      };
+      fetchUser();
+    }, []);
+
     return (
         <main className="text-stone-950 bg-stone-100 min-h-screen ">
             <main className="grid gap-4 p-4 grid-cols-[280px_1fr]">

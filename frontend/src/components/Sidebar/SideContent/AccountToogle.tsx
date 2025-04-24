@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BsChevronExpand } from "react-icons/bs";
 import PopoverCustom from './AccountToogle/PopoverCustom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 const AccountToogle: React.FC = () => {
+    const loggedUsersData = useSelector((state: RootState) => state.auth.user);
+
     const [isPopoverVisible, setPopoverVisible] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -36,8 +40,8 @@ const AccountToogle: React.FC = () => {
                         className='size-8 rounded shrink-0 bg-violet-500 shadow'
                     />
                     <div className='text-start'>
-                        <span className='text-sm font-semibold block'>Bivek Prasad Joshi</span>
-                        <span className='text-xs block text-stone-500'>bvkjosi@3@gmail.com</span>
+                        <span className='text-sm font-semibold block'>{loggedUsersData?.name}</span>
+                        <span className='text-xs block text-stone-500'>{loggedUsersData?.email}</span>
                     </div>
                     <BsChevronExpand className='text-xs ml-auto mr-2' />
                 </button>

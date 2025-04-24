@@ -12,6 +12,7 @@ import LandingPage from "../pages/Landing/LandingPage";
 
 
 const AppRoutes: React.FC = () => {
+
   return (
     <HashRouter>
       <Routes>

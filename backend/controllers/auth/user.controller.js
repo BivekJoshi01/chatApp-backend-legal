@@ -66,7 +66,20 @@ const allUsers = expressAsyncHandler(async (req, res) => {
       }
     : {};
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  res.send(users)
+  res.send(users);
 });
 
-module.exports = { registerUser, authUser, allUsers };
+const getUserById = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id).select("-password");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+module.exports = { registerUser, authUser, allUsers, getUserById };
