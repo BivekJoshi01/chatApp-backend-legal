@@ -25,6 +25,7 @@ import User from "../pages/Others/User/User";
 
 import Chat from "../pages/Chat/Chat";
 import Area from "../pages/Menu/Customer/Area/Area";
+import Agent from "../pages/Menu/Customer/Agent/Agent";
 
 export const MenuRoutesConfig = [
   {
@@ -43,7 +44,7 @@ export const MenuRoutesConfig = [
           { path: "Supplier/ Other Party", element: ProductManagement },
           { path: "Customer", element: ProductCompany },
           { path: "Area", element: Area },
-          { path: "Agent", element: UnitOfMeasurement },
+          { path: "Agent", element: Agent },
         ],
       },
       {
