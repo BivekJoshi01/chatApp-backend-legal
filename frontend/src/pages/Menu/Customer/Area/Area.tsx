@@ -53,7 +53,7 @@ const Area: React.FC = () => {
           <AreaForm onClose={() => setOpenModel(false)} />
         </Header>
       </div>
-      <FilterSearch />
+      {/* <FilterSearch /> */}
       <CustomTable
         columns={columns}
         data={areaData?.areas}

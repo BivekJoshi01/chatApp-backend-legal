@@ -1,18 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { addAgent, searchAgent } from "./agent-api";
+import { addCustomer, searchCustomer } from "./customer-api";
 
-export const useAddAgentHook = () => {
-  const queryClient = useQueryClient();
+export const useAddCustomerHook = () => {
+//   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["agent"],
+    mutationKey: ["customer"],
     mutationFn: async ({ formData }: any): Promise<any> => {
-      const response = await addAgent(formData);
+      const response = await addCustomer(formData);
       return response.data;
     },
     onSuccess: () => {
-      toast.success("Agent added successfully");
-      queryClient.invalidateQueries({ queryKey: ["getAgentPaginated"] });
+      toast.success("Customer added successfully");
+    //   queryClient.invalidateQueries({ queryKey: ["getAgentPaginated"] });
     },
     onError: (error: any) => {
       const message =
@@ -25,11 +25,11 @@ export const useAddAgentHook = () => {
 };
 
 
-export const useSearchAgentHook = () => {
+export const useSearchCustomerHook = () => {
   return useMutation({
-    mutationKey: ["agent"],
+    mutationKey: ["customer"],
     mutationFn: async ({ formData }: any): Promise<any> => {
-      const response = await searchAgent(formData);
+      const response = await searchCustomer(formData);
       return response;
     },
     onError: (error: any) => {

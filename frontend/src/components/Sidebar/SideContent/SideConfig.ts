@@ -14,6 +14,7 @@ import {
   FiUser,
   FiMapPin,
   FiMessageCircle,
+  FiDroplet,
 } from "react-icons/fi";
 
 export const getRoutesByHeadTab = ({ headTab }: { headTab: string }) => {
@@ -57,6 +58,8 @@ export const getRoutesByHeadTab = ({ headTab }: { headTab: string }) => {
           title: "Sales",
           hasSubmenu: true,
           submenu: [
+            { Icon: FiClipboard, title: "Sale" },
+            { Icon: FiClipboard, title: "Order" },
             { Icon: FiClipboard, title: "Invoice" },
             { Icon: FiClipboard, title: "Return" },
           ],
@@ -157,6 +160,12 @@ export const getRoutesByHeadTab = ({ headTab }: { headTab: string }) => {
         {
           Icon: FiUser,
           title: "Users",
+          hasSubmenu: false,
+          submenu: [],
+        },
+        {
+          Icon: FiDroplet,
+          title: "Roles",
           hasSubmenu: false,
           submenu: [],
         },

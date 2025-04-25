@@ -2,21 +2,29 @@ const mongoose = require("mongoose");
 
 const customerSchema = mongoose.Schema(
   {
-    customerDetail: { type: String, require: true },
-    street: { type: String, require: true },
-    city: { type: String, require: true },
-    country: { type: String, require: true },
-    vatPan: { type: String, require: true },
+    customerDetail: { type: String, required: true },
 
-    contactPerson: { type: String, require: true },
-    email: { type: String, require: true, unique: true },
-    phoneNumber: { type: String, require: true },
-    area: { type: String, require: true },
-    agent: { type: String, require: true },
-    creditLimit: { type: String, require: true },
-    type: { type: String, require: true },
-    memo: { type: String, require: true },
-    isActive: { type: String, require: true },
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    country: { type: String, required: true },
+
+    vatPan: { type: String, required: true },
+    isRetailer: { type: Boolean, required: true },
+
+    contactPerson: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phoneNumber: { type: String, required: true },
+
+    areaId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Area",
+      required: true,
+    },
+    creditLimit: { type: String, required: true },
+    type: { type: String, required: true },
+    memo: { type: String, required: true },
+    isActive: { type: Boolean, required: true },
+
     customerPic: {
       type: String,
       default:
