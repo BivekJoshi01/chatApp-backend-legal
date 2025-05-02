@@ -6,7 +6,7 @@ const colors = require("colors");
 const userRoutes = require("./routes/user.routes");
 const chatRoutes = require("./routes/chat.routes");
 const coreRoutes = require("./routes/core/core.route");
-
+const inventoryRoutes = require("./routes/inventory/inventory.route");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/core", coreRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
