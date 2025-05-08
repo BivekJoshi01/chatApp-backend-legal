@@ -18,7 +18,7 @@ const inputFields: {
     placeholder?: string;
     label?: string;
     required?: boolean;
-    options?: string[];
+    options?: any;
     error?: FieldError;
     gridClass?: string;
 }[] = [

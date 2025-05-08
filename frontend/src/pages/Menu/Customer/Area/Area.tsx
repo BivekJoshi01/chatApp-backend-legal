@@ -6,8 +6,8 @@ import AreaForm from "./AreaFrom";
 import CustomTable from "../../../../components/CustomTable/CustomTable";
 import Header from "../../../../components/Header/Header";
 import { CustomPaginationGetTable } from "../../../../components/CustomPagination/CustomPaginationGetTable";
-import FilterSearch from "../../../../components/FilterSearch/FilterSearch";
 import { useGetAreaPaginated } from "../../../../api/customerSupplier/area/area-hook";
+import DeleteConfirmationModel from "../../../../components/Model/DeleteConfirmationModel";
 
 
 const Area: React.FC = () => {
@@ -38,7 +38,9 @@ const Area: React.FC = () => {
     [],
   );
 
-
+  const handleDelete = (row: any) => {
+    console.log(row?.original)
+  }
   return (
     <>
       <div>
@@ -54,11 +56,20 @@ const Area: React.FC = () => {
         </Header>
       </div>
       {/* <FilterSearch /> */}
+
+      <DeleteConfirmationModel open={openModel} />
+
       <CustomTable
         columns={columns}
         data={areaData?.areas}
         isLoading={isLoading}
         enableRowNumbers
+        enableColumnActions
+        enableEditing={true}
+        enableRowActions={true}
+        enableEdit={true}
+        enableDelete={true}
+        handleDelete={handleDelete}
       />
       <CustomPaginationGetTable
         totalPages={areaData?.pages}

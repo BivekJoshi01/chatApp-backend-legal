@@ -1,6 +1,11 @@
 import React from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
 
+type DropdownOption = {
+  label: string;
+  value: string | number;
+};
+
 interface RenderInputProps {
   name: string;
   fieldType:
@@ -15,7 +20,7 @@ interface RenderInputProps {
   placeholder?: string;
   label?: string;
   required?: boolean;
-  options?: string[];
+  options?: DropdownOption[];
   register: UseFormRegister<any>;
   error?: FieldError;
 }
@@ -31,7 +36,8 @@ const RenderInput: React.FC<RenderInputProps> = ({
   error,
 }) => {
   const baseClass =
-    "w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500";
+    "w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm";
+
 
   const renderField = () => {
     switch (fieldType) {
@@ -68,11 +74,18 @@ const RenderInput: React.FC<RenderInputProps> = ({
         return (
           <>
             <div>{label}</div>
-            <select {...register(name)} className={baseClass}>
-              <option value="">Select</option>
+            <select
+              {...register(name)}
+              id={name}
+              className={baseClass}
+              defaultValue=""
+            >
+              <option value="" disabled>
+                {placeholder || "Select an option"}
+              </option>
               {options?.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
+                <option key={index} value={option.value || option.label}>
+                  {option.label}
                 </option>
               ))}
             </select>

@@ -1,10 +1,14 @@
-import { MaterialReactTable, type MRT_ColumnDef, type MRT_Row } from "material-react-table";
+import {
+  MaterialReactTable,
+  type MRT_ColumnDef,
+  type MRT_Row,
+} from "material-react-table";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 // import { FC } from "react";
 
 interface CustomTableProps<T extends Record<string, any>> {
   columns: MRT_ColumnDef<T>[];
   data: T[];
-  onRowClick?: (row: MRT_Row<T>) => void;
   isLoading?: boolean;
   // pageSize?: number;
   rowCount?: number;
@@ -24,21 +28,24 @@ interface CustomTableProps<T extends Record<string, any>> {
   enableHiding?: boolean;
   enableFullScreenToggle?: boolean;
   enableGlobalFilter?: boolean;
-  density?: string
+  renderRowActions?: any;
+  density?: string;
+  enableEdit?: boolean;
+  enableDelete?: boolean;
+  handleEdit?: any,
+  handleDelete?: any
   // showColumnFilters?: boolean;
 }
 
 const CustomTable = <T extends Record<string, any>>({
   columns,
   data,
-  onRowClick,
   isLoading,
   // pageSize = 10,
   rowCount,
   filter = false,
   enablePagination = false,
   enableEditing = false,
-  // editingMode,
   enableColumnResizing = true,
   enableColumnActions,
   enableColumnFilters,
@@ -51,10 +58,12 @@ const CustomTable = <T extends Record<string, any>>({
   enableHiding,
   enableFullScreenToggle,
   enableGlobalFilter,
-}: CustomTableProps<T>) => {
-  const handleRowClick = (row: MRT_Row<T>) => {
-    onRowClick?.(row);
-  };
+  enableEdit = false,
+  enableDelete = false,
+  handleEdit,
+  handleDelete
+}:
+  CustomTableProps<T>) => {
 
   return (
     <div className="custom_table">
@@ -70,7 +79,6 @@ const CustomTable = <T extends Record<string, any>>({
         enablePagination={enablePagination}
         // paginationPageSize={pageSize}
         enableEditing={enableEditing}
-        // editingMode={editingMode}
         rowCount={rowCount}
         state={{
           isLoading,
@@ -95,15 +103,36 @@ const CustomTable = <T extends Record<string, any>>({
         enableFullScreenToggle={enableFullScreenToggle}
         enableGlobalFilter={enableGlobalFilter}
         // density={density}
-        renderRowActions={() => <></>}
+        renderRowActions={({ row }) => (
+          <div className="flex gap-2">
+            {enableEdit && (
+              <button
+                onClick={() => handleEdit(row)}
+                className="text-blue-600 hover:text-blue-800"
+                title="Edit"
+              >
+                <FiEdit2 />
+              </button>
+            )}
+
+            {enableDelete && (
+              <button
+                onClick={() => handleDelete(row)}
+                className="text-red-600 hover:text-red-800"
+                title="Delete"
+              >
+                <FiTrash2 />
+              </button>
+            )}
+          </div>
+        )}
         muiTableHeadRowProps={{
           sx: {
             backgroundColor: "#8E51FF",
             height: filter ? "70px" : "40px",
           },
         }}
-        muiTableBodyRowProps={({ row }) => ({
-          onClick: () => handleRowClick(row),
+        muiTableBodyRowProps={() => ({
           sx: {
             cursor: "pointer",
             backgroundColor: "#ffff",

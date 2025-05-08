@@ -18,7 +18,7 @@ const inputFields: {
   placeholder?: string;
   label?: string;
   required?: boolean;
-  options?: string[];
+  options?: any;
   error?: FieldError;
   gridClass?: string;
 }[] = [
@@ -28,53 +28,56 @@ const inputFields: {
       placeholder: "Enter area detail",
       label: "Area Detail",
       required: true,
-      gridClass: "col-span-1 md:col-span-1",
+      gridClass: "col-span-1 md:col-span-4",
     },
     {
       name: "street",
       type: "text",
-      placeholder: "Enter short name",
-      label: "Short Name",
+      placeholder: "Enter street",
+      label: "Street",
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
     {
       name: "city",
       type: "text",
-      placeholder: "Enter short name",
-      label: "Short Name",
+      placeholder: "Enter city",
+      label: "City",
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
     {
       name: "country",
-      type: "text",
-      placeholder: "Enter short name",
-      label: "Short Name",
+      type: "dropdown",
+      placeholder: "Enter country",
+      label: "Country",
+      options: [
+        { label: "Nepal", value: "Nepal" }
+      ],
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
     {
       name: "contactPerson",
       type: "text",
-      placeholder: "Enter short name",
-      label: "Short Name",
+      placeholder: "Enter contact person",
+      label: "Contact Person",
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
     {
       name: "emailAddress",
       type: "text",
-      placeholder: "Enter short name",
-      label: "Short Name",
+      placeholder: "Enter email address",
+      label: "Email",
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
     {
       name: "phoneNumber",
       type: "text",
-      placeholder: "Enter short name",
-      label: "Short Name",
+      placeholder: "Enter phone number",
+      label: "Phone Number",
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
@@ -101,7 +104,7 @@ const AgentForm: React.FC<any> = ({ onClose }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid grid-cols-2 md:grid-cols-3"
+      className="grid grid-cols-2 md:grid-cols-4"
     >
       {inputFields.map((field, index) => (
         <div key={index} className={`w-full ${field.gridClass} py-1`}>
@@ -121,7 +124,7 @@ const AgentForm: React.FC<any> = ({ onClose }) => {
           />
         </div>
       ))}
-      <div className="col-span-2 md:col-span-3 flex justify-between items-center border-t pt-2 border-stone-300">
+      <div className="col-span-2 md:col-span-4 flex justify-between items-center border-t pt-2 border-stone-300">
         <button
           className="flex text-sm items-center gap-2 bg-red-300 transition-colors hover:bg-red-400 px-3 py-1.5 rounded"
           onClick={onClose}

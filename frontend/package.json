@@ -20,6 +20,7 @@
     "axios": "^1.8.4",
     "cmdk": "^1.1.1",
     "jwt-decode": "^4.0.0",
+    "lodash.debounce": "^4.0.8",
     "material-react-table": "^3.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

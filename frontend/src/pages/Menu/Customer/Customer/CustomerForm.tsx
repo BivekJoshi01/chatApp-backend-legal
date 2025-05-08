@@ -18,7 +18,7 @@ const inputFields: {
     placeholder?: string;
     label?: string;
     required?: boolean;
-    options?: string[];
+    options?: any;
     error?: FieldError;
     gridClass?: string;
 }[] = [
@@ -105,7 +105,7 @@ const inputFields: {
             name: "agent",
             type: "text",
             placeholder: "Enter area ID",
-            label: "Area ID",
+            label: "Agent ID",
             required: true,
             gridClass: "col-span-1",
         },
