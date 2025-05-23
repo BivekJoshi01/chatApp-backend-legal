@@ -57,7 +57,7 @@ export const MenuRoutesConfig = [
         children: [
           { path: "Product Management", element: ProductManagement },
           { path: "Product Company", element: ProductCompany },
-          { path: "Product Group", element: Area },
+          { path: "Product Group", element: ProductGroup },
           { path: "Unit of Measurement", element: UnitOfMeasurement },
         ],
       },

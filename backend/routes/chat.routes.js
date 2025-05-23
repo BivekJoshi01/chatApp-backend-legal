@@ -1,5 +1,6 @@
-const express = require("express");
+import express from "express";
 const { protect } = require("../middleware/authMiddleware");
+
 const {
   accessChat,
   fetchChat,

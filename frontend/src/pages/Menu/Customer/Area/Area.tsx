@@ -8,39 +8,47 @@ import Header from "../../../../components/Header/Header";
 import { CustomPaginationGetTable } from "../../../../components/CustomPagination/CustomPaginationGetTable";
 import { useGetAreaPaginated } from "../../../../api/customerSupplier/area/area-hook";
 import DeleteConfirmationModel from "../../../../components/Model/DeleteConfirmationModel";
-
+import FormModel from "../../../../components/Model/FormModel";
 
 const Area: React.FC = () => {
   const [openModel, setOpenModel] = useState(false);
+  const [openDeleteModel, setOpenDeleteModel] = useState(false);
+  const [openEditModel, setOpenEditModel] = useState(false);
+  const [editData, setEditData] = useState<any>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setpageSize] = useState(10);
-
 
   const { data: areaData, isLoading } = useGetAreaPaginated({
     pageNumber: pageNumber,
     pageSize: pageSize,
     search: "",
-  })
+  });
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
         id: nanoid(),
-        accessorKey: 'areaShortName',
-        header: 'Area',
+        accessorKey: "areaShortName",
+        header: "Area",
       },
       {
         id: nanoid(),
-        accessorKey: 'areaDetail',
-        header: 'Detail',
+        accessorKey: "areaDetail",
+        header: "Detail",
       },
     ],
-    [],
+    []
   );
 
   const handleDelete = (row: any) => {
-    console.log(row?.original)
-  }
+    setOpenDeleteModel(true);
+  };
+
+  const handleEdit = (row: any) => {
+    setEditData(row?.original); // Save selected row data
+    setOpenEditModel(true);     // Open edit form
+  };
+
   return (
     <>
       <div>
@@ -55,9 +63,6 @@ const Area: React.FC = () => {
           <AreaForm onClose={() => setOpenModel(false)} />
         </Header>
       </div>
-      {/* <FilterSearch /> */}
-
-      <DeleteConfirmationModel open={openModel} />
 
       <CustomTable
         columns={columns}
@@ -70,13 +75,30 @@ const Area: React.FC = () => {
         enableEdit={true}
         enableDelete={true}
         handleDelete={handleDelete}
+        handleEdit={handleEdit}
       />
+
       <CustomPaginationGetTable
         totalPages={areaData?.pages}
-        currentPage={1}
+        currentPage={pageNumber}
         totalElements={areaData?.totalElements}
         setPageNumber={setPageNumber}
         setpageSize={setpageSize}
+      />
+
+      <FormModel open={openEditModel} width={"20%"} modelTitle={"Edit Area"}>
+        <AreaForm
+          onClose={() => {
+            setOpenEditModel(false);
+            setEditData(null);
+          }}
+          defaultValues={editData}
+        />
+      </FormModel>
+
+      <DeleteConfirmationModel
+        open={openDeleteModel}
+        close={() => setOpenDeleteModel(false)}
       />
     </>
   );

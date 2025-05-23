@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Header from "../../../../components/Header/Header";
-import ProductCompantForm from "./ProductCompantForm";
+import ProductCompantForm from "./ProductCompanyForm";
 import { FiPlus } from "react-icons/fi";
 import CustomTable from "../../../../components/CustomTable/CustomTable";
 import { nanoid } from "@reduxjs/toolkit";

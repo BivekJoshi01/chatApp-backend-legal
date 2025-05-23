@@ -95,7 +95,7 @@ interface ProductCompantFormProps {
     onClose: () => void;
 }
 
-const ProductCompantForm: React.FC<ProductCompantFormProps> = ({ onClose }) => {
+const ProductCompanyForm: React.FC<ProductCompantFormProps> = ({ onClose }) => {
     const {
         register,
         handleSubmit,
@@ -149,4 +149,4 @@ const ProductCompantForm: React.FC<ProductCompantFormProps> = ({ onClose }) => {
     );
 };
 
-export default ProductCompantForm;
+export default ProductCompanyForm;

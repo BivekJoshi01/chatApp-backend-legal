@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { ENVIROMENT, DB } = require("./config");
+import mongoose from "mongoose";
+import { DB, ENVIROMENT } from "./config.js";
 
 let DB_URL = "";
 if (ENVIROMENT === "dev") {
@@ -8,7 +8,7 @@ if (ENVIROMENT === "dev") {
   DB_URL = `${DB.PROTOCOL}://${DB.USER}:${DB.PWD}@${DB.HOST}:${DB.PORT}/${DB.NAME}`;
 }
 
-const connectDB = async () => {
+export const connectDB = async () => {
   try {
     await mongoose.connect(DB_URL, {
       autoCreate: true,
@@ -21,4 +21,3 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
