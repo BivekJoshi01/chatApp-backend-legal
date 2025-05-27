@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import colors from "colors";
 import userRoutes from "./routes/user.routes.js";
 import { connectDB } from "./config/db.js";
+import { createDefaultAdminUser } from "./utils/createDefaultAdminUser.js";
 
 dotenv.config();
 
@@ -38,5 +39,6 @@ app.use("/api/user", userRoutes);
 const PORT = process.env.PORT || 7100;
 app.listen(PORT, async () => {
   await connectDB();
+  await createDefaultAdminUser();
   console.log(`Server Started on PORT ${PORT}`.yellow.bold);
 });

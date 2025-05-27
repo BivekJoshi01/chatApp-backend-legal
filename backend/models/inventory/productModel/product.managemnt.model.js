@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const productManagementSchema = mongoose.Schema(
   {
@@ -16,4 +16,4 @@ const ProductManagement = mongoose.model(
   productManagementSchema
 );
 
-module.exports = ProductManagement;
+export default ProductManagement;

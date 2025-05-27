@@ -39,4 +39,4 @@ router.route("/supplier/create").post(createSupplier);
 router.route("/supplier/getAll").get(getSuppliers);
 router.route("/supplier/search").post(getSupplierPaginatedPost);
 
-module.exports = router;
+export default router;

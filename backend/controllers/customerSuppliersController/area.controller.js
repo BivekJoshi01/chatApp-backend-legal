@@ -62,4 +62,4 @@ const getAreasPaginated = expressAsyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { addArea, getAllAreas, getAreasPaginated };
+export default { addArea, getAllAreas, getAreasPaginated };

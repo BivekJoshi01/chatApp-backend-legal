@@ -43,7 +43,7 @@ const getUnitOfMeasurementPaginatedPost = expressAsyncHandler(async (req, res) =
   });
 });
 
-module.exports = {
+export default {
     createUnitOfMeasurement,
     getUnitOfMeasurements,
     getUnitOfMeasurementPaginatedPost,

@@ -82,4 +82,4 @@ const getUserById = expressAsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser, allUsers, getUserById };
+export default { registerUser, authUser, allUsers, getUserById };

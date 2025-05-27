@@ -43,7 +43,7 @@ const getSupplierPaginatedPost = expressAsyncHandler(async (req, res) => {
   });
 });
 
-module.exports = {
+export default {
   createSupplier,
   getSuppliers,
   getSupplierPaginatedPost,

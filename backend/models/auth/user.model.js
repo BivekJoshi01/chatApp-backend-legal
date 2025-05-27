@@ -7,10 +7,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    // },
     name: {
       type: String,
       required: true,
@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
       default: Date.now,
+    },
+    role: {
+      type: String,
+      enum: ["ADMIN", "INVENTORY", "CUSTOMER", "SUPPORT", "SALES"], 
+      default: "CUSTOMER",
     },
     isVerified: {
       type: Boolean,

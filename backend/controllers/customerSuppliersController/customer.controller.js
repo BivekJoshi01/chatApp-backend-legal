@@ -46,7 +46,7 @@ const getCustomerPaginatedPost = expressAsyncHandler(async (req, res) => {
   });
 });
 
-module.exports = {
+export default {
   createCustomer,
   getCustomers,
   getCustomerPaginatedPost,

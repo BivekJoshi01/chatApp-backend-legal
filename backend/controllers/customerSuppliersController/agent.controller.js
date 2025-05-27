@@ -65,4 +65,4 @@ const getAgentPaginatedPost = expressAsyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { addAgent, getAllAgents, getAgentPaginatedPost };
+export default { addAgent, getAllAgents, getAgentPaginatedPost };

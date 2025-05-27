@@ -161,7 +161,7 @@ const removeFromGroup = expressAsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {
+export default {
   accessChat,
   fetchChat,
   createGroup,

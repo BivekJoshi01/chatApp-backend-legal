@@ -12,4 +12,4 @@ router.route("/unitOfMeasurement/create").post(createUnitOfMeasurement);
 router.route("/unitOfMeasurement/getAll").get(getUnitOfMeasurements);
 router.route("/unitOfMeasurement/search").post(getUnitOfMeasurementPaginatedPost);
 
-module.exports = router;
+export default router;

@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+// models/supplierModel.js
+import mongoose from "mongoose";
 
-const supplierSchema = mongoose.Schema(
+const supplierSchema = new mongoose.Schema(
   {
     supplierDetail: { type: String, required: true },
 
@@ -33,4 +34,4 @@ const supplierSchema = mongoose.Schema(
 
 const Supplier = mongoose.model("Supplier", supplierSchema);
 
-module.exports = Supplier;
+export default Supplier;

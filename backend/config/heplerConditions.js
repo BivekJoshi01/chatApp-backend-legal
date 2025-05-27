@@ -7,4 +7,4 @@ const buildSearchConditions = (fields) => {
   }
   return condition;
 };
-module.exports = { buildSearchConditions };
+export default { buildSearchConditions };

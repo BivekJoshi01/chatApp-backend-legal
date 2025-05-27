@@ -5,9 +5,9 @@ import { generateTokenAndSetCookie } from "../../utils/generateTokenAndSendCooki
 import { sendVerificationEmail } from "../../mailtrap/emails.js";
 
 export const signup = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, name,role } = req.body;
   try {
-    if (!email || !password || !name) {
+    if (!email  || !name) {
       throw new Error("All Fields are required");
     }
     const userAlreadyExists = await User.findOne({ email });
@@ -19,13 +19,14 @@ export const signup = async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = generateVerificationToken();
 
     const user = new User({
       email,
-      password: hashedPassword,
+      // password: hashedPassword,
       name,
+      role,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, //24 hours
     });
@@ -41,7 +42,7 @@ export const signup = async (req, res) => {
       message: "User Created successfully",
       user: {
         ...user._doc,
-        password: undefined,
+        // password: undefined,
       },
     });
   } catch (error) {

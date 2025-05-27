@@ -35,4 +35,4 @@ const addCompany = expressAsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addCompany };
+export default { addCompany };

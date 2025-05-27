@@ -1,14 +1,15 @@
-const mongoose = require("mongoose");
+// models/agentModel.js
+import mongoose from "mongoose";
 
-const agentSchema = mongoose.Schema(
+const agentSchema = new mongoose.Schema(
   {
-    agentDetail: { type: String, require: true },
-    street: { type: String, require: true },
-    city: { type: String, require: true },
-    country: { type: String, require: true },
-    contactPerson: { type: String, require: true },
-    emailAddress: { type: String, require: true },
-    phoneNumber: { type: String, require: true },
+    agentDetail: { type: String, required: true },
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    country: { type: String, required: true },
+    contactPerson: { type: String, required: true },
+    emailAddress: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
   },
   {
     timestamps: true,
@@ -17,4 +18,4 @@ const agentSchema = mongoose.Schema(
 
 const Agent = mongoose.model("Agent", agentSchema);
 
-module.exports = Agent;
+export default Agent;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const unitOfMeasurementSchema = mongoose.Schema(
   {
@@ -16,4 +16,4 @@ const UnitOfMeasurement = mongoose.model(
   unitOfMeasurementSchema
 );
 
-module.exports = UnitOfMeasurement;
+export default UnitOfMeasurement;

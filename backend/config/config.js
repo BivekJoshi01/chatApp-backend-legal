@@ -19,7 +19,7 @@
 //   JWT_SECRET: process.env.JWT_SECRET,
 // };
 
-// module.exports = Config;
+// export default Config;
 
 export const DB = {
   PROTOCOL: "mongodb",
