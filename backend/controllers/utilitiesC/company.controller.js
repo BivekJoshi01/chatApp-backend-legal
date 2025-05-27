@@ -1,19 +1,19 @@
-const expressAsyncHandler = require("express-async-handler");
-const Company = require("../../models/utilities/comapnyModel");
+import expressAsyncHandler from "express-async-handler";
+import Company from "../../models/utilities/companyModel.js";
 
 const addCompany = expressAsyncHandler(async (req, res) => {
   const { companyName, email, pic } = req.body;
 
   if (!companyName || !email) {
     res.status(400);
-    throw newError("Please Enter all the Feilds".orange);
+    throw new Error("Please enter all the fields");
   }
 
-  const userExists = await Company.findOne({ email });
+  const companyExists = await Company.findOne({ email });
 
-  if (userExists) {
+  if (companyExists) {
     res.status(400);
-    throw new Error("User already exists".red);
+    throw new Error("Company already exists");
   }
 
   const company = await Company.create({
@@ -31,7 +31,7 @@ const addCompany = expressAsyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Failed to Create the User");
+    throw new Error("Failed to create the company");
   }
 });
 

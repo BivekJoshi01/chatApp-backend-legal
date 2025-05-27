@@ -1,10 +1,10 @@
 import express from "express";;
 
-const {
+import {
   createUnitOfMeasurement,
   getUnitOfMeasurements,
   getUnitOfMeasurementPaginatedPost,
-} = require("../../controllers/inventoryC/productC/unitOfMeasurement.contoller");
+} from "../../controllers/inventoryC/productC/unitOfMeasurement.contoller.js";
 
 const router = express.Router();
 

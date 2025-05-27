@@ -1,12 +1,12 @@
-const expressAsyncHandler = require("express-async-handler");
-const Area = require("../../models/customerSupplierModel/area.model");
+import expressAsyncHandler from "express-async-handler";
+import Area from "../../models/customerSupplierModel/area.model.js";
 
 const addArea = expressAsyncHandler(async (req, res) => {
   const { areaDetail, areaShortName } = req.body;
 
   if (!areaShortName) {
     res.status(400);
-    throw newError("Please Enter area short name");
+    throw new Error("Please enter area short name");
   }
 
   const area = await Area.create({
@@ -21,7 +21,7 @@ const addArea = expressAsyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Failed to Create area");
+    throw new Error("Failed to create area");
   }
 });
 
@@ -48,8 +48,8 @@ const getAreasPaginated = expressAsyncHandler(async (req, res) => {
       }
     : {};
 
-  const count = await Area.countDocuments({ ...keyword });
-  const areas = await Area.find({ ...keyword })
+  const count = await Area.countDocuments(keyword);
+  const areas = await Area.find(keyword)
     .limit(pageSize)
     .skip(pageSize * (pageNumber - 1))
     .sort({ createdAt: -1 });
@@ -62,4 +62,4 @@ const getAreasPaginated = expressAsyncHandler(async (req, res) => {
   });
 });
 
-export default { addArea, getAllAreas, getAreasPaginated };
+export { addArea, getAllAreas, getAreasPaginated };

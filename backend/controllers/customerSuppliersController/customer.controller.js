@@ -1,32 +1,22 @@
-const expressAsyncHandler = require("express-async-handler");
-const Customer = require("../../models/customerSupplierModel/customer.model");
-const { buildSearchConditions } = require("../../config/heplerConditions");
+import expressAsyncHandler from "express-async-handler";
+import Customer from "../../models/customerSupplierModel/customer.model.js";
+import { buildSearchConditions } from "../../config/heplerConditions.js";
 
-const createCustomer = async (req, res) => {
-  try {
-    const customer = await Customer.create(req.body);
-    res.status(201).json({
-      _id: customer._id,
-      message: "Customer added successfully",
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+export const createCustomer = expressAsyncHandler(async (req, res) => {
+  const customer = await Customer.create(req.body);
+  res.status(201).json({
+    _id: customer._id,
+    message: "Customer added successfully",
+  });
+});
 
-const getCustomers = async (req, res) => {
-  try {
-    const customers = await Customer.find()
-      .populate("area", "name")
-      .populate("area", "agent"); // assuming Area model has a `name` field
-    // assuming Area model has a `name` field
-    res.status(200).json(customers);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+export const getCustomers = expressAsyncHandler(async (req, res) => {
+  // Populate area fields 'name' and 'agent' properly in one call
+  const customers = await Customer.find().populate("area", "name agent");
+  res.status(200).json(customers);
+});
 
-const getCustomerPaginatedPost = expressAsyncHandler(async (req, res) => {
+export const getCustomerPaginatedPost = expressAsyncHandler(async (req, res) => {
   const { pageSize = 10, pageNumber = 1, ...searchFields } = req.body;
 
   const searchCondition = buildSearchConditions(searchFields);
@@ -36,7 +26,8 @@ const getCustomerPaginatedPost = expressAsyncHandler(async (req, res) => {
   const customers = await Customer.find(searchCondition)
     .limit(Number(pageSize))
     .skip(Number(pageSize) * (Number(pageNumber) - 1))
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .populate("area", "name agent");
 
   res.status(200).json({
     customers,
@@ -45,9 +36,3 @@ const getCustomerPaginatedPost = expressAsyncHandler(async (req, res) => {
     totalElements: count,
   });
 });
-
-export default {
-  createCustomer,
-  getCustomers,
-  getCustomerPaginatedPost,
-};

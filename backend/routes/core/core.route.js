@@ -1,42 +1,45 @@
-import express from "express";;
+import express from "express";
 
-const {
+import {
   addAgent,
   getAllAgents,
   getAgentPaginatedPost,
-} = require("../../controllers/customerSuppliersController/agent.controller");
-const {
+} from "../../controllers/customerSuppliersController/agent.controller.js";
+
+import {
   addArea,
   getAllAreas,
   getAreasPaginated,
-} = require("../../controllers/customerSuppliersController/area.controller");
-const {
+} from "../../controllers/customerSuppliersController/area.controller.js";
+
+import {
   createCustomer,
   getCustomers,
   getCustomerPaginatedPost,
-} = require("../../controllers/customerSuppliersController/customer.controller");
-const {
+} from "../../controllers/customerSuppliersController/customer.controller.js";
+
+import {
   createSupplier,
   getSuppliers,
   getSupplierPaginatedPost,
-} = require("../../controllers/customerSuppliersController/supplier.controller");
+} from "../../controllers/customerSuppliersController/supplier.controller.js";
 
 const router = express.Router();
 
-router.route("/agent/create").post(addAgent);
-router.route("/agent/getAll").get(getAllAgents);
-router.route("/agent/search").post(getAgentPaginatedPost);
+router.post("/agent/create", addAgent);
+router.get("/agent/getAll", getAllAgents);
+router.post("/agent/search", getAgentPaginatedPost);
 
-router.route("/area/create").post(addArea);
-router.route("/area/getAll").get(getAllAreas);
-router.route("/area/paginated").get(getAreasPaginated);
+router.post("/area/create", addArea);
+router.get("/area/getAll", getAllAreas);
+router.get("/area/paginated", getAreasPaginated);
 
-router.route("/customer/create").post(createCustomer);
-router.route("/customer/getAll").get(getCustomers);
-router.route("/customer/search").post(getCustomerPaginatedPost);
+router.post("/customer/create", createCustomer);
+router.get("/customer/getAll", getCustomers);
+router.post("/customer/search", getCustomerPaginatedPost);
 
-router.route("/supplier/create").post(createSupplier);
-router.route("/supplier/getAll").get(getSuppliers);
-router.route("/supplier/search").post(getSupplierPaginatedPost);
+router.post("/supplier/create", createSupplier);
+router.get("/supplier/getAll", getSuppliers);
+router.post("/supplier/search", getSupplierPaginatedPost);
 
 export default router;

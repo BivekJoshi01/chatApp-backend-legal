@@ -1,29 +1,21 @@
-const expressAsyncHandler = require("express-async-handler");
-const Supplier = require("../../models/customerSupplierModel/supplier.model");
-const { buildSearchConditions } = require("../../config/heplerConditions");
+import expressAsyncHandler from "express-async-handler";
+import Supplier from "../../models/customerSupplierModel/supplier.model.js";
+import { buildSearchConditions } from "../../config/heplerConditions.js";
 
-const createSupplier = async (req, res) => {
-  try {
-    const supplier = await Supplier.create(req.body);
-    res.status(201).json({
-      _id: supplier._id,
-      message: "Supplier added successfully",
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+export const createSupplier = expressAsyncHandler(async (req, res) => {
+  const supplier = await Supplier.create(req.body);
+  res.status(201).json({
+    _id: supplier._id,
+    message: "Supplier added successfully",
+  });
+});
 
-const getSuppliers = async (req, res) => {
-  try {
-    const suppliers = await Supplier.find()
-    res.status(200).json(suppliers);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+export const getSuppliers = expressAsyncHandler(async (req, res) => {
+  const suppliers = await Supplier.find();
+  res.status(200).json(suppliers);
+});
 
-const getSupplierPaginatedPost = expressAsyncHandler(async (req, res) => {
+export const getSupplierPaginatedPost = expressAsyncHandler(async (req, res) => {
   const { pageSize = 10, pageNumber = 1, ...searchFields } = req.body;
 
   const searchCondition = buildSearchConditions(searchFields);
@@ -42,9 +34,3 @@ const getSupplierPaginatedPost = expressAsyncHandler(async (req, res) => {
     totalElements: count,
   });
 });
-
-export default {
-  createSupplier,
-  getSuppliers,
-  getSupplierPaginatedPost,
-};

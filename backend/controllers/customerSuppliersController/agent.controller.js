@@ -1,8 +1,8 @@
-const expressAsyncHandler = require("express-async-handler");
-const Agent = require("../../models/customerSupplierModel/agent.model");
-const { buildSearchConditions } = require("../../config/heplerConditions");
+import expressAsyncHandler from "express-async-handler";
+import Agent from "../../models/customerSupplierModel/agent.model.js";
+import { buildSearchConditions } from "../../config/heplerConditions.js";
 
-const addAgent = expressAsyncHandler(async (req, res) => {
+export const addAgent = expressAsyncHandler(async (req, res) => {
   const {
     agentDetail,
     street,
@@ -12,6 +12,19 @@ const addAgent = expressAsyncHandler(async (req, res) => {
     emailAddress,
     phoneNumber,
   } = req.body;
+
+  if (
+    !agentDetail ||
+    !street ||
+    !city ||
+    !country ||
+    !contactPerson ||
+    !emailAddress ||
+    !phoneNumber
+  ) {
+    res.status(400);
+    throw new Error("All fields are required");
+  }
 
   const agent = await Agent.create({
     agentDetail,
@@ -30,22 +43,22 @@ const addAgent = expressAsyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Failed to Create agent");
+    throw new Error("Failed to create agent");
   }
 });
 
-const getAllAgents = expressAsyncHandler(async (req, res) => {
-  const agent = await Agent.find({});
+export const getAllAgents = expressAsyncHandler(async (req, res) => {
+  const agents = await Agent.find({});
 
-  if (agent && agent.length > 0) {
-    res.status(200).json(agent);
+  if (agents && agents.length > 0) {
+    res.status(200).json(agents);
   } else {
     res.status(404);
-    throw new Error("No agent found");
+    throw new Error("No agents found");
   }
 });
 
-const getAgentPaginatedPost = expressAsyncHandler(async (req, res) => {
+export const getAgentPaginatedPost = expressAsyncHandler(async (req, res) => {
   const { pageSize = 10, pageNumber = 1, ...searchFields } = req.body;
 
   const searchCondition = buildSearchConditions(searchFields);
@@ -64,5 +77,3 @@ const getAgentPaginatedPost = expressAsyncHandler(async (req, res) => {
     totalElements: count,
   });
 });
-
-export default { addAgent, getAllAgents, getAgentPaginatedPost };

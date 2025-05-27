@@ -1,4 +1,4 @@
-const buildSearchConditions = (fields) => {
+export const buildSearchConditions = (fields) => {
   const condition = {};
   for (const [key, value] of Object.entries(fields)) {
     if (value && typeof value === "string" && value.trim() !== "") {
@@ -7,4 +7,3 @@ const buildSearchConditions = (fields) => {
   }
   return condition;
 };
-export default { buildSearchConditions };
