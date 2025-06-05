@@ -186,7 +186,7 @@ export const forgotPassword = async (req, res) => {
 
     await sendPasswordResetEmail(
       user.email,
-      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+      `${process.env.CLIENT_URL}/#/reset-password/${resetToken}`
     );
 
     res.status(200).json({
@@ -243,19 +243,18 @@ export const resetPassword = async (req, res) => {
 };
 
 export const allUsers = expressAsyncHandler(async (req, res) => {
-  const keyword = req.query.search
-    ? {
-        $or: [
-          { name: { $regex: req.query.search, $options: "i" } },
-          { email: { $regex: req.query.search, $options: "i" } },
-        ],
-      }
-    : {};
-  if (!req.user || !req.user._id) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
+  try {
+    const users = await User.find().select("-password");
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  // const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  res.send(users);
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    console.error("🚀 ~ allUsers ~ error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
 });

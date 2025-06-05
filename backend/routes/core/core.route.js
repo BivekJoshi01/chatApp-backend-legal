@@ -23,20 +23,25 @@ import {
   getSuppliers,
   getSupplierPaginatedPost,
 } from "../../controllers/customerSuppliersController/supplier.controller.js";
+import { verifyTokenMiddleware } from "../../middleware/verifyTokenMiddleware.js";
 
 const router = express.Router();
 
-router.post("/agent/create", addAgent);
-router.get("/agent/getAll", getAllAgents);
-router.post("/agent/search", getAgentPaginatedPost);
+router.post("/agent/create", verifyTokenMiddleware, addAgent);
+router.get("/agent/getAll", verifyTokenMiddleware, getAllAgents);
+router.post("/agent/search", verifyTokenMiddleware, getAgentPaginatedPost);
 
-router.post("/area/create", addArea);
-router.get("/area/getAll", getAllAreas);
-router.get("/area/paginated", getAreasPaginated);
+router.post("/area/create", verifyTokenMiddleware, addArea);
+router.get("/area/getAll", verifyTokenMiddleware, getAllAreas);
+router.get("/area/paginated", verifyTokenMiddleware, getAreasPaginated);
 
-router.post("/customer/create", createCustomer);
-router.get("/customer/getAll", getCustomers);
-router.post("/customer/search", getCustomerPaginatedPost);
+router.post("/customer/create", verifyTokenMiddleware, createCustomer);
+router.get("/customer/getAll", verifyTokenMiddleware, getCustomers);
+router.post(
+  "/customer/search",
+  verifyTokenMiddleware,
+  getCustomerPaginatedPost
+);
 
 router.post("/supplier/create", createSupplier);
 router.get("/supplier/getAll", getSuppliers);

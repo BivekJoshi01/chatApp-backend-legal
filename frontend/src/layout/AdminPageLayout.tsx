@@ -3,27 +3,19 @@ import { Outlet } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Plan from "../components/Sidebar/SideContent/Plan";
 import { useDispatch } from "react-redux";
-import { getUserId } from "../utils/cookieHelper";
-import { getUserById } from "../api/auth/auth-api";
 import { setUser } from "../redux/reducer/authSlice";
+import { useGetLoggedUserData } from "../api/auth/auth-hook";
 
 const AdminPageLayout: React.FC = () => {
     const dispatch = useDispatch();
 
-    let called = false;
+    const { data: loggedUserData } = useGetLoggedUserData();
+
     useEffect(() => {
-      if (called) return;
-      called = true;
-    
-      const fetchUser = async () => {
-        const userId = getUserId();
-        if (userId) {
-          const userData = await getUserById(userId);
-          dispatch(setUser(userData));
+        if (loggedUserData) {
+            dispatch(setUser(loggedUserData?.user));
         }
-      };
-      fetchUser();
-    }, []);
+    }, [loggedUserData, dispatch]);
 
     return (
         <main className="text-stone-950 bg-stone-100 min-h-screen ">

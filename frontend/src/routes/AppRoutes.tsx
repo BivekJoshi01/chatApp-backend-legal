@@ -7,6 +7,7 @@ import AdminPageLayout from "../layout/AdminPageLayout";
 import RegisterPage from "../pages/Auth/Register/RegisterPage";
 import { MenuRoutesConfig } from "./routesConfig";
 import LandingPage from "../pages/Landing/LandingPage";
+import SignUpVerification from "../pages/Auth/Register/SignUpVerification";
 // ------------------------------------------------------------------------------------------
 
 
@@ -18,7 +19,8 @@ const AppRoutes: React.FC = () => {
       <Routes>
         {/* Root route */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email" element={<SignUpVerification />} />
+        <Route path="/reset-password/:id" element={<SignUpVerification />} />
 
         {/* Admin routes */}
         <Route element={<AdminPageLayout />}>

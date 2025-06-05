@@ -17,28 +17,28 @@ const UsersList: React.FC = () => {
                         {groupClick && (
                             <div className="absolute bg-white p-3 z-50 rounded w-100 h-100 shadow-sm">
                                 <div className="flex flex-col gap-1">
-                                {/* {userData?.map((data: any) => {
-                                    const isSelected = selectedUserId === data?._id;
+                                    {userData?.users?.map((data: any) => {
+                                        const isSelected = selectedUserId === data?._id;
 
-                                    return (
-                                        <div
-                                            key={data?._id}
-                                            onClick={() => setSelectedUserId(data?._id)}
-                                            className={`flex gap-1.5 items-center p-1.5 rounded cursor-pointer transition-colors ${isSelected
-                                                ? "bg-violet-500 text-white"
-                                                : "bg-violet-100 hover:bg-violet-300"
-                                                }`}
-                                        >
-                                            <img
-                                                className="w-10 h-10 rounded-full"
-                                                src={data?.pic}
-                                                alt="Rounded avatar"
-                                            />
-                                            <div>{data?.name} </div>
-                                        </div>
-                                    );
-                                })} */}
-                                <GroupChatPop/>
+                                        return (
+                                            <div
+                                                key={data?._id}
+                                                onClick={() => setSelectedUserId(data?._id)}
+                                                className={`flex gap-1.5 items-center p-1.5 rounded cursor-pointer transition-colors ${isSelected
+                                                    ? "bg-violet-500 text-white"
+                                                    : "bg-violet-100 hover:bg-violet-300"
+                                                    }`}
+                                            >
+                                                <img
+                                                    className="w-10 h-10 rounded-full"
+                                                    src={data?.pic}
+                                                    alt="Rounded avatar"
+                                                />
+                                                <div>{data?.name} </div>
+                                            </div>
+                                        );
+                                    })}
+                                    <GroupChatPop />
                                 </div>
                             </div>
                         )}
@@ -59,7 +59,7 @@ const UsersList: React.FC = () => {
                 </div>
 
                 <div className="flex gap-1 flex-col">
-                    {userData?.map((data: any) => {
+                    {userData?.users?.map((data: any) => {
                         const isSelected = selectedUserId === data?._id;
 
                         return (

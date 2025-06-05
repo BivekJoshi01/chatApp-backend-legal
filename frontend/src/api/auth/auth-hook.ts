@@ -3,7 +3,9 @@ import {
   authenticate,
   getAllUsers,
   getLoggedUserData,
+  logout,
   register,
+  verifyEmail,
 } from "./auth-api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
@@ -22,13 +24,17 @@ interface RegisterFormData {
   password: string;
 }
 
+interface VerifyEmailData {
+  code: string;
+}
+
 interface AuthResponse {
   user: {
     _id: string;
     name: string;
     email: string;
     pic: string;
-  }
+  };
 }
 
 export const useAuthHook = () => {
@@ -63,6 +69,7 @@ export const useAuthHook = () => {
 
 export const useRegisterHook = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationKey: ["register"],
@@ -81,10 +88,66 @@ export const useRegisterHook = () => {
     onSuccess: () => {
       dispatch(setCurrentPage("Login"));
       toast.success("Sign Up user Successful");
+      navigate("/verify-email");
     },
     onError: (error: any) => {
       const message =
         error?.response?.data?.message || error.message || "Sign up Failed";
+      toast.error(message);
+    },
+  });
+};
+
+export const useVerifyEmailHook = () => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationKey: ["verifyEmail"],
+    mutationFn: async ({
+      formData,
+    }: {
+      formData: VerifyEmailData;
+    }): Promise<AuthResponse> => {
+      try {
+        const response = await verifyEmail(formData);
+        return response.data;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      toast.success("Email Verified Successful");
+      navigate("/Menu/Home");
+    },
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Email Verified Failed";
+      toast.error(message);
+    },
+  });
+};
+
+export const useLogoutHook = () => {
+  const navigate = useNavigate();
+  return useMutation({
+    mutationKey: ["logout"],
+    mutationFn: async () => {
+      try {
+        const response = await logout();
+        return response;
+      } catch (error: any) {
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      toast.success("Logged out successfully");
+      navigate("/");
+    },
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message || error.message || "Logout error";
       toast.error(message);
     },
   });

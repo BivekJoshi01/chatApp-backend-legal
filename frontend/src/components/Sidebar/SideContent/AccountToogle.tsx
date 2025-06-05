@@ -3,13 +3,9 @@ import { BsChevronExpand } from "react-icons/bs";
 import PopoverCustom from './AccountToogle/PopoverCustom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { useGetLoggedUserData } from '../../../api/auth/auth-hook';
 
 const AccountToogle: React.FC = () => {
     const loggedUsersData = useSelector((state: RootState) => state.auth.user);
-    const {data:loggedUser}=useGetLoggedUserData();
-    // console.log("🚀 ~ loggedUser:", loggedUser)
-
 
     const [isPopoverVisible, setPopoverVisible] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
