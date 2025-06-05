@@ -10,7 +10,7 @@ const Chat: React.FC = () => {
         <></>
       </Header>
 
-      <div className="bg-stone-100 m-2.5 h-193 flex">
+      <div className="bg-stone-100 m-2.5 flex" style={{ height: "calc(100vh - 13vh)" }}>
         <div className="border-r border-gray-300 w-1/5">
           <UsersList />
         </div>

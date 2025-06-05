@@ -16,6 +16,11 @@ export const register = async (formData: object) => {
   return data;
 };
 
+export const getLoggedUserData = async () => {
+  const { data } = await axiosInstance.get("api/user/check-auth");
+  return data;
+};
+
 export const getAllUsers = async () => {
   const { data } = await axiosInstance.get("api/user/getAll?search=");
   return data;

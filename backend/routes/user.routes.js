@@ -1,5 +1,16 @@
 import express from "express";
-import { login, logout, signup, verifyEmail } from "../controllers/auth/auth.controller.js";
+import {
+  checkAuth,
+  login,
+  logout,
+  signup,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+  allUsers,
+} from "../controllers/auth/auth.controller.js";
+import { protect } from "../middleware/authMiddleware.js";
+import { verifyTokenMiddleware } from "../middleware/verifyTokenMiddleware.js";
 // const {
 //   registerUser,
 //   authUser,
@@ -7,21 +18,18 @@ import { login, logout, signup, verifyEmail } from "../controllers/auth/auth.con
 //   getUserById,
 // } = require("../controllers/auth/user.controller");
 // const { protect } = require("../middleware/authMiddleware");
-// const { addCompany } = require("../controllers/utilitiesC/company.controller");
 
 const router = express.Router();
 
+router.get("/check-auth", verifyTokenMiddleware, checkAuth);
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/verify-email", verifyEmail);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
-
-// router.route("/register").post(registerUser);
-// router.post("/login", authUser);
-// router.route("/getAll").get(protect, allUsers);
+router.route("/getAll").get(allUsers);
 // router.route("/:id").get(protect, getUserById);
-
-// router.route("/company").post(addCompany);
 
 export default router;

@@ -1,10 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { authenticate, getAllUsers, register } from "./auth-api";
+import {
+  authenticate,
+  getAllUsers,
+  getLoggedUserData,
+  register,
+} from "./auth-api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../redux/reducer/navigationSlice";
-import { setLoggedUserId, setUserToken } from "../../utils/cookieHelper";
+import { setLoggedUserId } from "../../utils/cookieHelper";
 
 interface LoginFormData {
   email: string;
@@ -18,11 +23,12 @@ interface RegisterFormData {
 }
 
 interface AuthResponse {
-  _id: string;
-  name: string;
-  email: string;
-  pic: string;
-  token: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    pic: string;
+  }
 }
 
 export const useAuthHook = () => {
@@ -37,14 +43,13 @@ export const useAuthHook = () => {
     }): Promise<AuthResponse> => {
       try {
         const response = await authenticate(formData);
-        setUserToken(response?.token);
         return response;
       } catch (error: any) {
         throw error;
       }
     },
     onSuccess: (response) => {
-      setLoggedUserId(response._id);
+      setLoggedUserId(response?.user?._id);
       navigate("Menu/Home");
       toast.success("Login Successful");
     },
@@ -68,7 +73,6 @@ export const useRegisterHook = () => {
     }): Promise<AuthResponse> => {
       try {
         const response = await register(formData);
-
         return response.data;
       } catch (error: any) {
         throw error;
@@ -86,12 +90,21 @@ export const useRegisterHook = () => {
   });
 };
 
+export const useGetLoggedUserData = () => {
+  return useQuery({
+    queryKey: ["getLoggedUserData"],
+    queryFn: getLoggedUserData,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+};
+
 export const useGetAllUser = () => {
   return useQuery({
     queryKey: ["getAllUsers"],
-    queryFn: () => getAllUsers(),
+    queryFn: getAllUsers,
     refetchOnWindowFocus: false,
-    refetchInterval: undefined,
     refetchOnMount: false,
     refetchOnReconnect: false,
   });

@@ -1,7 +1,7 @@
 import React from "react";
 import { FiArrowDownRight, FiKey, FiUser } from "react-icons/fi";
 import { useNavigate } from "react-router";
-import { removeUser } from "../../../../utils/cookieHelper";
+// import { removeUser } from "../../../../utils/cookieHelper";
 
 interface PopoverCustomProps {
   isPopoverVisible: boolean;
@@ -14,7 +14,7 @@ const PopoverCustom: React.FC<PopoverCustomProps> = ({ isPopoverVisible }) => {
   const handleChangePassword = () => {};
   const handleLogout = () => {
     navigate("/");
-    removeUser();
+    // removeUser();
   };
   return (
     <div className="absolute top-12 right-1 z-[100]">

@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import colors from "colors";
 import userRoutes from "./routes/user.routes.js";
 import coreRoutes from "./routes/core/core.route.js";
+import chatRoutes from "./routes/chat.routes.js";
 import inventoryRoutes from "./routes/inventory/inventory.route.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -13,16 +15,13 @@ import { createDefaultAdminUser } from "./utils/createDefaultAdminUser.js";
 
 dotenv.config();
 
-// const chatRoutes = require("./routes/chat.routes");
-// const inventoryRoutes = require("./routes/inventory/inventory.route");
-
-
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.CLIENT_URL || "http://localhost:5100",
     credentials: true,
   })
 );
@@ -32,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoutes);
-// app.use("/api/chat", chatRoutes);
+app.use("/api/chat", chatRoutes);
 app.use("/api/core", coreRoutes);
 app.use("/api/inventory", inventoryRoutes);
 
