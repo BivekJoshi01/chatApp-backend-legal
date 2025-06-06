@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuthHook } from "../../../api/auth/auth-hook";
+import LoadingButton from "../../../components/Button/LoadingButton";
 
 type FormData = {
   email: string;
@@ -16,7 +17,7 @@ const LoginPage: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const { mutate } = useAuthHook();
+  const { mutate, isPending } = useAuthHook();
 
   const onSubmit = (data: FormData) => {
     console.log("Form Data:", data);
@@ -54,7 +55,7 @@ const LoginPage: React.FC = () => {
             className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm
           bg-white/20 placeholder-gray-300
           border ${errors.email ? "border-red-500" : "border-white/40"}
-          text-black
+          text-white
           focus:outline-none focus:ring-2 focus:ring-blue-400
           transition-colors`}
             placeholder="Enter your email"
@@ -77,7 +78,7 @@ const LoginPage: React.FC = () => {
             className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm
           bg-white/20 placeholder-gray-300
           border ${errors.password ? "border-red-500" : "border-white/40"}
-          text-black
+          text-white
           focus:outline-none focus:ring-2 focus:ring-blue-400
           transition-colors`}
             placeholder="Enter your password"
@@ -98,13 +99,8 @@ const LoginPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 transition duration-200 text-white font-semibold py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          Login
-        </button>
+        <LoadingButton isPending={isPending} btnName="Login" btnLog="Logging in..." />
+
       </form>
       <div className="text-center mt-5">
         <button

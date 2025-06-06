@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useRegisterHook } from "../../../api/auth/auth-hook";
 import { FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import LoadingButton from "../../../components/Button/LoadingButton";
 
 type FormData = {
   name: string;
@@ -46,7 +47,7 @@ const schema = yup.object().shape({
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  const { mutate } = useRegisterHook();
+  const { mutate, isPending } = useRegisterHook();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -85,9 +86,8 @@ const RegisterPage: React.FC = () => {
           <input
             id="name"
             {...register("name")}
-            className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm bg-white/20 placeholder-gray-300 border ${
-              errors.name ? "border-red-500" : "border-white/40"
-            } text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
+            className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm bg-white/20 placeholder-gray-300 border ${errors.name ? "border-red-500" : "border-white/40"
+              } text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
             placeholder="Enter your name"
           />
           {errors.name && (
@@ -103,9 +103,8 @@ const RegisterPage: React.FC = () => {
           <input
             id="email"
             {...register("email")}
-            className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm bg-white/20 placeholder-gray-300 border ${
-              errors.email ? "border-red-500" : "border-white/40"
-            } text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
+            className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm bg-white/20 placeholder-gray-300 border ${errors.email ? "border-red-500" : "border-white/40"
+              } text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
             placeholder="Enter your email"
           />
           {errors.email && (
@@ -126,9 +125,8 @@ const RegisterPage: React.FC = () => {
               {...register("password")}
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
-              className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm pr-10 bg-white/20 placeholder-gray-300 border ${
-                errors.password ? "border-red-500" : "border-white/40"
-              } text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
+              className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm pr-10 bg-white/20 placeholder-gray-300 border ${errors.password ? "border-red-500" : "border-white/40"
+                } text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
               placeholder="Password"
             />
             <span
@@ -179,9 +177,8 @@ const RegisterPage: React.FC = () => {
               id="confirmPassword"
               autoComplete="new-password"
               {...register("confirmPassword")}
-              className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm pr-10 bg-white/20 placeholder-gray-300 border ${
-                errors.confirmPassword ? "border-red-500" : "border-white/40"
-              } text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
+              className={`w-full mt-2 px-4 py-2 rounded-lg shadow-sm pr-10 bg-white/20 placeholder-gray-300 border ${errors.confirmPassword ? "border-red-500" : "border-white/40"
+                } text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors`}
               placeholder="Confirm"
             />
             <span
@@ -207,13 +204,7 @@ const RegisterPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 transition duration-200 text-white font-semibold py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          Sign Up
-        </button>
+        <LoadingButton isPending={isPending} btnName="Sign Up" btnLog="Signing up..." />
       </form>
     </div>
   );

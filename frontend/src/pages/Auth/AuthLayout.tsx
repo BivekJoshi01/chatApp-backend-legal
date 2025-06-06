@@ -121,21 +121,21 @@ const AuthLayout = () => {
               />
               <Outlet />
               <style>{`
-    @keyframes shineAnimation {
-      0% {
-        transform: rotate(25deg) translateX(-100%);
-        opacity: 0.3;
-      }
-      50% {
-        transform: rotate(25deg) translateX(100%);
-        opacity: 0.6;
-      }
-      100% {
-        transform: rotate(25deg) translateX(-100%);
-        opacity: 0.3;
-      }
-    }
-  `}</style>
+                    @keyframes shineAnimation {
+                      0% {
+                        transform: rotate(25deg) translateX(-100%);
+                        opacity: 0.3;
+                      }
+                      50% {
+                        transform: rotate(25deg) translateX(100%);
+                        opacity: 0.6;
+                      }
+                      100% {
+                        transform: rotate(25deg) translateX(-100%);
+                        opacity: 0.3;
+                      }
+                    }
+              `}</style>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useForgotPasswordHook } from '../../../api/auth/auth-hook';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import LoadingButton from '../../../components/Button/LoadingButton';
 
 const ForgotPassword: React.FC = () => {
   const navigate=useNavigate();
@@ -11,7 +12,7 @@ const ForgotPassword: React.FC = () => {
     formState: { errors },
   } = useForm<any>();
 
-  const { mutate } = useForgotPasswordHook();
+  const { mutate,isPending } = useForgotPasswordHook();
 
   const onSubmit = (data: any) => {
     console.log("Form Data:", data);
@@ -35,7 +36,7 @@ const ForgotPassword: React.FC = () => {
             autoComplete="off"
             {...register("email", { required: "Please enter Email" })}
             className={`w-full mt-2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none
-              ${errors.email ? "border-red-500" : "border-white/40"} bg-white/20 text-black placeholder-gray-400`}
+              ${errors.email ? "border-red-500" : "border-white/40"} bg-white/20 text-white placeholder-gray-400`}
             placeholder="Enter your email"
           />
           {/* {errors.email && (
@@ -43,12 +44,7 @@ const ForgotPassword: React.FC = () => {
           )} */}
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 transition duration-200 text-white font-semibold py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          Send
-        </button>
+        <LoadingButton isPending={isPending}/>
       </form>
       <div className="text-center mt-5">
         <button

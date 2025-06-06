@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import { useVerifyEmailHook } from "../../../api/auth/auth-hook";
+import LoadingButton from "../../../components/Button/LoadingButton";
 
 const SignUpVerification = () => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
-  const { mutate } = useVerifyEmailHook();
+  const { mutate, isPending } = useVerifyEmailHook();
 
   const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -47,7 +48,7 @@ const SignUpVerification = () => {
               type="text"
               inputMode="numeric"
               maxLength={1}
-              className="w-12 h-12 text-center text-lg font-medium rounded-md border border-white/40 bg-white/20 placeholder-gray-300 text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="w-12 h-12 text-center text-lg font-medium rounded-md border border-white/40 bg-white/20 placeholder-gray-300 text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               ref={(el) => {
                 inputsRef.current[i] = el!;
               }}
@@ -57,13 +58,8 @@ const SignUpVerification = () => {
           ))}
       </div>
 
-      <button
-        type="button"
-        onClick={handleSubmit}
-        className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md transition focus:outline-none focus:ring-2 focus:ring-blue-400"
-      >
-        Verify
-      </button>
+      <LoadingButton isPending={isPending} btnName="Verify" btnLog="Verifying..." onClick={handleSubmit} />
+
     </div>
   );
 };

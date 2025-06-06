@@ -3,6 +3,7 @@ import { useResetPasswordHook } from "../../../api/auth/auth-hook";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import LoadingButton from "../../../components/Button/LoadingButton";
 
 type FormData = {
   password: string;
@@ -24,7 +25,7 @@ const ResetPassword: React.FC = () => {
     mode: "onBlur",
   });
 
-  const { mutate } = useResetPasswordHook();
+  const { mutate, isPending } = useResetPasswordHook();
 
   const onSubmit = (data: FormData) => {
     mutate({
@@ -38,7 +39,7 @@ const ResetPassword: React.FC = () => {
   const passwordValue = watch("password", "");
 
   return (
-   <div style={{ width: "100%" }}>
+    <div style={{ width: "100%" }}>
       <h2 className="text-xl font-semibold text-center mb-8 text-white/90">
         Change Password
       </h2>
@@ -57,9 +58,8 @@ const ResetPassword: React.FC = () => {
             id="password"
             autoComplete="new-password"
             {...register("password", { required: "Please enter password" })}
-            className={`w-full mt-2 px-4 py-2 border rounded-lg shadow-sm pr-10 focus:ring-2 focus:ring-blue-400 focus:outline-none ${
-              errors.password ? "border-red-500" : "border-white/40"
-            } bg-white/20 text-black placeholder-gray-400`}
+            className={`w-full mt-2 px-4 py-2 border rounded-lg shadow-sm pr-10 focus:ring-2 focus:ring-blue-400 focus:outline-none ${errors.password ? "border-red-500" : "border-white/40"
+              } bg-white/20 text-white placeholder-gray-400`}
             placeholder="Enter your password"
           />
           <span
@@ -92,9 +92,8 @@ const ResetPassword: React.FC = () => {
               validate: (value) =>
                 value === passwordValue || "Passwords do not match",
             })}
-            className={`w-full mt-2 px-4 py-2 border rounded-lg shadow-sm pr-10 focus:ring-2 focus:ring-blue-400 focus:outline-none ${
-              errors.confirmPassword ? "border-red-500" : "border-white/40"
-            } bg-white/20 text-black placeholder-gray-400`}
+            className={`w-full mt-2 px-4 py-2 border rounded-lg shadow-sm pr-10 focus:ring-2 focus:ring-blue-400 focus:outline-none ${errors.confirmPassword ? "border-red-500" : "border-white/40"
+              } bg-white/20 text-white placeholder-gray-400`}
             placeholder="Confirm your password"
           />
           <span
@@ -109,13 +108,7 @@ const ResetPassword: React.FC = () => {
             </p>
           )}
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 transition duration-200 text-white font-semibold py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          Change Password
-        </button>
+        <LoadingButton isPending={isPending} btnName="Change Password" btnLog="Changing Password..." />
       </form>
     </div>
   );

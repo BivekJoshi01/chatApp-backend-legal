@@ -36,6 +36,7 @@ interface AuthResponse {
     name: string;
     email: string;
     pic: string;
+    role: string;
   };
 }
 
@@ -58,7 +59,11 @@ export const useAuthHook = () => {
     },
     onSuccess: (response) => {
       setLoggedUserId(response?.user?._id);
-      navigate("Menu/Home");
+      if (response?.user?.role === "CUSTOMER") {
+        navigate("/User/Home");
+      } else {
+        navigate("/Menu/Home");
+      }
       toast.success("Login Successful");
     },
     onError: (error: any) => {
@@ -112,14 +117,21 @@ export const useVerifyEmailHook = () => {
     }): Promise<AuthResponse> => {
       try {
         const response = await verifyEmail(formData);
-        return response.data;
+        return response;
       } catch (error: any) {
         throw error;
       }
     },
-    onSuccess: () => {
-      toast.success("Email Verified Successful");
-      navigate("/Menu/Home");
+    onSuccess: (response) => {
+        console.log("🚀 ~ useVerifyEmailHook ~ response:", response)
+
+      setLoggedUserId(response?.user?._id);
+      if (response?.user?.role === "CUSTOMER") {
+        navigate("/User/Home");
+      } else {
+        navigate("/Menu/Home");
+      }
+      toast.success("Login Successful");
     },
     onError: (error: any) => {
       const message =
@@ -145,9 +157,8 @@ export const useForgotPasswordHook = () => {
       }
     },
     onSuccess: (response) => {
-      // setLoggedUserId(response?.user?._id);
-      // navigate("Menu/Home");
-      // toast.success("Login Successful");
+      navigate("/");
+      toast.success(response.message || "Success");
     },
     onError: (error: any) => {
       const message =
@@ -171,13 +182,14 @@ export const useResetPasswordHook = () => {
       }
     },
     onSuccess: (response) => {
-      // setLoggedUserId(response?.user?._id);
-      // navigate("Menu/Home");
-      // toast.success("Login Successful");
+      navigate("/auth/login");
+      toast.success(response.message || "Success");
     },
     onError: (error: any) => {
       const message =
-        error?.response?.data?.message || error.message || "Reset Password Failed";
+        error?.response?.data?.message ||
+        error.message ||
+        "Reset Password Failed";
       toast.error(message);
     },
   });
