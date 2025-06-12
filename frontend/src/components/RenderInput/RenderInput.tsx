@@ -1,5 +1,7 @@
 import React from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 type DropdownOption = {
   label: string;
@@ -9,14 +11,14 @@ type DropdownOption = {
 interface RenderInputProps {
   name: string;
   fieldType:
-  | "text"
-  | "number"
-  | "textarea"
-  | "email"
-  | "dropdown"
-  | "password"
-  | "date"
-  | "checkbox";
+    | "text"
+    | "number"
+    | "textarea"
+    | "email"
+    | "dropdown"
+    | "password"
+    | "date"
+    | "checkbox";
   placeholder?: string;
   label?: string;
   required?: boolean;
@@ -38,7 +40,6 @@ const RenderInput: React.FC<RenderInputProps> = ({
   const baseClass =
     "w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm";
 
-
   const renderField = () => {
     switch (fieldType) {
       case "text":
@@ -48,13 +49,15 @@ const RenderInput: React.FC<RenderInputProps> = ({
       case "date":
         return (
           <>
-            <div>{label}{" "}{required && <span className="text-red-500 text-sm">*</span>}</div>
-            <input
-              type={fieldType}
-              {...register(name)}
-              placeholder={placeholder}
-              className={baseClass}
-            />
+            <div className="grid w-full max-w-sm items-center gap-3">
+              <Label htmlFor="email">{label}</Label>
+              <Input
+                type={fieldType}
+                id="email"
+                placeholder={placeholder}
+                {...register(name)}
+              />
+            </div>
           </>
         );
 
@@ -90,7 +93,6 @@ const RenderInput: React.FC<RenderInputProps> = ({
               ))}
             </select>
           </>
-
         );
 
       case "checkbox":

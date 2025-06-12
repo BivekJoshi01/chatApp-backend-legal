@@ -1,42 +1,37 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
-// import CompanyLogo from "../assets/company-logo.png";
+import CompanyLogo from "../../../assets/Office/UniversalLogo.jpeg";
 import { useNavigate } from "react-router";
 
 const Unauthorized401Page: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Box
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      bgcolor="#f8f9fa"
-      textAlign="center"
-      px={2}
-    >
-      <Box mb={4}>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-center px-4">
+      <div className="mb-6">
         <img
-          // src={CompanyLogo}
+          src={CompanyLogo}
           alt="Company Logo"
-          style={{ maxWidth: "180px", height: "auto" }}
+          className="w-44 max-w-full h-auto mx-auto"
         />
-      </Box>
+      </div>
 
-      <Typography variant="h3" fontWeight="bold" gutterBottom color="error">
-        401 - Unauthorized
-      </Typography>
-
-      <Typography variant="subtitle1" color="text.secondary" mb={4}>
+      <h1 className="text-6xl font-bold text-red-500">
+        401
+      </h1>
+      <h2 className="text-2xl font-semibold mt-2 text-gray-800">
+        Unauthorized User
+      </h2>
+      <p className="text-gray-600 text-lg mb-6">
         You do not have permission to access this page.
-      </Typography>
+      </p>
 
-      <Button variant="contained" color="primary" onClick={() => navigate("/")}>
+      <button
+        onClick={() => navigate("/")}
+        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition"
+      >
         Go to Homepage
-      </Button>
-    </Box>
+      </button>
+    </div>
   );
 };
 

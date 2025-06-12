@@ -8,7 +8,6 @@ const Partners: React.FC = () => {
     { id: 3, name: 'Laxmi Krisha Maharjan', role: 'Finance Manager', image: Sanjeev },
     { id: 4, name: 'Bikash Shrestha', role: 'Technology Lead', image: Sanjeev },
   ];
-
   return (
     <div className="w-full px-4 py-8">
       <h2 className="text-3xl font-bold text-center mb-8">Our Partners</h2>

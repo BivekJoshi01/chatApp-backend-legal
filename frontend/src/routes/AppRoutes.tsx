@@ -3,7 +3,6 @@ import React from "react";
 import CustomLoader from "../components/Loader/CustomLoader";
 import { HashRouter, Route, Routes } from "react-router";
 import AdminPageLayout from "../layout/AdminPageLayout";
-import Unauthorized401Page from "../pages/Auth/Error/Unauthorized401Page";
 
 // ---------------------------------------------------------------------------------------u
 import { MenuRoutesConfig } from "./routesConfig";
@@ -13,6 +12,8 @@ import UserPageLayout from "../layout/UserPageLayout";
 import { UserRoutesConfig } from "./userRouteConfig";
 import DelayedSuspense from "../components/Loader/LoaderWithDelay";
 import ProtectedRoute from "./ProtectedRoute";
+import NotFound404Page from "../pages/Auth/Error/NotFound404Page";
+import Unauthorized401Page from "../pages/Auth/Error/Unauthorized401Page";
 // ------------------------------------------------------------------------------------------
 
 // Lazy auth pages
@@ -36,6 +37,7 @@ const AppRoutes: React.FC = () => {
       <DelayedSuspense fallback={<CustomLoader />} minDelay={1000}>
         <Routes>
           <Route path="/unauthorized" element={<Unauthorized401Page />} />
+          <Route path="*" element={<NotFound404Page />} />
 
           {/* Root route */}
           <Route path="/" element={<LandingPage />} />
