@@ -25,6 +25,14 @@ const inputFields: {
 }[] = [
     {
       name: "unitCategory",
+      type: "autoCompleteSelectFeild",
+      placeholder: "Enter customer name",
+      label: "Unit Category",
+      required: true,
+      gridClass: "col-span-1",
+    },
+    {
+      name: "unitCategory",
       type: "text",
       placeholder: "Enter customer name",
       label: "Unit Category",

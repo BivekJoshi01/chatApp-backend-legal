@@ -103,6 +103,7 @@ const SupplierOtherParty: React.FC = () => {
           errors={errors}
           onSubmit={handleSubmit(onSearch)}
         />
+
         <CustomTable
           columns={columns}
           data={supplierData?.suppliers || []}

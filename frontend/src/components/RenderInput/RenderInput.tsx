@@ -2,6 +2,7 @@ import React from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { AutocompleteSelectFeild } from "../ui/autoCompleteSelectFeild";
 
 type DropdownOption = {
   label: string;
@@ -11,14 +12,15 @@ type DropdownOption = {
 interface RenderInputProps {
   name: string;
   fieldType:
-    | "text"
-    | "number"
-    | "textarea"
-    | "email"
-    | "dropdown"
-    | "password"
-    | "date"
-    | "checkbox";
+  | "text"
+  | "number"
+  | "textarea"
+  | "email"
+  | "dropdown"
+  | "autoCompleteSelectFeild"
+  | "password"
+  | "date"
+  | "checkbox";
   placeholder?: string;
   label?: string;
   required?: boolean;
@@ -48,17 +50,12 @@ const RenderInput: React.FC<RenderInputProps> = ({
       case "password":
       case "date":
         return (
-          <>
-            <div className="grid w-full max-w-sm items-center gap-3">
-              <Label htmlFor="email">{label}</Label>
-              <Input
-                type={fieldType}
-                id="email"
-                placeholder={placeholder}
-                {...register(name)}
-              />
-            </div>
-          </>
+          <Input
+            type={fieldType}
+            id="email"
+            placeholder={placeholder}
+            {...register(name)}
+          />
         );
 
       case "textarea":
@@ -72,7 +69,10 @@ const RenderInput: React.FC<RenderInputProps> = ({
             />
           </>
         );
-
+      case "autoCompleteSelectFeild":
+        return (
+          <AutocompleteSelectFeild placeholder="Slelct Highter" />
+        );
       case "dropdown":
         return (
           <>
@@ -113,7 +113,8 @@ const RenderInput: React.FC<RenderInputProps> = ({
   };
 
   return (
-    <div className="mb-1 px-2">
+    <div className="grid w-full max-w-sm items-center gap-2 px-2">
+      <Label htmlFor="email">{label}</Label>
       {renderField()}
       {error && <p className="text-red-500 text-sm">{error.message}</p>}
     </div>

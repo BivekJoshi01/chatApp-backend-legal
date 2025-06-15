@@ -12,7 +12,6 @@ const validationSchema = yup.object().shape({
     areaShortName: yup.string().required("Area Short name is required"),
 });
 
-// const {data}=useGetAr
 const inputFields: {
     name: string;
     type: any;
