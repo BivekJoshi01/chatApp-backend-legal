@@ -1,123 +1,148 @@
 import React from "react";
-import { UseFormRegister, FieldError } from "react-hook-form";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { AutocompleteSelectFeild } from "../ui/autoCompleteSelectFeild";
+import {
+  UseFormRegister,
+  FieldError,
+  FieldErrors,
+  Controller,
+  Control,
+} from "react-hook-form";
+import { Input } from "./Fields/input";
+import { AutocompleteSelectField } from "./Fields/autoCompleteSelectFeild";
+import { Label } from "./Fields/label";
+import { AutocompleteSelectGetRequestField } from "./Fields/autoComplteSelectGetRequestFeild";
 
-type DropdownOption = {
-  label: string;
-  value: string | number;
-};
-
-interface RenderInputProps {
-  name: string;
-  fieldType:
+export type FieldType =
   | "text"
   | "number"
   | "textarea"
   | "email"
   | "dropdown"
-  | "autoCompleteSelectFeild"
+  | "autoCompleteSelectField"
+  | "autoCompleteSelectGetRequestField"
   | "password"
   | "date"
   | "checkbox";
+
+type Option = {
+  label?: string;
+  value?: string;
+};
+export interface InputField {
+  name: string;
+  type: FieldType;
   placeholder?: string;
   label?: string;
   required?: boolean;
-  options?: DropdownOption[];
-  register: UseFormRegister<any>;
-  error?: FieldError;
+  gridClass?: string;
+  options?: Option[];
+  apiPath?: any;
+  optionLabel?: string;
+  optionValue?: string;
 }
 
-const RenderInput: React.FC<RenderInputProps> = ({
-  name,
-  fieldType,
-  placeholder,
-  label,
-  required,
-  options,
+interface RenderInputProps {
+  inputFields: InputField[];
+  register: UseFormRegister<any>;
+  control: Control<any>;
+  errors?: FieldErrors<any>;
+}
+
+export const RenderInput: React.FC<RenderInputProps> = ({
+  inputFields,
   register,
-  error,
+  control,
+  errors = {},
 }) => {
-  const baseClass =
-    "w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm";
+  return (
+    <>
+      {inputFields?.map((field) => {
+        const error = errors[field?.name] as FieldError | undefined;
+        const commonProps = {
+          ...register(field?.name),
+          placeholder: field?.placeholder,
+          id: field?.name,
+        };
 
-  const renderField = () => {
-    switch (fieldType) {
-      case "text":
-      case "email":
-      case "number":
-      case "password":
-      case "date":
-        return (
-          <Input
-            type={fieldType}
-            id="email"
-            placeholder={placeholder}
-            {...register(name)}
-          />
-        );
+        const renderField = () => {
+          switch (field?.type) {
+            case "text":
+            case "email":
+            case "number":
+            case "password":
+            case "date":
+              return <Input type={field?.type} {...commonProps} />;
 
-      case "textarea":
-        return (
-          <>
-            <div>{label}</div>
-            <textarea
-              {...register(name)}
-              placeholder={placeholder}
-              className={baseClass}
-            />
-          </>
-        );
-      case "autoCompleteSelectFeild":
-        return (
-          <AutocompleteSelectFeild placeholder="Slelct Highter" />
-        );
-      case "dropdown":
-        return (
-          <>
-            <div>{label}</div>
-            <select
-              {...register(name)}
-              id={name}
-              className={baseClass}
-              defaultValue=""
-            >
-              <option value="" disabled>
-                {placeholder || "Select an option"}
-              </option>
-              {options?.map((option, index) => (
-                <option key={index} value={option.value || option.label}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </>
-        );
+            case "textarea":
+              return <textarea {...commonProps} />;
 
-      case "checkbox":
+            case "autoCompleteSelectField":
+              return (
+                <Controller
+                  name={field.name}
+                  control={control}
+                  render={({ field: controllerField }) => (
+                    <AutocompleteSelectField
+                      {...controllerField}
+                      placeholder={field.placeholder || "Select Option"}
+                      options={field.options || []}
+                    />
+                  )}
+                />
+              );
+
+            case "autoCompleteSelectGetRequestField":
+              return (
+                <Controller
+                  name={field.name}
+                  control={control}
+                  defaultValue=""
+                  render={({ field: controllerField }) => (
+                    <AutocompleteSelectGetRequestField
+                      {...controllerField}
+                      placeholder={field?.placeholder || "Select Option"}
+                      apiPath={field?.apiPath}
+                      optionLabel={field?.optionLabel}
+                      optionValue={field?.optionValue}
+                    />
+                  )}
+                />
+              );
+
+            case "checkbox":
+              return (
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    {...register(field?.name)}
+                    className="w-4 h-4"
+                    id={field?.name}
+                  />
+                  <label htmlFor={field.name} className="ml-2 text-sm">
+                    {field?.placeholder}
+                  </label>
+                </div>
+              );
+
+            default:
+              return <Input type="text" {...commonProps} />;
+          }
+        };
+
         return (
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              {...register(name)}
-              className="w-4 h-4 text-blue-500"
-            />
-            <label className="ml-2">{placeholder}</label>
+          <div
+            key={field?.name}
+            className={`grid w-full items-start gap-2 px-2 py-2 ${field?.gridClass || ""
+              }`}
+          >
+            {field?.label && (
+              <Label htmlFor={field?.name}>{field?.label}</Label>
+            )}
+            {renderField()}
+            {error && <p className="text-red-500 text-sm">{error?.message}</p>}
           </div>
         );
-
-      default:
-        return <input type="text" className={baseClass} />;
-    }
-  };
-
-  return (
-    <div className="grid w-full max-w-sm items-center gap-2 px-2">
-      <Label htmlFor="email">{label}</Label>
-      {renderField()}
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
-    </div>
+      })}
+    </>
   );
 };
 

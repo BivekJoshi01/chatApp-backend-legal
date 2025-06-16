@@ -17,3 +17,8 @@ export const getAreaPaginated = async ({
   );
   return response?.data;
 };
+
+export const getAllArea = async () => {
+  const response = await axiosInstance.get(`api/core/area/getAll}`);
+  return response?.data;
+};

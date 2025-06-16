@@ -46,17 +46,17 @@ const inputFields: {
       required: true,
       gridClass: "col-span-1 md:col-span-1",
     },
-    {
-      name: "country",
-      type: "dropdown",
-      placeholder: "Enter country",
-      label: "Country",
-      options: [
-        { label: "Nepal", value: "Nepal" }
-      ],
-      required: true,
-      gridClass: "col-span-1 md:col-span-1",
-    },
+    // {
+    //   name: "country",
+    //   type: "dropdown",
+    //   placeholder: "Enter country",
+    //   label: "Country",
+    //   options: [
+    //     { label: "Nepal", value: "Nepal" }
+    //   ],
+    //   required: true,
+    //   gridClass: "col-span-1 md:col-span-1",
+    // },
     {
       name: "contactPerson",
       type: "text",
@@ -114,7 +114,6 @@ const AgentForm: React.FC<any> = ({ onClose }) => {
             placeholder={field.placeholder}
             label={field.label}
             required={field.required}
-            options={field.options}
             register={register}
             error={
               errors[field.name as keyof typeof errors] as

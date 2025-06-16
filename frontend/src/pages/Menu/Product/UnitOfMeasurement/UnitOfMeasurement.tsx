@@ -68,7 +68,7 @@ const UnitOfMeasurement: React.FC = () => {
   return (
     <div>
       <Header
-        modelWidth="40%"
+        modelWidth="30%"
         modelTitle="Unit Of Measurement"
         buttonTitle="Add Unit of Measurement"
         buttonIcon={<FiPlus />}

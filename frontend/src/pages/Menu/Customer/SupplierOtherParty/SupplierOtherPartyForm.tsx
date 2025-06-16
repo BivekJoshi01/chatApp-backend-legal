@@ -169,7 +169,7 @@ const SupplierOtherPartyForm: React.FC<ProductCompantFormProps> = ({ onClose }) 
         >
             {inputFields.map((field, index) => (
                 <div key={index} className={`w-full ${field.gridClass} py-1`}>
-                    <RenderInput
+                    {/* <RenderInput
                         name={field.name}
                         fieldType={field.type}
                         placeholder={field.placeholder}
@@ -182,7 +182,7 @@ const SupplierOtherPartyForm: React.FC<ProductCompantFormProps> = ({ onClose }) 
                             | FieldError
                             | undefined
                         }
-                    />
+                    /> */}
                 </div>
             ))}
             <div className="col-span-2 md:col-span-4 flex justify-between items-center border-t pt-2 border-stone-300">

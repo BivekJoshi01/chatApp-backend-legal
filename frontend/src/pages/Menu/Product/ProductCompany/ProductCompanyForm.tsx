@@ -68,14 +68,14 @@ const inputFields: {
             required: true,
             gridClass: "col-span-2 md:col-span-1",
         },
-        {
-            name: "role",
-            type: "dropdown",
-            options: ["Admin", "User", "Guest"],
-            label: "User Name",
-            required: true,
-            gridClass: "col-span-2 md:col-span-1",
-        },
+        // {
+        //     name: "role",
+        //     type: "dropdown",
+        //     options: ["Admin", "User", "Guest"],
+        //     label: "User Name",
+        //     required: true,
+        //     gridClass: "col-span-2 md:col-span-1",
+        // },
         {
             name: "bio",
             type: "textarea",
@@ -115,20 +115,19 @@ const ProductCompanyForm: React.FC<ProductCompantFormProps> = ({ onClose }) => {
         >
             {inputFields.map((field, index) => (
                 <div key={index} className={`w-full ${field.gridClass} py-1`}>
-                    <RenderInput
+                    {/* <RenderInput
                         name={field.name}
                         fieldType={field.type}
                         placeholder={field.placeholder}
                         label={field.label}
                         required={field.required}
-                        options={field.options}
                         register={register}
                         error={
                             errors[field.name as keyof typeof errors] as
                             | FieldError
                             | undefined
                         }
-                    />
+                    /> */}
                 </div>
             ))}
             <div className="col-span-2 md:col-span-3 flex justify-between items-center border-t pt-2 border-stone-300">

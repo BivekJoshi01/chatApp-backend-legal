@@ -33,3 +33,4 @@ export const useGetAreaPaginated = ({ pageNumber, pageSize, search = "" }: any) 
     staleTime: 30000,
   });
 };
+

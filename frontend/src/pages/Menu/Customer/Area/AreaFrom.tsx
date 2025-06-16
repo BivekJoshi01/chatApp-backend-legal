@@ -82,7 +82,7 @@ const AreaForm: React.FC<AreaFormProps> = ({ onClose, defaultValues }) => {
     >
       {inputFields.map((field, index) => (
         <div key={index} className={`w-full ${field.gridClass} py-1`}>
-          <RenderInput
+          {/* <RenderInput
             name={field.name}
             fieldType={field.type}
             placeholder={field.placeholder}
@@ -93,7 +93,7 @@ const AreaForm: React.FC<AreaFormProps> = ({ onClose, defaultValues }) => {
             error={
               errors[field.name as keyof typeof errors] as FieldError | undefined
             }
-          />
+          /> */}
         </div>
       ))}
       <div className="col-span-2 md:col-span-3 flex justify-between items-center border-t pt-2 border-stone-300">
