@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 
 const productGroupSchema = mongoose.Schema(
   {
-    groupName: { type: String, require: true, unique: true },
+    name: { type: String, require: true, unique: true },
+    shortName: { type: String, require: true, unique: true },
+    typeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductType",
+      required: true,
+    },
     description: { type: String, require: true },
   },
   {
