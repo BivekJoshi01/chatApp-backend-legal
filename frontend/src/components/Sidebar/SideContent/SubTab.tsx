@@ -27,7 +27,7 @@ const SubTab: React.FC<SubTabProps> = ({ headTab, setHeadTab }) => {
               onClick={() => setHeadTab(tab.id)}
               className={`px-4 pt-2 cursor-pointer transition-all duration-200 rounded-t text-sm flex items-center gap-1 
               ${isActive
-                  ? "border-t border-l border-r text-violet-600"
+                  ? "border-t border-l border-r bg-primary-10"
                   : "hover:bg-stone-200 text-stone-500"
                 }
             `}

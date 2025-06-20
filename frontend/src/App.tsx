@@ -1,11 +1,12 @@
 import './App.css'
 import AppRoutes from './routes/AppRoutes'
+import { ThemeProvider } from './theme/ThemeProvider'
 
 function App() {
   return (
-    <div className="text-stone-950 bg-stone-100">
+    <ThemeProvider>
       <AppRoutes />
-    </div>
+    </ThemeProvider>
   )
 }
 

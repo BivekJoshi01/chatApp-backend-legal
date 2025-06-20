@@ -22,7 +22,7 @@ const FilterSearch: React.FC<{
     const [collapse, setCollapse] = useState(false);
 
     return (
-        <div className="bg-violet-100 mb-4 p-2.5">
+        <div className="bg-primary-10 mb-4 p-2.5">
             <div className="flex justify-between">
                 <div className="font-semibold">Filter</div>
                 <div
@@ -37,7 +37,7 @@ const FilterSearch: React.FC<{
                 <form onSubmit={onSubmit}>
                     <div className="flex flex-col gap-2 mt-2">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            {inputFields?.map((field, index) => (
+                            {/* {inputFields?.map((field, index) => (
                                 <div key={index} className={`w-full ${field.gridClass} py-1`}>
                                     <RenderInput
                                         name={field.name}
@@ -50,7 +50,7 @@ const FilterSearch: React.FC<{
                                         error={errors[field.name]}
                                     />
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                         <div className="flex justify-end">
                             <button

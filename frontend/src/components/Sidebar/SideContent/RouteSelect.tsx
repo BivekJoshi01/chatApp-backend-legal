@@ -94,7 +94,7 @@ const Route = ({
     <div>
       <button
         onClick={onClick}
-        className={`flex items-center justify-between gap-2 w-full rounded px-2 py-1.5 text-sm transition-[box-shadow,_background-color,_color] ${selected ? "bg-violet-200 text-stone-950 shadow" : "hover:bg-stone-200 bg-transparent text-stone-500 shadow-none"
+        className={`flex items-center justify-between gap-2 w-full rounded px-2 py-1.5 text-sm transition-[box-shadow,_background-color,_color] ${selected ? "bg-primary-30 text-text shadow" : "hover:bg-primary-10 bg-transparent text-stone-500 shadow-none"
           }`}
       >
         <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ const Route = ({
           {submenu?.map((item, index) => (
             <button
               key={index}
-              className={`flex items-center gap-2 text-sm text-stone-600 w-full text-left hover:text-stone-800 py-1 px-1 rounded ${activeSubmenuItem === item.title ? "bg-violet-100 text-stone-950 shadow" : "hover:bg-stone-200 bg-transparent text-stone-500 shadow-none"}`}
+              className={`flex items-center gap-2 text-sm text-stone-600 w-full text-left hover:text-stone-800 py-1 px-1 rounded ${activeSubmenuItem === item.title ? "bg-primary-20 text-text shadow" : "hover:bg-primary-10 bg-transparent text-stone-500 shadow-none"}`}
               onClick={() => handleSubmenuItemClick(item.title)}
             >
               <item.Icon className={activeSubmenuItem === item.title ? "text-violet-500" : ""} />

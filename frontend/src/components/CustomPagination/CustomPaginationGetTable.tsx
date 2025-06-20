@@ -63,7 +63,7 @@ export const CustomPaginationGetTable: React.FC<PaginationProps> = ({
         }`
 
     return (
-        <div className='bg-violet-100 mt-4 p-2.5'>
+        <div className='bg-primary-10 mt-4 p-2.5'>
             <div className='flex items-center justify-between'>
                 <div>Total Elements: {totalElements}</div>
                 <nav aria-label="Page navigation">

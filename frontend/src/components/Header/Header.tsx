@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
           {buttonTitle && setOpenModel ? (
             <button
-              className="flex text-sm items-center gap-2 bg-stone-100 transition-colors hover:bg-violet-100 hover:text-violet-700 px-3 py-1.5 rounded"
+              className="flex text-sm items-center gap-2 bg-primary-20 transition-colors hover:bg-violet-100 hover:text-violet-700 px-3 py-1.5 rounded"
               // onClick={() => setOpenModel(true)}
               onClick={() => setOpenModel(true)}
             >

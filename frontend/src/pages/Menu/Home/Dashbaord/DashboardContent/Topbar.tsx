@@ -30,7 +30,7 @@ const Topbar: React.FC = () => {
           </span>
           <span className='text-xs block text-stone-500'>{formattedDate}</span>
         </div>
-        <button className='flex text-sm items-center gap-2 bg-stone-100 transition-colors hover:bg-violet-100 hover:text-violet-700 px-3 py-1.5 rounded'>
+        <button className='flex text-sm items-center gap-2 bg-background transition-colors hover:bg-violet-100 hover:text-violet-700 px-3 py-1.5 rounded'>
           <FiCalendar /> <span>Prev 6 Months</span>
         </button>
       </div>

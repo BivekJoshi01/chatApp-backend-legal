@@ -16,7 +16,7 @@ export const connectDB = async () => {
     });
     console.log(`Database connected: ${DB.HOST} ${DB.NAME}`.cyan.underline);
   } catch (error) {
-    console.error(`Database connection error: ${error}`, red.bold);
+    console.error(`Database connection error: ${error}`. red.bold);
     process.exit(1);
   }
 };

@@ -1,10 +1,5 @@
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  type MRT_Row,
-} from "material-react-table";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
-// import { FC } from "react";
 
 interface CustomTableProps<T extends Record<string, any>> {
   columns: MRT_ColumnDef<T>[];
@@ -32,8 +27,8 @@ interface CustomTableProps<T extends Record<string, any>> {
   density?: string;
   enableEdit?: boolean;
   enableDelete?: boolean;
-  handleEdit?: any,
-  handleDelete?: any
+  handleEdit?: any;
+  handleDelete?: any;
   // showColumnFilters?: boolean;
 }
 
@@ -61,12 +56,10 @@ const CustomTable = <T extends Record<string, any>>({
   enableEdit = false,
   enableDelete = false,
   handleEdit,
-  handleDelete
-}:
-  CustomTableProps<T>) => {
-
+  handleDelete,
+}: CustomTableProps<T>) => {
   return (
-    <div className="custom_table">
+    <>
       <MaterialReactTable
         columns={columns.map((col) => ({
           ...col,
@@ -128,23 +121,37 @@ const CustomTable = <T extends Record<string, any>>({
         )}
         muiTableHeadRowProps={{
           sx: {
-            backgroundColor: "#8E51FF",
+            backgroundColor: "var(--primary)",
             height: filter ? "70px" : "40px",
           },
         }}
         muiTableBodyRowProps={() => ({
           sx: {
             cursor: "pointer",
-            backgroundColor: "#ffff",
+            backgroundColor: "var(--primary-10)",
+            color: "var(--text)",
           },
         })}
         muiTableHeadCellProps={{
           sx: {
-            color: "black",
+            color: "var(--text)",
           },
         }}
       />
-    </div>
+      <style>
+        {`
+      .css-10gei56  {
+        background-color: var(--background)
+      }
+              .css-zrlv9q  {
+        background-color: var(--background)
+      }
+        .css-1e1m30i {
+          color: var(--text)
+        }
+      `}
+      </style>
+    </>
   );
 };
 
