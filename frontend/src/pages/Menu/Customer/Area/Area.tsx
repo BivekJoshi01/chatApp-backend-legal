@@ -53,7 +53,6 @@ const Area: React.FC = () => {
     <>
       <div>
         <Header
-          modelWidth="40%"
           modelTitle="Area"
           buttonTitle="Add Area"
           buttonIcon={<FiPlus />}

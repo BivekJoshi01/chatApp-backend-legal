@@ -2,9 +2,9 @@ import React, { useState, useEffect, ReactNode } from "react";
 import FormModel from "../Model/FormModel";
 import Breadcrumb from "./BreadCrump/BreadCrump";
 import GlobeImage from "../../assets/Office/GlobeImage.svg";
+import SubHead from "./SubHead";
 interface HeaderProps {
   children: ReactNode;
-  modelWidth?: string;
   modelTitle?: string;
   buttonTitle?: string;
   buttonIcon?: ReactNode;
@@ -14,12 +14,11 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   children,
-  modelWidth,
   modelTitle,
   buttonTitle,
   buttonIcon,
   openModel,
-  setOpenModel
+  setOpenModel,
 }) => {
   const [time, setTime] = useState(new Date());
 
@@ -33,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <div className="border-b px-4 mb-4 mt-2 pb-4 border-stone-200">
+      <div className="border-b px-4 mb-0 mt-2 pb-4 border-stone-200">
         <div className="flex items-center justify-between p-0.5">
           <div className="flex gap-2">
             <div className="w-8">
@@ -60,20 +59,14 @@ const Header: React.FC<HeaderProps> = ({
             >
               {buttonIcon} <span>{buttonTitle}</span>
             </button>
-          ) : <div></div>}
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
-      {/* {openModel && (
-        <FormModel
-          open={openModel}
-          width={modelWidth}
-          modelTitle={modelTitle}
-        >
-          {children}
-        </FormModel>
-      )} */}
+      <SubHead />
       {openModel && setOpenModel && (
-        <FormModel open={openModel} width={modelWidth} modelTitle={modelTitle}>
+        <FormModel open={openModel} modelTitle={modelTitle}>
           {children}
         </FormModel>
       )}

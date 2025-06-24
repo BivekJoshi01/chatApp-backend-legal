@@ -8,7 +8,6 @@ const PurchaseInvoice: React.FC = () => {
   return (
     <div>
       <Header
-        modelWidth="40%"
         modelTitle="Invoice"
         buttonTitle="Add Invoice"
         buttonIcon={<FiPlus />}

@@ -43,7 +43,6 @@ const User: React.FC = () => {
     return (
         <div>
             <Header
-                modelWidth="40%"
                 modelTitle="Product Company"
             >
                 <></>

@@ -101,7 +101,6 @@ const Agent: React.FC = () => {
   return (
     <>
       <Header
-        modelWidth="40%"
         modelTitle="Agent"
         buttonTitle="Add Agent"
         buttonIcon={<FiPlus />}

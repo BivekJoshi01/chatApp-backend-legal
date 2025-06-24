@@ -14,6 +14,7 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../redux/reducer/navigationSlice";
 import { setLoggedUserId, setLoggedUserRole } from "../../utils/cookieHelper";
+import { setUser } from "../../redux/reducer/authSlice";
 
 interface LoginFormData {
   email: string;
@@ -206,6 +207,7 @@ export const useResetPasswordHook = () => {
 
 export const useLogoutHook = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return useMutation({
     mutationKey: ["logout"],
     mutationFn: async () => {
@@ -219,6 +221,7 @@ export const useLogoutHook = () => {
     onSuccess: () => {
       toast.success("Logged out successfully");
       navigate("/");
+      dispatch(setUser(null));
     },
     onError: (error: any) => {
       const message =

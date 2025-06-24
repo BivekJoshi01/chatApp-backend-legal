@@ -9,7 +9,6 @@ const ProductGroup: React.FC = () => {
   return (
     <div>
       <Header
-        modelWidth="40%"
         modelTitle="Product Company"
         buttonTitle="Add Product Company"
         buttonIcon={<FiPlus />}

@@ -3,11 +3,14 @@ import React, { ReactNode, useState } from "react";
 interface FormModelProps {
   open: boolean;
   children: ReactNode;
-  width?: string;
-  modelTitle?: string
+  modelTitle?: string;
 }
 
-const FormModel: React.FC<FormModelProps> = ({ open, children, width = "50%", modelTitle }) => {
+const FormModel: React.FC<FormModelProps> = ({
+  open,
+  children,
+  modelTitle,
+}) => {
   const [isShaking, setIsShaking] = useState(false);
 
   if (!open) return null;
@@ -19,26 +22,22 @@ const FormModel: React.FC<FormModelProps> = ({ open, children, width = "50%", mo
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-stone-950/50 z-10 "
+      className="fixed inset-0 flex items-center justify-center bg-stone-950/50 z-50"
       onClick={handleOutsideClick}
     >
       <div
-        className={`bg-white w-[90%] sm:w-full rounded-lg shadow-lg p-4 transition ${isShaking ? "shake" : ""}`}
-        style={{ width: width }}
+        className={`bg-foreground w-full sm:w-auto max-w-[95%] rounded-lg shadow-lg p-4 transition ${
+          isShaking ? "shake" : ""
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex justify-center items-center border-b pb-2 border-stone-300">
           {modelTitle}
         </div>
 
-        {/* Content */}
-        <div className="py-1">
-          {children}
-        </div>
+        <div className="py-1">{children}</div>
       </div>
 
-      {/* Custom Shake Animation */}
       <style>
         {`
           @keyframes shake {

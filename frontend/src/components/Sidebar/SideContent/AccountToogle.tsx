@@ -40,7 +40,8 @@ const AccountToogle: React.FC = () => {
                         className='size-8 rounded shrink-0 bg-violet-500 shadow'
                     />
                     <div className='text-start'>
-                        <span className='text-sm font-semibold block'>{loggedUsersData?.name}</span>
+                        <span className="text-sm font-semibold block truncate">{loggedUsersData?.name}</span>
+
                         <span className='text-xs block text-stone-500'>{loggedUsersData?.email}</span>
                     </div>
                     <BsChevronExpand className='text-xs ml-auto mr-2' />

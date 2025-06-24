@@ -96,7 +96,6 @@ const Customer: React.FC = () => {
     <>
       <div>
         <Header
-          modelWidth="40%"
           modelTitle="Customer"
           buttonTitle="Add Customer"
           buttonIcon={<FiPlus />}

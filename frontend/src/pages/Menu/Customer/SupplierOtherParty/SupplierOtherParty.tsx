@@ -88,7 +88,6 @@ const SupplierOtherParty: React.FC = () => {
     <>
       <div>
         <Header
-          modelWidth="40%"
           modelTitle="Supplier"
           buttonTitle="Add Supplier"
           buttonIcon={<FiPlus />}
