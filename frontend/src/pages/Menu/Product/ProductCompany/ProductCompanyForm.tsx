@@ -1,151 +1,138 @@
-import React from "react";
-import { FieldError, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
+import { useForm } from "react-hook-form";
+import RenderInput, {
+  InputField,
+} from "../../../../components/RenderInput/RenderInput";
 import * as yup from "yup";
-import RenderInput from "../../../../components/RenderInput/RenderInput";
-import { FiCamera } from "react-icons/fi";
+import { useAddProductCompanyHook } from "../../../../api/product/productCompany/productCompany-hook";
 import { IoClose } from "react-icons/io5";
+import { FiCamera } from "react-icons/fi";
 
 const validationSchema = yup.object().shape({
-    username: yup.string().required("Name is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    password: yup
-        .string()
-        .min(6, "Password must be at least 6 characters")
-        .required("Password is required"),
-    dob: yup.string().required("DOB is required"),
-    bio: yup.string(),
-    role: yup.string().required("Role is required"),
-    agreeTerms: yup.boolean().oneOf([true], "You must agree to terms"),
+  name: yup.string().required("Company name is required"),
+  street: yup.string().required("Street is required"),
+  city: yup.string().required("City is required"),
+  country: yup.string().required("Country is required"),
+  contactPerson: yup.string().required("Contact person is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  phoneNumber: yup.string().required("Phone number is required"),
 });
 
-const inputFields: {
-    name: string;
-    type:
-    | "text"
-    | "email"
-    | "password"
-    | "date"
-    | "textarea"
-    | "dropdown"
-    | "checkbox";
-    placeholder?: string;
-    label?: string;
-    required?: boolean;
-    options?: any;
-    error?: FieldError;
-    gridClass?: string;
-}[] = [
-        {
-            name: "username",
-            type: "text",
-            placeholder: "Enter your name",
-            label: "User Name",
-            required: false,
-            gridClass: "col-span-2 md:col-span-1",
-        },
-        {
-            name: "email",
-            type: "email",
-            placeholder: "Enter your email",
-            label: "User Name",
-            required: true,
-            gridClass: "col-span-2 md:col-span-1",
-        },
-        {
-            name: "password",
-            type: "password",
-            placeholder: "Enter password",
-            label: "User Name",
-            required: true,
-            gridClass: "col-span-2 md:col-span-1",
-        },
-        {
-            name: "dob",
-            type: "date",
-            placeholder: "Select date of birth",
-            label: "User Name",
-            required: true,
-            gridClass: "col-span-2 md:col-span-1",
-        },
-        // {
-        //     name: "role",
-        //     type: "dropdown",
-        //     options: ["Admin", "User", "Guest"],
-        //     label: "User Name",
-        //     required: true,
-        //     gridClass: "col-span-2 md:col-span-1",
-        // },
-        {
-            name: "bio",
-            type: "textarea",
-            placeholder: "Tell us about yourself",
-            label: "User Name",
-            required: true,
-            gridClass: "col-span-3",
-        },
+const inputFields: InputField[] = [
+  {
+    name: "name",
+    type: "text",
+    placeholder: "Enter company name",
+    label: "Company Name",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+  {
+    name: "street",
+    type: "text",
+    placeholder: "Enter street address",
+    label: "Street",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+  {
+    name: "city",
+    type: "text",
+    placeholder: "Enter city",
+    label: "City",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+  {
+    name: "country",
+    type: "text",
+    placeholder: "Enter country",
+    label: "Country",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+  {
+    name: "contactPerson",
+    type: "text",
+    placeholder: "Enter contact person name",
+    label: "Contact Person",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+  {
+    name: "email",
+    type: "email",
+    placeholder: "Enter email address",
+    label: "Email",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+  {
+    name: "phoneNumber",
+    type: "text",
+    placeholder: "Enter phone number",
+    label: "Phone Number",
+    required: true,
+    gridClass: "col-span-2 md:col-span-1",
+  },
+];
 
-        {
-            name: "agreeTerms",
-            type: "checkbox",
-            gridClass: "col-span-2 flex items-center gap-2",
-        },
-    ];
-interface ProductCompantFormProps {
-    onClose: () => void;
+interface ProductCompanyFormProps {
+  onClose: () => void;
 }
 
-const ProductCompanyForm: React.FC<ProductCompantFormProps> = ({ onClose }) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-    });
+const ProductCompanyForm: React.FC<ProductCompanyFormProps> = ({ onClose }) => {
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
-    const onSubmit = (data: object) => {
-        console.log("Form Data:", data);
-    };
+  const watchedValues = watch();
+  console.log("🚀 ~ watchedValues:", watchedValues);
 
-    return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-2 md:grid-cols-3"
-        >
-            {inputFields.map((field, index) => (
-                <div key={index} className={`w-full ${field.gridClass} py-1`}>
-                    {/* <RenderInput
-                        name={field.name}
-                        fieldType={field.type}
-                        placeholder={field.placeholder}
-                        label={field.label}
-                        required={field.required}
-                        register={register}
-                        error={
-                            errors[field.name as keyof typeof errors] as
-                            | FieldError
-                            | undefined
-                        }
-                    /> */}
-                </div>
-            ))}
-            <div className="col-span-2 md:col-span-3 flex justify-between items-center border-t pt-2 border-stone-300">
-                <button
-                    className="flex text-sm items-center gap-2 bg-red-300 transition-colors hover:bg-red-400 px-3 py-1.5 rounded"
-                    onClick={onClose}
-                >
-                    <IoClose/> <span>Close</span>
-                </button>
-                <button
-                    className="flex text-sm items-center gap-2 bg-green-300 transition-colors hover:bg-green-400 px-3 py-1.5 rounded"
-                    type="submit"
-                >
-                    <FiCamera /> <span>Submit</span>
-                </button>
-            </div>
-        </form>
+  const { mutate } = useAddProductCompanyHook();
+
+  const onSubmit = (data: object) => {
+    mutate(
+      { formData: data },
+      {
+        onSuccess: () => onClose(),
+      }
     );
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <RenderInput
+        inputFields={inputFields}
+        register={register}
+        errors={errors}
+        control={control}
+      />
+
+      <div className="col-span-2 md:col-span-4 flex justify-between items-center border-t pt-2 border-stone-300">
+        <button
+          type="button"
+          className="flex text-sm items-center gap-2 bg-red-300 transition-colors hover:bg-red-400 px-3 py-1.5 rounded"
+          onClick={onClose}
+        >
+          <IoClose /> <span>Close</span>
+        </button>
+        <button
+          className="flex text-sm items-center gap-2 bg-green-300 transition-colors hover:bg-green-400 px-3 py-1.5 rounded"
+          type="submit"
+        >
+          <FiCamera /> <span>Submit</span>
+        </button>
+      </div>
+    </form>
+  );
 };
 
 export default ProductCompanyForm;

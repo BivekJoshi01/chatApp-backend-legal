@@ -1,15 +1,16 @@
 import React from "react";
 import {
-  UseFormRegister,
+  Control,
+  Controller,
   FieldError,
   FieldErrors,
-  Controller,
-  Control,
+  UseFormRegister,
 } from "react-hook-form";
-import { Input } from "./Fields/input";
 import { AutocompleteSelectField } from "./Fields/autoCompleteSelectFeild";
-import { Label } from "./Fields/label";
 import { AutocompleteSelectGetRequestField } from "./Fields/autoComplteSelectGetRequestFeild";
+import { Input } from "./Fields/input";
+import { Label } from "./Fields/label";
+import { Select } from "./Fields/select";
 import { Textarea } from "./Fields/textarea";
 
 export type FieldType =
@@ -22,7 +23,8 @@ export type FieldType =
   | "autoCompleteSelectGetRequestField"
   | "password"
   | "date"
-  | "checkbox";
+  | "checkbox"
+  | "select";
 
 type Option = {
   label?: string;
@@ -114,8 +116,9 @@ export const RenderInput: React.FC<RenderInputProps> = ({
               return (
                 <div className="flex items-center gap-2.5">
                   <div>
-                    <Label htmlFor={field?.extraLabel}>{field?.extraLabel}</Label>
-                  
+                    <Label htmlFor={field?.extraLabel}>
+                      {field?.extraLabel}
+                    </Label>
                   </div>
                   <input
                     type="checkbox"
@@ -129,6 +132,20 @@ export const RenderInput: React.FC<RenderInputProps> = ({
                 </div>
               );
 
+            case "select":
+              return (
+                <Select {...commonProps}>
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  {field.options?.map((opt, i) => (
+                    <option key={i} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </Select>
+              );
+
             default:
               return <Input type="text" {...commonProps} />;
           }
@@ -137,8 +154,9 @@ export const RenderInput: React.FC<RenderInputProps> = ({
         return (
           <div
             key={field?.name}
-            className={`grid w-full items-start gap-2 px-2 py-2 ${field?.gridClass || ""
-              }`}
+            className={`grid w-full items-start gap-2 px-2 py-2 ${
+              field?.gridClass || ""
+            }`}
           >
             {field?.label && (
               <Label htmlFor={field?.name}>{field?.label}</Label>
