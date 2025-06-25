@@ -8,8 +8,11 @@ import {
 
 import {
   addArea,
+  deleteArea,
   getAllAreas,
+  getAreaById,
   getAreasPaginated,
+  updateArea,
 } from "../../controllers/customerSuppliersController/area.controller.js";
 
 import {
@@ -32,8 +35,11 @@ router.get("/agent/getAll", verifyTokenMiddleware, getAllAgents);
 router.post("/agent/search", verifyTokenMiddleware, getAgentPaginatedPost);
 
 router.post("/area/create", verifyTokenMiddleware, addArea);
-router.get("/area/getAll", verifyTokenMiddleware, getAllAreas);
-router.get("/area/paginated", verifyTokenMiddleware, getAreasPaginated);
+router.get("/area/getAll", getAllAreas);
+router.get("/area/paginated", getAreasPaginated);
+router.get("/area/:id", getAreaById);
+router.put("/area/:id", verifyTokenMiddleware, updateArea);
+router.delete("/area/:id", verifyTokenMiddleware, deleteArea);
 
 router.post("/customer/create", verifyTokenMiddleware, createCustomer);
 router.get("/customer/getAll", verifyTokenMiddleware, getCustomers);

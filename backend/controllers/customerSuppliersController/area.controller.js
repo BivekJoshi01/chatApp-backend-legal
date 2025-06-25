@@ -62,4 +62,43 @@ const getAreasPaginated = expressAsyncHandler(async (req, res) => {
   });
 });
 
+export const getAreaById = expressAsyncHandler(async (req, res) => {
+  const area = await Area.findById(req.params.id);
+  if (area) {
+    res.status(200).json(area);
+  } else {
+    res.status(404);
+    throw new Error("Area not found");
+  }
+});
+
+export const updateArea = expressAsyncHandler(async (req, res) => {
+  const area = await Area.findById(req.params.id);
+
+  if (area) {
+    Object.assign(area, req.body);
+
+    const updatedArea = await area.save();
+    res.status(200).json({
+      _id: updatedArea._id,
+      message: "Area updated successfully",
+    });
+  } else {
+    res.status(404);
+    throw new Error("Area not found");
+  }
+});
+
+export const deleteArea = expressAsyncHandler(async (req, res) => {
+  const area = await Area.findById(req.params.id);
+
+  if (area) {
+    await Area.deleteOne({ _id: req.params.id });
+    res.status(200).json({ message: "Area removed successfully" });
+  } else {
+    res.status(404);
+    throw new Error("Area not found");
+  }
+});
+
 export { addArea, getAllAreas, getAreasPaginated };

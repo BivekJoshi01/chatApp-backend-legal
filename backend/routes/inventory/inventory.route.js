@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   createUnitOfMeasurement,
   getUnitOfMeasurements,
@@ -16,7 +15,7 @@ import {
   getProductTypeById,
   updateProductType,
   deleteProductType,
-  searchProductTypes
+  searchProductTypes,
 } from "../../controllers/inventoryC/productC/productType.controller.js";
 
 import {
@@ -25,7 +24,7 @@ import {
   getProductCompanyPaginatedPost,
   getProductCompanyById,
   updateProductCompany,
-  deleteProductCompany
+  deleteProductCompany,
 } from "../../controllers/inventoryC/productC/productCompany.controller.js";
 
 import {
@@ -35,7 +34,7 @@ import {
   getProductGroupById,
   updateProductGroup,
   deleteProductGroup,
-  getProductGroupsByType
+  getProductGroupsByType,
 } from "../../controllers/inventoryC/productC/productGroup.controller.js";
 
 import {
@@ -45,52 +44,54 @@ import {
   getProductManagementById,
   updateProductManagement,
   deleteProductManagement,
-  searchProductManagements
+  searchProductManagements,
 } from "../../controllers/inventoryC/productC/productManagement.controller.js";
+
+import { verifyTokenMiddleware } from "../../middleware/verifyTokenMiddleware.js";
 
 const router = express.Router();
 
-// Unit of Measurement routes
-router.route("/unitOfMeasurement/create").post(createUnitOfMeasurement);
-router.route("/unitOfMeasurement/getAll").get(getUnitOfMeasurements);
-router.route("/unitOfMeasurement/search").post(getUnitOfMeasurementPaginatedPost);
-router.route("/unitOfMeasurement/:id").get(getUnitOfMeasurementById);
-router.route("/unitOfMeasurement/:id").put(updateUnitOfMeasurement);
-router.route("/unitOfMeasurement/:id").delete(deleteUnitOfMeasurement);
+// 🔹 Unit of Measurement Routes
+router.post("/unitOfMeasurement/create", verifyTokenMiddleware, createUnitOfMeasurement);
+router.get("/unitOfMeasurement/getAll", getUnitOfMeasurements);
+router.post("/unitOfMeasurement/search", getUnitOfMeasurementPaginatedPost);
+router.get("/unitOfMeasurement/:id", getUnitOfMeasurementById);
+router.put("/unitOfMeasurement/:id", verifyTokenMiddleware, updateUnitOfMeasurement);
+router.delete("/unitOfMeasurement/:id", verifyTokenMiddleware, deleteUnitOfMeasurement);
 
-// Product Type routes
-router.route("/productType/create").post(createProductType);
-router.route("/productType/getAll").get(getProductTypes);
-router.route("/productType/search").post(getProductTypePaginatedPost);
-router.route("/productType/:id").get(getProductTypeById);
-router.route("/productType/:id").put(updateProductType);
-router.route("/productType/:id").delete(deleteProductType);
-router.route("/productType/keyword").get(searchProductTypes);
+// 🔹 Product Type Routes
+router.post("/productType/create", verifyTokenMiddleware, createProductType);
+router.get("/productType/getAll", getProductTypes);
+router.post("/productType/search", getProductTypePaginatedPost);
+router.get("/productType/:id", getProductTypeById);
+router.put("/productType/:id", verifyTokenMiddleware, updateProductType);
+router.delete("/productType/:id", verifyTokenMiddleware, deleteProductType);
+router.get("/productType/keyword", searchProductTypes);
 
-// Product Company routes
-router.route("/productCompany/create").post(createProductCompany);
-router.route("/productCompany/getAll").get(getProductCompanies);
-router.route("/productCompany/search").post(getProductCompanyPaginatedPost);
-router.route("/productCompany/:id").get(getProductCompanyById);
-router.route("/productCompany/:id").put(updateProductCompany);
-router.route("/productCompany/:id").delete(deleteProductCompany);
+// 🔹 Product Company Routes
+router.post("/productCompany/create", verifyTokenMiddleware, createProductCompany);
+router.get("/productCompany/getAll", getProductCompanies);
+router.post("/productCompany/search", getProductCompanyPaginatedPost);
+router.get("/productCompany/:id", getProductCompanyById);
+router.put("/productCompany/:id", verifyTokenMiddleware, updateProductCompany);
+router.delete("/productCompany/:id", verifyTokenMiddleware, deleteProductCompany);
 
-// Product Group routes
-router.route("/productGroup/create").post(createProductGroup);
-router.route("/productGroup/getAll").get(getProductGroups);
-router.route("/productGroup/search").post(getProductGroupPaginatedPost);
-router.route("/productGroup/:id").get(getProductGroupById);
-router.route("/productGroup/:id").put(updateProductGroup);
-router.route("/productGroup/:id").delete(deleteProductGroup);
-router.route("/productGroup/type/:typeId").get(getProductGroupsByType);
+// 🔹 Product Group Routes
+router.post("/productGroup/create", verifyTokenMiddleware, createProductGroup);
+router.get("/productGroup/getAll", getProductGroups);
+router.post("/productGroup/search", getProductGroupPaginatedPost);
+router.get("/productGroup/:id", getProductGroupById);
+router.put("/productGroup/:id", verifyTokenMiddleware, updateProductGroup);
+router.delete("/productGroup/:id", verifyTokenMiddleware, deleteProductGroup);
+router.get("/productGroup/type/:typeId", getProductGroupsByType);
 
-// Product Management routes
-router.route("/productManagement/create").post(createProductManagement);
-router.route("/productManagement/getAll").get(getProductManagements);
-router.route("/productManagement/search").post(getProductManagementPaginatedPost);
-router.route("/productManagement/:id").get(getProductManagementById);
-router.route("/productManagement/:id").put(updateProductManagement);
-router.route("/productManagement/:id").delete(deleteProductManagement);
-router.route("/productManagement/keyword").get(searchProductManagements);
+// 🔹 Product Management Routes
+router.post("/productManagement/create", verifyTokenMiddleware, createProductManagement);
+router.get("/productManagement/getAll", getProductManagements);
+router.post("/productManagement/search", getProductManagementPaginatedPost);
+router.get("/productManagement/:id", getProductManagementById);
+router.put("/productManagement/:id", verifyTokenMiddleware, updateProductManagement);
+router.delete("/productManagement/:id", verifyTokenMiddleware, deleteProductManagement);
+router.get("/productManagement/keyword", searchProductManagements);
 
 export default router;
