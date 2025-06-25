@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from "react";
+import { Separator } from "../ui/separator";
 
 interface FormModelProps {
   open: boolean;
@@ -26,16 +27,15 @@ const FormModel: React.FC<FormModelProps> = ({
       onClick={handleOutsideClick}
     >
       <div
-        className={`bg-foreground w-full min-w-[40%] sm:w-auto max-w-[95%] rounded-lg shadow-lg p-4 transition ${
-          isShaking ? "shake" : ""
-        }`}
+        className={`bg-foreground w-full min-w-[30%] sm:w-auto max-w-[95%] rounded-lg shadow-lg p-4 transition ${isShaking ? "shake" : ""
+          }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-center items-center border-b pb-2 border-stone-300">
-          {modelTitle}
+        <div className="flex justify-center items-center">
+          <strong>{modelTitle}</strong>
         </div>
-
-        <div className="py-1">{children}</div>
+        <Separator className="my-2" />
+        <div className="py-1 ">{children}</div>
       </div>
 
       <style>

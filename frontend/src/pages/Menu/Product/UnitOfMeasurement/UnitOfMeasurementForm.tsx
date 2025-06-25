@@ -7,8 +7,8 @@ import RenderInput, {
 import * as yup from "yup";
 import { useAddUnitOfMeasurementHook, useGetUnitOfMeasurementByIdHook, useUpdateUnitOfMeasurementHook } from "../../../../api/product/unitOfMeasurement/unitOfMeasurement-hook";
 import { IoClose } from "react-icons/io5";
-import { FiCamera } from "react-icons/fi";
 import { Button } from "../../../../components/Button/button";
+import { Separator } from "../../../../components/ui/separator";
 
 const validationSchema = yup.object().shape({
   unitCategory: yup.string().required("Unit Category is required"),
@@ -117,19 +117,20 @@ const UnitOfMeasurementForm: React.FC<UnitOfMeasurementFormProps> = ({
         control={control}
       />
 
-      <div className="col-span-2 md:col-span-4 flex justify-between items-center border-t pt-2 border-stone-300">
-        <button
-          type="button"
-          className="flex text-sm items-center gap-2 bg-red-300 transition-colors hover:bg-red-400 px-3 py-1.5 rounded"
+      <Separator className="my-2" />
+
+      <div className="flex justify-end gap-2.5">
+        <Button
+          variant="outline"
           onClick={onClose}
         >
           <IoClose /> <span>Close</span>
-        </button>
+        </Button>
         <Button
           type="submit"
           disabled={isSubmitting || isFetching}
         >
-          <FiCamera /> <span>{id ? "Update" : "Submit"}</span>
+          <span>{id ? "Update" : "Submit"}</span>
         </Button>
       </div>
     </form>

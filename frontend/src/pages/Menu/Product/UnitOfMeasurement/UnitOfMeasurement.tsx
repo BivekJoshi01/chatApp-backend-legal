@@ -3,7 +3,6 @@ import Header from "../../../../components/Header/Header";
 import { FiPlus } from "react-icons/fi";
 import UnitOfMeasurementForm from "./UnitOfMeasurementForm";
 import { MRT_ColumnDef } from "material-react-table";
-import { nanoid } from "@reduxjs/toolkit";
 import { useDeleteUnitOfMeasurementHook, useSearchUnitOfMeasurementHook } from "../../../../api/product/unitOfMeasurement/unitOfMeasurement-hook";
 import { useForm } from "react-hook-form";
 import FilterSearch from "../../../../components/FilterSearch/FilterSearch";
@@ -150,7 +149,7 @@ const UnitOfMeasurement: React.FC = () => {
           });
         }}
       />
-      <FormModel open={openEditModel} modelTitle="Edit Product Type">
+      <FormModel open={openEditModel} modelTitle="Edit Unit of Measurement">
         <UnitOfMeasurementForm
           selectedRowId={selectedItem?._id}
           onClose={() => {

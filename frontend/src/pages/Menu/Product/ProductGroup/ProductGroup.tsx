@@ -158,7 +158,7 @@ const ProductGroup: React.FC = () => {
         }}
       />
 
-      <FormModel open={openEditModel} modelTitle="Edit Product Type">
+      <FormModel open={openEditModel} modelTitle="Edit Product Group">
         <ProductGroupForm
           selectedRowId={selectedItem?._id}
           onClose={() => {

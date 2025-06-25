@@ -165,7 +165,7 @@ const ProductCompany: React.FC = () => {
         }}
       />
 
-      <FormModel open={openEditModel} modelTitle="Edit Product Type">
+      <FormModel open={openEditModel} modelTitle="Edit Product Company">
         <ProductCompanyForm
           selectedRowId={selectedItem?._id}
           onClose={() => {

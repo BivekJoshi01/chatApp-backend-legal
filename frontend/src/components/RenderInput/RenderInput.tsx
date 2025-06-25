@@ -154,12 +154,14 @@ export const RenderInput: React.FC<RenderInputProps> = ({
         return (
           <div
             key={field?.name}
-            className={`grid w-full items-start gap-2 px-2 py-2 ${
-              field?.gridClass || ""
-            }`}
+            className={`grid w-full items-start gap-2 px-2 py-2 ${field?.gridClass || ""
+              }`}
           >
             {field?.label && (
-              <Label htmlFor={field?.name}>{field?.label}</Label>
+              <Label htmlFor={field?.name}>
+                {field?.label}{" "}
+                <p className="text-red-500 text-sm">{field?.required && "*"}</p>
+              </Label>
             )}
             {renderField()}
             {error && <p className="text-red-500 text-sm">{error?.message}</p>}
