@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import Area from "../../models/customerSupplierModel/area.model.js";
 
-const addArea = expressAsyncHandler(async (req, res) => {
+export const addArea = expressAsyncHandler(async (req, res) => {
   const { areaDetail, areaShortName } = req.body;
 
   if (!areaShortName) {
@@ -25,7 +25,7 @@ const addArea = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const getAllAreas = expressAsyncHandler(async (req, res) => {
+export const getAllAreas = expressAsyncHandler(async (req, res) => {
   const areas = await Area.find({});
 
   if (areas && areas.length > 0) {
@@ -36,7 +36,7 @@ const getAllAreas = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const getAreasPaginated = expressAsyncHandler(async (req, res) => {
+export const getAreasPaginated = expressAsyncHandler(async (req, res) => {
   const pageSize = Number(req.query.pageSize) || 10;
   const pageNumber = Number(req.query.pageNumber) || 1;
   const keyword = req.query.search
@@ -101,4 +101,3 @@ export const deleteArea = expressAsyncHandler(async (req, res) => {
   }
 });
 
-export { addArea, getAllAreas, getAreasPaginated };

@@ -22,3 +22,18 @@ export const getAllArea = async () => {
   const response = await axiosInstance.get(`api/core/area/getAll}`);
   return response?.data;
 };
+
+export const getAreaById = async (id: string) => {
+  const { data } = await axiosInstance.get(`api/core/area/${id}`);
+  return data;
+};
+
+export const updateArea = async (id: string, formData: object) => {
+  const { data } = await axiosInstance.put(`api/core/area/${id}`, formData);
+  return data;
+};
+
+export const deleteArea = async (id: string) => {
+  const { data } = await axiosInstance.delete(`api/core/area/${id}`);
+  return data;
+};

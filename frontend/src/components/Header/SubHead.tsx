@@ -8,20 +8,19 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "../ui/navigation-menu";
+import {
+  Drawer,
+  DrawerContent,
+} from "../ui/drawer";
 import { Link } from "react-router";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
+import LetterHead from "./SubHeadAction/LetterHead";
 
-// Menu config (reusable items except "Home")
+// Menu config (excluding Letter Head)
 const menuItems = [
-  {
-    label: "Note",
-    href: "/docs",
-  },
-  {
-    label: "Docs",
-    href: "/docs",
-  },
+  { label: "Note", href: "/docs" },
+  { label: "Docs", href: "/docs" },
   {
     label: "List",
     links: ["Componentss", "Documentations", "Blockss"],
@@ -30,20 +29,18 @@ const menuItems = [
     label: "Simple",
     links: ["Components", "Documentation", "Blocks"],
   },
-  {
-    label: "Letter Head",
-    href: "/docs",
-  },
 ];
 
 const SubHead = () => {
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+
   return (
     <div className="relative z-50 border-b border-stone-200 mb-4">
       <div className="p-1.5">
         <div className="flex justify-between items-center">
           <NavigationMenu viewport={false}>
             <NavigationMenuList>
-              {/* Leave "Home" as-is */}
+              {/* Home */}
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Home</NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -79,7 +76,7 @@ const SubHead = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              {/* Reusable menu items */}
+              {/* Render remaining items */}
               {menuItems.map((item) => (
                 <NavigationMenuItem key={item.label}>
                   {item.href ? (
@@ -95,9 +92,12 @@ const SubHead = () => {
                       <NavigationMenuContent>
                         <ul className="grid w-[200px] gap-4">
                           <li>
-                            {item?.links.map((text) => (
+                            {item.links.map((text) => (
                               <NavigationMenuLink asChild key={text}>
-                                <Link href="#" className="flex-row items-center gap-2">
+                                <Link
+                                  href="#"
+                                  className="flex-row items-center gap-2"
+                                >
                                   {text}
                                 </Link>
                               </NavigationMenuLink>
@@ -109,15 +109,35 @@ const SubHead = () => {
                   )}
                 </NavigationMenuItem>
               ))}
+
+              {/* Letter Head with Drawer Trigger */}
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={navigationMenuTriggerStyle()}
+                  onClick={() => setOpenDrawer(true)}
+                >
+                  <button>Letter Head</button>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
+          {/* Icons */}
           <div className="flex gap-3 mr-2.5">
             <IoMdNotificationsOutline size={20} />
             <IoSettingsOutline size={20} />
           </div>
         </div>
       </div>
+      <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
+        <DrawerContent
+          className="fixed top-0 left-0 h-screen w-full bg-white"
+        >
+          <LetterHead />
+        </DrawerContent>
+      </Drawer>
+
     </div>
   );
 };

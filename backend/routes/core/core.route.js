@@ -4,6 +4,9 @@ import {
   addAgent,
   getAllAgents,
   getAgentPaginatedPost,
+  getAgentById,
+  updateAgent,
+  deleteAgent,
 } from "../../controllers/customerSuppliersController/agent.controller.js";
 
 import {
@@ -33,6 +36,9 @@ const router = express.Router();
 router.post("/agent/create", verifyTokenMiddleware, addAgent);
 router.get("/agent/getAll", verifyTokenMiddleware, getAllAgents);
 router.post("/agent/search", verifyTokenMiddleware, getAgentPaginatedPost);
+router.get("/agent/:id", getAgentById);
+router.put("/agent/:id", verifyTokenMiddleware, updateAgent);
+router.delete("/agent/:id", verifyTokenMiddleware, deleteAgent);
 
 router.post("/area/create", verifyTokenMiddleware, addArea);
 router.get("/area/getAll", getAllAreas);

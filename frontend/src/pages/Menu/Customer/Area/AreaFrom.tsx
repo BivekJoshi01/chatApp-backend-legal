@@ -1,27 +1,21 @@
-import React, { useEffect } from "react";
-import { FieldError, useForm } from "react-hook-form";
+import React, { useCallback, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import RenderInput from "../../../../components/RenderInput/RenderInput";
-import { FiCamera } from "react-icons/fi";
+import RenderInput, {
+  InputField,
+} from "../../../../components/RenderInput/RenderInput";
 import { IoClose } from "react-icons/io5";
-import { useAddAreaHook } from "../../../../api/customerSupplier/area/area-hook";
+import { useAddAreaHook, useGetAreaByIdHook, useUpdateAreaHook } from "../../../../api/customerSupplier/area/area-hook";
+import { Separator } from "../../../../components/ui/separator";
+import { Button } from "../../../../components/Button/button";
 
 const validationSchema = yup.object().shape({
   areaDetail: yup.string().required("Area Detail is required"),
   areaShortName: yup.string().required("Area Short name is required"),
 });
 
-const inputFields: {
-  name: string;
-  type: any;
-  placeholder?: string;
-  label?: string;
-  required?: boolean;
-  options?: any;
-  error?: FieldError;
-  gridClass?: string;
-}[] = [
+const inputFields: InputField[] = [
   {
     name: "areaDetail",
     type: "text",
@@ -42,15 +36,16 @@ const inputFields: {
 
 interface AreaFormProps {
   onClose: () => void;
-  defaultValues?: {
-    areaDetail: string;
-    areaShortName: string;
-  };
+  selectedRowId?: string;
 }
 
-const AreaForm: React.FC<AreaFormProps> = ({ onClose, defaultValues }) => {
+const AreaForm: React.FC<AreaFormProps> = ({ selectedRowId, onClose }) => {
+  const id = selectedRowId ?? "";
+  const { data, isLoading: isFetching } = useGetAreaByIdHook(id);
+
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
@@ -58,58 +53,70 @@ const AreaForm: React.FC<AreaFormProps> = ({ onClose, defaultValues }) => {
     resolver: yupResolver(validationSchema),
   });
 
+  const { mutate: addMutate, isPending: isAdding } = useAddAreaHook();
+  const { mutate: updateMutate, isPending: isUpdating } = useUpdateAreaHook();
+
   useEffect(() => {
-    if (defaultValues) {
-      reset(defaultValues);
+    if (data) {
+      reset({
+        areaDetail: data.areaDetail ?? "",
+        areaShortName: data.areaShortName ?? "",
+      });
+    } else {
+      reset({
+        areaDetail: "",
+        areaShortName: "",
+      });
     }
-  }, [defaultValues, reset]);
+  }, [data, reset]);
 
-  const { mutate } = useAddAreaHook();
+  const handleClose = useCallback(() => {
+    reset();
+    onClose();
+  }, [reset, onClose]);
 
-  const onSubmit = (data: object) => {
-    mutate(
-      { formData: data },
-      {
-        onSuccess: () => onClose(),
-      }
-    );
+  const onSubmit: SubmitHandler<any> = (formData) => {
+    if (id) {
+      updateMutate(
+        { id, formData },
+        {
+          onSuccess: handleClose,
+        }
+      );
+    } else {
+      addMutate(
+        { formData },
+        {
+          onSuccess: handleClose,
+        }
+      );
+    }
   };
+  const isSubmitting = isAdding || isUpdating;
+
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="grid grid-cols-2 md:grid-cols-3"
-    >
-      {inputFields.map((field, index) => (
-        <div key={index} className={`w-full ${field.gridClass} py-1`}>
-          {/* <RenderInput
-            name={field.name}
-            fieldType={field.type}
-            placeholder={field.placeholder}
-            label={field.label}
-            required={field.required}
-            options={field.options}
-            register={register}
-            error={
-              errors[field.name as keyof typeof errors] as FieldError | undefined
-            }
-          /> */}
-        </div>
-      ))}
-      <div className="col-span-2 md:col-span-3 flex justify-between items-center border-t pt-2 border-stone-300">
-        <button
-          className="flex text-sm items-center gap-2 bg-red-300 transition-colors hover:bg-red-400 px-3 py-1.5 rounded"
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <RenderInput
+        inputFields={inputFields}
+        register={register}
+        errors={errors}
+        control={control}
+      />
+      <Separator className="my-2" />
+      <div className="flex justify-end gap-2.5">
+        <Button
+          variant="outline"
           onClick={onClose}
-          type="button"
         >
           <IoClose /> <span>Close</span>
-        </button>
-        <button
-          className="flex text-sm items-center gap-2 bg-green-300 transition-colors hover:bg-green-400 px-3 py-1.5 rounded"
+        </Button>
+        <Button
           type="submit"
+          disabled={isSubmitting || isFetching}
         >
-          <FiCamera /> <span>Submit</span>
-        </button>
+          <span>{id ? "Update" : "Submit"}</span>
+        </Button>
       </div>
     </form>
   );

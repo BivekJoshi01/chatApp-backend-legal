@@ -19,7 +19,6 @@ const ProductType: React.FC = () => {
   const [openEditModel, setOpenEditModel] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
-
   const isFirstRender = useRef(true);
 
   const {

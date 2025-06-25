@@ -77,3 +77,42 @@ export const getAgentPaginatedPost = expressAsyncHandler(async (req, res) => {
     totalElements: count,
   });
 });
+
+export const getAgentById = expressAsyncHandler(async (req, res) => {
+  const agent = await Agent.findById(req.params.id);
+  if (agent) {
+    res.status(200).json(agent);
+  } else {
+    res.status(404);
+    throw new Error("Agent not found");
+  }
+});
+
+export const updateAgent = expressAsyncHandler(async (req, res) => {
+  const agent = await Agent.findById(req.params.id);
+
+  if (agent) {
+    Object.assign(agent, req.body);
+
+    const updatedArea = await agent.save();
+    res.status(200).json({
+      _id: updatedArea._id,
+      message: "Agent updated successfully",
+    });
+  } else {
+    res.status(404);
+    throw new Error("Agent not found");
+  }
+});
+
+export const deleteAgent = expressAsyncHandler(async (req, res) => {
+  const agent = await Agent.findById(req.params.id);
+
+  if (agent) {
+    await Agent.deleteOne({ _id: req.params.id });
+    res.status(200).json({ message: "Agent removed successfully" });
+  } else {
+    res.status(404);
+    throw new Error("Agent not found");
+  }
+});
