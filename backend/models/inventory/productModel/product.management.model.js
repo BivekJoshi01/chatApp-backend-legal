@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const productManagementSchema = mongoose.Schema(
   {
     productName: { type: String, required: true, unique: true },
-    code: { type: String, required: true, unique: true },
+    code: { type: String, unique: true },
     barCode: { type: String },
 
     description: { type: String },
@@ -92,6 +92,13 @@ const productManagementSchema = mongoose.Schema(
   }
 );
 
+productManagementSchema.pre("save", function (next) {
+  if (!this.code) {
+    const now = new Date().toISOString().replace(/[-:.TZ]/g, "");
+    this.code = `PRD-${now}`;
+  }
+  next();
+});
 const ProductManagement = mongoose.model("Product", productManagementSchema);
 
 export default ProductManagement;

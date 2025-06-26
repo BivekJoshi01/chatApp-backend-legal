@@ -47,6 +47,116 @@ const ProductManagement: React.FC = () => {
         accessorKey: "description",
         header: "Product Description",
       },
+      {
+        id: nanoid(),
+        accessorKey: "code",
+        header: "Product Code",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "mrp",
+        header: "MRP",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "purchasePrice",
+        header: "Purchase Price",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "salePrice",
+        header: "Sale Price",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "discountPercent",
+        header: "Discount %",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "vatRate",
+        header: "VAT Rate",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "stockQuantity",
+        header: "Stock Quantity",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "minStockLevel",
+        header: "minStockLevel",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "maxStockLevel",
+        header: "maxStockLevel",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "unitOfMeasurement.baseUnit",
+        header: "Base Unit",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "weight",
+        header: "Product Weight",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "dimensions.length",
+        header: "Length",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "dimensions.width",
+        header: "Width",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "dimensions.height",
+        header: "Height",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "dimensions.height",
+        header: "Height",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "dimensions.height",
+        header: "Height",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "dimensions.height",
+        header: "Height",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "productGroup.shortName",
+        header: "productGroup",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "productCompany.name",
+        header: "productCompany",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "supplier.supplierDetail",
+        header: "supplier",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "expiryDate",
+        header: "Expiry Date",
+      },
+      {
+        id: nanoid(),
+        accessorKey: "batchNumber",
+        header: "Batch Number",
+      },
     ],
     []
   );

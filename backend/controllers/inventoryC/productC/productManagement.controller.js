@@ -1,12 +1,14 @@
 import expressAsyncHandler from "express-async-handler";
-import ProductManagement from "../../../models/inventory/productModel/product.management.model.js";
 import { buildSearchConditions } from "../../../config/heplerConditions.js";
+import ProductManagement from "../../../models/inventory/productModel/product.management.model.js";
 
 export const createProductManagement = expressAsyncHandler(async (req, res) => {
-  const productManagement = await ProductManagement.create(req.body);
+  // const productManagement = await ProductManagement.create(req.body);
+  const product = new ProductManagement(req.body);
+  await product.save(); 
   res.status(201).json({
-    _id: productManagement._id,
-    message: "Product category added successfully",
+    _id: product._id,
+    message: "Product added successfully",
   });
 });
 
@@ -26,7 +28,11 @@ export const getProductManagementPaginatedPost = expressAsyncHandler(
     const productManagements = await ProductManagement.find(searchCondition)
       .limit(Number(pageSize))
       .skip(Number(pageSize) * (Number(pageNumber) - 1))
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .populate("unitOfMeasurement", "unitCategory baseUnit contain")
+      .populate("productGroup", "shortName")
+      .populate("productCompany", "name")
+      .populate("supplier", "supplierDetail");
 
     res.status(200).json({
       productManagements,
