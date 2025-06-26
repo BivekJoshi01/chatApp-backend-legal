@@ -1,206 +1,225 @@
-// import React from 'react'
-
-// const SupplierOtherPartyForm = () => {
-//   return (
-//     <div>SupplierOtherPartyForm</div>
-//   )
-// }
-
-// export default SupplierOtherPartyForm
-
-
-import React from "react";
-import { FieldError, useForm } from "react-hook-form";
+import React, { useCallback, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import RenderInput from "../../../../components/RenderInput/RenderInput";
-import { FiCamera } from "react-icons/fi";
+import RenderInput, {
+  InputField,
+} from "../../../../components/RenderInput/RenderInput";
 import { IoClose } from "react-icons/io5";
-import { useAddSupplierHook } from "../../../../api/customerSupplier/supplier/supplier-hook";
+import {
+  useAddSupplierHook,
+  useGetSupplierByIdHook,
+  useUpdateSupplierHook,
+} from "../../../../api/customerSupplier/supplier/supplier-hook";
+import { Separator } from "../../../../components/ui/separator";
+import { Button } from "../../../../components/Button/button";
 
 const validationSchema = yup.object().shape({
-    areaDetail: yup.string().required("Area Detail is required"),
-    areaShortName: yup.string().required("Area Short name is required"),
+  // areaDetail: yup.string().required("Area Detail is required"),
+  // areaShortName: yup.string().required("Area Short name is required"),
 });
 
-const inputFields: {
-    name: string;
-    type: any;
-    placeholder?: string;
-    label?: string;
-    required?: boolean;
-    options?: string[];
-    error?: FieldError;
-    gridClass?: string;
-}[] = [
-        {
-            name: "supplierDetail",
-            type: "text",
-            placeholder: "Enter supplier name",
-            label: "Supplier Name",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "street",
-            type: "text",
-            placeholder: "Enter street",
-            label: "Street",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "city",
-            type: "text",
-            placeholder: "Enter city",
-            label: "City",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "country",
-            type: "text",
-            placeholder: "Enter country",
-            label: "Country",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "vatPan",
-            type: "text",
-            placeholder: "Enter VAT/PAN",
-            label: "VAT/PAN",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "isRegular",
-            type: "checkbox",
-            label: "Is Retailer?",
-            required: false,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "contactPerson",
-            type: "text",
-            placeholder: "Enter contact person",
-            label: "Contact Person",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "email",
-            type: "email",
-            placeholder: "Enter email",
-            label: "Email",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "phoneNumber",
-            type: "text",
-            placeholder: "Enter phone number",
-            label: "Phone Number",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "creditLimit",
-            type: "number",
-            placeholder: "Enter credit limit",
-            label: "Credit Limit",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "type",
-            type: "text",
-            placeholder: "Enter type",
-            label: "Supplier Type",
-            required: true,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "memo",
-            type: "text",
-            placeholder: "Enter memo",
-            label: "Memo",
-            required: false,
-            gridClass: "col-span-1",
-        },
-        {
-            name: "isActive",
-            type: "checkbox",
-            label: "Is Active?",
-            required: false,
-            gridClass: "col-span-1",
-        },
-    ];
+const inputFields: InputField[] = [
+  {
+    name: "supplierDetail",
+    type: "text",
+    placeholder: "Enter supplier name",
+    label: "Supplier Name",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "street",
+    type: "text",
+    placeholder: "Enter street",
+    label: "Street",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "city",
+    type: "text",
+    placeholder: "Enter city",
+    label: "City",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "country",
+    type: "text",
+    placeholder: "Enter country",
+    label: "Country",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "vatPan",
+    type: "text",
+    placeholder: "Enter VAT/PAN",
+    label: "VAT/PAN",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "isRegular",
+    type: "checkbox",
+    label: "Is Retailer?",
+    required: false,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "contactPerson",
+    type: "text",
+    placeholder: "Enter contact person",
+    label: "Contact Person",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "email",
+    type: "email",
+    placeholder: "Enter email",
+    label: "Email",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "phoneNumber",
+    type: "text",
+    placeholder: "Enter phone number",
+    label: "Phone Number",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "creditLimit",
+    type: "number",
+    placeholder: "Enter credit limit",
+    label: "Credit Limit",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "type",
+    type: "text",
+    placeholder: "Enter type",
+    label: "Supplier Type",
+    required: true,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "memo",
+    type: "text",
+    placeholder: "Enter memo",
+    label: "Memo",
+    required: false,
+    gridClass: "col-span-1",
+  },
+  {
+    name: "isActive",
+    type: "checkbox",
+    label: "Is Active?",
+    required: false,
+    gridClass: "col-span-1",
+  },
+];
 
-interface ProductCompantFormProps {
-    onClose: () => void;
+interface SupplierFormProps {
+  selectedRowId?: string;
+  onClose: () => void;
 }
 
-const SupplierOtherPartyForm: React.FC<ProductCompantFormProps> = ({ onClose }) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-    });
+const SupplierOtherPartyForm: React.FC<SupplierFormProps> = ({
+  selectedRowId,
+  onClose,
+}) => {
+  const id = selectedRowId ?? "";
+  const { data, isLoading: isFetching } = useGetSupplierByIdHook(id);
 
-    const { mutate } = useAddSupplierHook();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
+  const { mutate: addMutate, isPending: isAdding } = useAddSupplierHook();
+  const { mutate: updateMutate, isPending: isUpdating } =
+    useUpdateSupplierHook();
 
-    const onSubmit = (data: object) => {
-        mutate(
-            { formData: data },
-            {
-                onSuccess: () => onClose(),
-            }
-        );
-    };
+  useEffect(() => {
+    if (data) {
+      reset({
+        agentDetail: data?.agentDetail ?? "",
+        street: data?.street ?? "",
+        city: data?.city ?? "",
+        country: data?.country ?? "",
+        contactPerson: data?.contactPerson ?? "",
+        emailAddress: data?.emailAddress ?? "",
+        phoneNumber: data.phoneNumber ?? "",
+      });
+    } else {
+      reset({
+        agentDetail: "",
+        street: "",
+        city: "",
+        country: "",
+        contactPerson: "",
+        emailAddress: "",
+        phoneNumber: "",
+      });
+    }
+  }, [data, reset]);
 
-    return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-2 md:grid-cols-4"
-        >
-            {inputFields.map((field, index) => (
-                <div key={index} className={`w-full ${field.gridClass} py-1`}>
-                    {/* <RenderInput
-                        name={field.name}
-                        fieldType={field.type}
-                        placeholder={field.placeholder}
-                        label={field.label}
-                        required={field.required}
-                        options={field.options}
-                        register={register}
-                        error={
-                            errors[field.name as keyof typeof errors] as
-                            | FieldError
-                            | undefined
-                        }
-                    /> */}
-                </div>
-            ))}
-            <div className="col-span-2 md:col-span-4 flex justify-between items-center border-t pt-2 border-stone-300">
-                <button
-                    className="flex text-sm items-center gap-2 bg-red-300 transition-colors hover:bg-red-400 px-3 py-1.5 rounded"
-                    onClick={onClose}
-                >
-                    <IoClose /> <span>Close</span>
-                </button>
-                <button
-                    className="flex text-sm items-center gap-2 bg-green-300 transition-colors hover:bg-green-400 px-3 py-1.5 rounded"
-                    type="submit"
-                >
-                    <FiCamera /> <span>Submit</span>
-                </button>
-            </div>
-        </form>
-    );
+  const handleClose = useCallback(() => {
+    reset();
+    onClose();
+  }, [reset, onClose]);
+
+  const onSubmit: SubmitHandler<any> = (formData) => {
+    if (id) {
+      updateMutate(
+        { id, formData },
+        {
+          onSuccess: handleClose,
+        }
+      );
+    } else {
+      addMutate(
+        { formData },
+        {
+          onSuccess: handleClose,
+        }
+      );
+    }
+  };
+
+  const isSubmitting = isAdding || isUpdating;
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <RenderInput
+        inputFields={inputFields}
+        register={register}
+        errors={errors}
+        control={control}
+      />
+
+      <Separator className="my-2" />
+
+      <div className="flex justify-end gap-2.5">
+        <Button variant="outline" onClick={onClose}>
+          <IoClose /> <span>Close</span>
+        </Button>
+        <Button type="submit" disabled={isSubmitting || isFetching}>
+          <span>{id ? "Update" : "Submit"}</span>
+        </Button>
+      </div>
+    </form>
+  );
 };
 
 export default SupplierOtherPartyForm;

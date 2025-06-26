@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
   addProductCompany,
@@ -10,7 +10,6 @@ import {
 } from "./productCompany-api";
 
 export const useAddProductCompanyHook = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["productCompany"],
     mutationFn: async ({ formData }: any): Promise<any> => {
@@ -19,7 +18,6 @@ export const useAddProductCompanyHook = () => {
     },
     onSuccess: () => {
       toast.success("Product company added successfully");
-      queryClient.invalidateQueries({ queryKey: ["productCompanies"] });
     },
     onError: (error: any) => {
       const message =
@@ -70,7 +68,6 @@ export const useGetProductCompanyByIdHook = (id: string) => {
 };
 
 export const useUpdateProductCompanyHook = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["updateProductCompany"],
     mutationFn: async ({ id, formData }: { id: string; formData: object }): Promise<any> => {
@@ -79,7 +76,6 @@ export const useUpdateProductCompanyHook = () => {
     },
     onSuccess: () => {
       toast.success("Product company updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["productCompanies"] });
     },
     onError: (error: any) => {
       const message =
@@ -92,7 +88,6 @@ export const useUpdateProductCompanyHook = () => {
 };
 
 export const useDeleteProductCompanyHook = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["deleteProductCompany"],
     mutationFn: async (id: string): Promise<any> => {
@@ -101,7 +96,6 @@ export const useDeleteProductCompanyHook = () => {
     },
     onSuccess: () => {
       toast.success("Product company deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["productCompanies"] });
     },
     onError: (error: any) => {
       const message =

@@ -34,3 +34,43 @@ export const getSupplierPaginatedPost = expressAsyncHandler(async (req, res) => 
     totalElements: count,
   });
 });
+
+export const getSupplierById = expressAsyncHandler(async (req, res) => {
+  const supplier = await Supplier.findById(req.params.id);
+  
+  if (supplier) {
+    res.status(200).json(supplier);
+  } else {
+    res.status(404);
+    throw new Error("Supplier detail not found");
+  }
+});
+
+export const updateSupplier = expressAsyncHandler(async (req, res) => {
+  const supplier = await Supplier.findById(req.params.id);
+
+  if (supplier) {
+    Object.assign(supplier, req.body);
+    
+    const updatedSupplier = await supplier.save();
+    res.status(200).json({
+      _id: updatedSupplier._id,
+      message: "Supplier detail updated successfully",
+    });
+  } else {
+    res.status(404);
+    throw new Error("Supplier detail not found");
+  }
+});
+
+export const deleteSupplier = expressAsyncHandler(async (req, res) => {
+  const supplier = await Supplier.findById(req.params.id);
+
+  if (supplier) {
+    await Supplier.deleteOne({ _id: req.params.id });
+    res.status(200).json({ message: "Supplier detail removed successfully" });
+  } else {
+    res.status(404);
+    throw new Error("Supplier detail not found");
+  }
+});

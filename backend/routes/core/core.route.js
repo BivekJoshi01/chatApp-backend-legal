@@ -28,6 +28,9 @@ import {
   createSupplier,
   getSuppliers,
   getSupplierPaginatedPost,
+  getSupplierById,
+  updateSupplier,
+  deleteSupplier,
 } from "../../controllers/customerSuppliersController/supplier.controller.js";
 import { verifyTokenMiddleware } from "../../middleware/verifyTokenMiddleware.js";
 
@@ -55,8 +58,11 @@ router.post(
   getCustomerPaginatedPost
 );
 
-router.post("/supplier/create", createSupplier);
+router.post("/supplier/create", verifyTokenMiddleware, createSupplier);
 router.get("/supplier/getAll", getSuppliers);
 router.post("/supplier/search", getSupplierPaginatedPost);
+router.get("/supplier/:id", getSupplierById);
+router.put("/supplier/:id", verifyTokenMiddleware, updateSupplier);
+router.delete("/supplier/:id", verifyTokenMiddleware, deleteSupplier);
 
 export default router;
