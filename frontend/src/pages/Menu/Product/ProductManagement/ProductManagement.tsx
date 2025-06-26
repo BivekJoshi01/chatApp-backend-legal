@@ -3,12 +3,18 @@ import { MRT_ColumnDef } from "material-react-table";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiPlus } from "react-icons/fi";
-import { useSearchProductManagementsHook } from "../../../../api/product/productManagement/productManagement-hook";
-import Header from "../../../../components/Header/Header";
-import ProductManagementForm from "./ProductManagementForm";
+import {
+  useDeleteProductManagementHook,
+  useSearchProductManagementsHook,
+} from "../../../../api/product/productManagement/productManagement-hook";
 import { CustomPaginationSearchTable } from "../../../../components/CustomPagination/CustomPaginationSearchTable";
 import CustomTable from "../../../../components/CustomTable/CustomTable";
 import FilterSearch from "../../../../components/FilterSearch/FilterSearch";
+import Header from "../../../../components/Header/Header";
+import DeleteConfirmationModel from "../../../../components/Model/DeleteConfirmationModel";
+import FormModel from "../../../../components/Model/FormModel";
+import ProductGroupForm from "../ProductGroup/ProductGroupForm";
+import ProductManagementForm from "./ProductManagementForm";
 
 const ProductManagement: React.FC = () => {
   const [openModel, setOpenModel] = useState(false);
@@ -16,6 +22,10 @@ const ProductManagement: React.FC = () => {
     pageSize: 10,
     pageNumber: 1,
   });
+  const [searchKeyword, setSearchKeyword] = useState<Record<string, any>>({});
+  const [openDeleteModel, setOpenDeleteModel] = useState(false);
+  const [openEditModel, setOpenEditModel] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const {
     register,
@@ -28,7 +38,10 @@ const ProductManagement: React.FC = () => {
     isPending,
   } = useSearchProductManagementsHook();
 
+  const { mutate: deleteMutate } = useDeleteProductManagementHook();
+
   const onSearch = (formData: any) => {
+    setSearchKeyword(formData);
     mutate({ formData: { ...formData, ...pagination } });
   };
 
@@ -171,6 +184,17 @@ const ProductManagement: React.FC = () => {
     },
   ];
 
+  const handleDelete = (row: any) => {
+    setSelectedItem(row?.original);
+    setOpenDeleteModel(true);
+  };
+
+  const handleEdit = (row: any) => {
+    setSelectedItem(row?.original);
+    setOpenEditModel(true);
+  };
+
+
   return (
     <div>
       <Header
@@ -180,7 +204,7 @@ const ProductManagement: React.FC = () => {
         openModel={openModel}
         setOpenModel={setOpenModel}
       >
-        <ProductManagementForm onClose={() => setOpenModel(false)}/>
+        <ProductManagementForm onClose={() => setOpenModel(false)} />
       </Header>
       <FilterSearch
         inputFields={inputFields}
@@ -193,6 +217,13 @@ const ProductManagement: React.FC = () => {
         data={productManagementData?.productManagements || []}
         enableRowNumbers
         isLoading={isPending}
+        enableColumnActions
+        enableEditing={true}
+        enableRowActions={true}
+        enableEdit={true}
+        enableDelete={true}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
       />
       <CustomPaginationSearchTable
         totalPages={productManagementData?.pages}
@@ -203,6 +234,29 @@ const ProductManagement: React.FC = () => {
           setPagination(updatedPagination)
         }
       />
+      <DeleteConfirmationModel
+        open={openDeleteModel}
+        close={() => setOpenDeleteModel(false)}
+        onConfirm={() => {
+          if (!selectedItem?._id) return;
+          deleteMutate(selectedItem?._id, {
+            onSuccess: () => {
+              mutate({ formData: { ...searchKeyword, ...pagination } });
+              setOpenDeleteModel(false);
+            },
+          });
+        }}
+      />
+
+      <FormModel open={openEditModel} modelTitle="Edit Product">
+        <ProductManagementForm
+          selectedRowId={selectedItem?._id}
+          onClose={() => {
+            setOpenEditModel(false);
+            mutate({ formData: { ...searchKeyword, ...pagination } });
+          }}
+        />
+      </FormModel>
     </div>
   );
 };

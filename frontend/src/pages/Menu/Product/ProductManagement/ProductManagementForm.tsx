@@ -1,10 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useCallback, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { FiCamera } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import * as yup from "yup";
-import { useAddProductManagementHook } from "../../../../api/product/productManagement/productManagement-hook";
+import {
+  useAddProductManagementHook,
+  useGetProductManagementByIdHook,
+  useUpdateProductManagementHook,
+} from "../../../../api/product/productManagement/productManagement-hook";
 
 import { useGetAllSuppliersHook } from "../../../../api/customerSupplier/supplier/supplier-hook";
 import { useGetAllProductCompaniesHook } from "../../../../api/product/productCompany/productCompany-hook";
@@ -13,6 +17,7 @@ import { useGetAllUnitOfMeasurementHook } from "../../../../api/product/unitOfMe
 import RenderInput, {
   InputField,
 } from "../../../../components/RenderInput/RenderInput";
+import { Separator } from "@radix-ui/react-separator";
 
 const validationSchema = yup.object().shape({
   productName: yup.string().required("Product Name is required"),
@@ -58,10 +63,12 @@ const validationSchema = yup.object().shape({
 });
 
 interface ProductManagementFormProps {
+  selectedRowId?: string;
   onClose: () => void;
 }
 
 const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
+  selectedRowId,
   onClose,
 }) => {
   const {
@@ -70,6 +77,7 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -85,15 +93,89 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
     },
   });
 
+  const id = selectedRowId ?? "";
+  const { data, isLoading: isFetching } = useGetProductManagementByIdHook(id);
+
   const watchedValues = watch();
   console.log("🚀 ~ watchedValues:", watchedValues);
 
-  const { mutate } = useAddProductManagementHook();
+  const { mutate: addmutate, isPending: isAdding } =
+    useAddProductManagementHook();
+  const { mutate: updatemutate, isPending: isUpdating } =
+    useUpdateProductManagementHook();
 
   const { data: unitOfMeasurements } = useGetAllUnitOfMeasurementHook();
   const { data: productGroups } = useGetAllProductGroupsHook();
   const { data: productCompanies } = useGetAllProductCompaniesHook();
   const { data: suppliers } = useGetAllSuppliersHook();
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        productName: data.productName ?? "",
+        description: data.description ?? "",
+        purchasePrice: data.purchasePrice ?? "",
+        salePrice: data.salePrice ?? "",
+        discountPercent: data.discountPercent ?? "",
+        vatRate: data.vatRate ?? "",
+        stockQuantity: data.stockQuantity ?? "",
+        minStockLevel: data.minStockLevel ?? "",
+        maxStockLevel: data.maxStockLevel ?? "",
+        unitOfMeasurement: data.unitOfMeasurement ?? "",
+        weight: data.weight ?? "",
+        dimensions: {
+          length: data.dimensions?.length ?? 0,
+          width: data.dimensions?.width ?? 0,
+          height: data.dimensions?.height ?? 0,
+        },
+        productGroup: data.productGroup ?? "",
+        productCompany: data.productCompany ?? "",
+        supplier: data.supplier ?? "",
+        hasExpiryDate: data.hasExpiryDate ?? false,
+        expiryDate: data.expiryDate ?? "",
+        batchNumber: data.batchNumber ?? "",
+        requireAdditionalInfo: data.requireAdditionalInfo ?? false,
+        warehouseLocation: data.warehouseLocation ?? "",
+        isActive: data.isActive ?? false,
+        isFeatured: data.isFeatured ?? false,
+        // imageUrls: data.imageUrls ?? [], // Uncomment if using image upload
+      });
+    } else {
+      reset({
+        productName: "",
+        description: "",
+        purchasePrice: 0,
+        salePrice: 0,
+        discountPercent: 0,
+        vatRate: 0,
+        stockQuantity: 0,
+        minStockLevel: 0,
+        maxStockLevel: 0,
+        unitOfMeasurement: "",
+        weight: 0,
+        dimensions: {
+          length: 0,
+          width: 0,
+          height: 0,
+        },
+        productGroup: "",
+        productCompany: "",
+        supplier: "",
+        hasExpiryDate: false,
+        expiryDate: undefined,
+        batchNumber: "",
+        requireAdditionalInfo: false,
+        warehouseLocation: "",
+        isActive: false,
+        isFeatured: false,
+        // imageUrls: [], // Uncomment if using image upload
+      });
+    }
+  }, [data, reset]);
+  const handleClose = useCallback(() => {
+    reset();
+    onClose();
+  }, [reset, onClose]);
 
   const inputFields: InputField[] = [
     {
@@ -292,14 +374,24 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
     // },
   ];
 
-  const onSubmit = (data: object) => {
-    mutate(
-      { formData: data },
-      {
-        onSuccess: () => onClose(),
-      }
-    );
+  const onSubmit: SubmitHandler<any> = (formData) => {
+    if (id) {
+      updatemutate(
+        { id, formData },
+        {
+          onSuccess: handleClose,
+        }
+      );
+    } else {
+      addmutate(
+        { formData },
+        {
+          onSuccess: () => onClose(),
+        }
+      );
+    }
   };
+  const isSubmitting = isAdding || isUpdating;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -309,7 +401,7 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
         errors={errors}
         control={control}
       />
-
+      <Separator className="my-2" />
       <div className="col-span-2 md:col-span-4 flex justify-between items-center border-t pt-2 border-stone-300">
         <button
           type="button"
@@ -321,8 +413,9 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
         <button
           className="flex text-sm items-center gap-2 bg-green-300 transition-colors hover:bg-green-400 px-3 py-1.5 rounded"
           type="submit"
+          disabled={isSubmitting||isFetching}
         >
-          <FiCamera /> <span>Submit</span>
+          <FiCamera /> <span>{id ? "Update" : "Submit"}</span>
         </button>
       </div>
     </form>
