@@ -56,15 +56,15 @@ const UnitOfMeasurement: React.FC = () => {
     () => [
       {
         accessorKey: "unitCategory",
-        header: "unitCategory",
+        header: "Category",
       },
       {
         accessorKey: "baseUnit",
-        header: "baseUnit",
+        header: "Base Unit",
       },
       {
         accessorKey: "contain",
-        header: "contain",
+        header: "Contain",
       },
     ],
     []

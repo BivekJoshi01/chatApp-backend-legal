@@ -10,9 +10,7 @@ const productManagementSchema = mongoose.Schema(
 
     purchasePrice: { type: Number, required: true },
     salePrice: { type: Number, required: true },
-    mrp: { type: Number },
-    discountPrice: { type: Number },
-    discountPercent: { type: Number },
+    perUnitPrice: { type: Number },
 
     vatRate: { type: Number, default: 0 },
     priceIncludeVat: { type: Boolean, default: false },
@@ -30,8 +28,8 @@ const productManagementSchema = mongoose.Schema(
       height: Number,
     },
 
-    productGroup: { type: mongoose.Schema.Types.ObjectId, ref: "ProductGroup" },
-    productCompany: {
+    productGroup: { type: mongoose.Schema.Types.ObjectId, ref: "ProductGroup" },//
+    productCompany: {//
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProductCompany",
     },

@@ -29,6 +29,8 @@ interface CustomTableProps<T extends Record<string, any>> {
   enableDelete?: boolean;
   handleEdit?: any;
   handleDelete?: any;
+  enableExpand?: any;
+  renderRowSubComponent?: any;
   // showColumnFilters?: boolean;
 }
 
@@ -36,7 +38,6 @@ const CustomTable = <T extends Record<string, any>>({
   columns,
   data,
   isLoading,
-  // pageSize = 10,
   rowCount,
   filter = false,
   enablePagination = false,
@@ -57,6 +58,8 @@ const CustomTable = <T extends Record<string, any>>({
   enableDelete = false,
   handleEdit,
   handleDelete,
+  enableExpand = false,
+  renderRowSubComponent,
 }: CustomTableProps<T>) => {
   return (
     <>
@@ -70,7 +73,6 @@ const CustomTable = <T extends Record<string, any>>({
         enableRowVirtualization
         enableStickyHeader
         enablePagination={enablePagination}
-        // paginationPageSize={pageSize}
         enableEditing={enableEditing}
         rowCount={rowCount}
         state={{
@@ -82,25 +84,26 @@ const CustomTable = <T extends Record<string, any>>({
           columnPinning: {
             right: ["mrt-row-actions"],
           },
+          // Expand row initial state can be managed here if needed
         }}
         enableColumnResizing={enableColumnResizing}
         enableColumnActions={enableColumnActions}
         enableColumnFilters={enableColumnFilters}
         enableSorting={enableSorting}
         enableRowActions={enableRowActions}
-        // showColumnFilters={showColumnFilters}
         enableBottomToolbar={enableBottomToolbar}
         enableTopToolbar={enableTopToolbar}
         enableDensityToggle={enableDensityToggle}
         enableHiding={enableHiding}
         enableFullScreenToggle={enableFullScreenToggle}
         enableGlobalFilter={enableGlobalFilter}
-        // density={density}
+
+        // Row Actions buttons
         renderRowActions={({ row }) => (
           <div className="flex gap-2">
             {enableEdit && (
               <button
-                onClick={() => handleEdit(row)}
+                onClick={() => handleEdit?.(row)}
                 className="text-blue-600 hover:text-blue-800 bg-blue-200 p-1 rounded"
                 title="Edit"
               >
@@ -110,7 +113,7 @@ const CustomTable = <T extends Record<string, any>>({
 
             {enableDelete && (
               <button
-                onClick={() => handleDelete(row)}
+                onClick={() => handleDelete?.(row)}
                 className="text-red-600 hover:text-red-800 bg-red-200 p-1 rounded"
                 title="Delete"
               >
@@ -119,6 +122,16 @@ const CustomTable = <T extends Record<string, any>>({
             )}
           </div>
         )}
+
+        enableExpanding={enableExpand}
+        renderDetailPanel={
+          enableExpand && renderRowSubComponent
+            ? ({ row }: { row: any }) => (
+              <div className="p-1">{renderRowSubComponent(row.original)}</div>
+            )
+            : undefined
+        }
+
         muiTableHeadRowProps={{
           sx: {
             backgroundColor: "var(--primary)",

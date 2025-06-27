@@ -13,7 +13,6 @@ import FilterSearch from "../../../../components/FilterSearch/FilterSearch";
 import Header from "../../../../components/Header/Header";
 import DeleteConfirmationModel from "../../../../components/Model/DeleteConfirmationModel";
 import FormModel from "../../../../components/Model/FormModel";
-import ProductGroupForm from "../ProductGroup/ProductGroupForm";
 import ProductManagementForm from "./ProductManagementForm";
 
 const ProductManagement: React.FC = () => {
@@ -52,23 +51,36 @@ const ProductManagement: React.FC = () => {
     () => [
       {
         id: nanoid(),
-        accessorKey: "productName",
-        header: "Product Name",
+        header: "Product",
+        Cell: ({ row }) => {
+          const { productName, description } = row.original;
+          return (
+            <div>
+              <b>{productName}</b>
+              <div className="text-stone-400">{description}</div>
+            </div>
+          );
+        },
       },
       {
         id: nanoid(),
-        accessorKey: "description",
-        header: "Product Description",
+        accessorKey: "productGroup.shortName",
+        header: "Group",
       },
       {
         id: nanoid(),
-        accessorKey: "code",
-        header: "Product Code",
+        accessorKey: "productCompany.name",
+        header: "productCompany",
       },
+      // {
+      //   id: nanoid(),
+      //   accessorKey: "code",
+      //   header: "Product Code",
+      // },
       {
         id: nanoid(),
-        accessorKey: "mrp",
-        header: "MRP",
+        accessorKey: "unitOfMeasurement.baseUnit",
+        header: "Base Unit",
       },
       {
         id: nanoid(),
@@ -82,94 +94,15 @@ const ProductManagement: React.FC = () => {
       },
       {
         id: nanoid(),
-        accessorKey: "discountPercent",
-        header: "Discount %",
+        accessorKey: "perUnitPrice",
+        header: "Per Unit Price",
       },
+
       {
         id: nanoid(),
         accessorKey: "vatRate",
-        header: "VAT Rate",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "stockQuantity",
-        header: "Stock Quantity",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "minStockLevel",
-        header: "minStockLevel",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "maxStockLevel",
-        header: "maxStockLevel",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "unitOfMeasurement.baseUnit",
-        header: "Base Unit",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "weight",
-        header: "Product Weight",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "dimensions.length",
-        header: "Length",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "dimensions.width",
-        header: "Width",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "dimensions.height",
-        header: "Height",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "dimensions.height",
-        header: "Height",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "dimensions.height",
-        header: "Height",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "dimensions.height",
-        header: "Height",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "productGroup.shortName",
-        header: "productGroup",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "productCompany.name",
-        header: "productCompany",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "supplier.supplierDetail",
-        header: "supplier",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "expiryDate",
-        header: "Expiry Date",
-      },
-      {
-        id: nanoid(),
-        accessorKey: "batchNumber",
-        header: "Batch Number",
-      },
+        header: "VAT %",
+      }
     ],
     []
   );
@@ -224,6 +157,12 @@ const ProductManagement: React.FC = () => {
         enableDelete={true}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
+        enableExpand={true}
+        renderRowSubComponent={(row: any) => (
+          <div >
+            <strong>Extra Info:</strong> {row.extraInfo}
+          </div>
+        )}
       />
       <CustomPaginationSearchTable
         totalPages={productManagementData?.pages}
