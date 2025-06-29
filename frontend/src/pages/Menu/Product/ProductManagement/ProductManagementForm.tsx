@@ -34,8 +34,6 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
   } = useForm<any>({
     resolver: yupResolver(productManagemetSchema),
     defaultValues: {
-      vatRate: 0,
-      priceIncludeVat: false,
       stockQuantity: 0,
       minStockLevel: 0,
       maxStockLevel: 0,
@@ -67,7 +65,6 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
         purchasePrice: data.purchasePrice ?? 0,
         salePrice: data.salePrice ?? 0,
         discountPercent: data.discountPercent ?? 0,
-        vatRate: data.vatRate ?? 0,
         stockQuantity: data.stockQuantity ?? 0,
         minStockLevel: data.minStockLevel ?? 0,
         maxStockLevel: data.maxStockLevel ?? 0,
@@ -229,19 +226,6 @@ const ProductManagementForm: React.FC<ProductManagementFormProps> = ({
       type: "number",
       label: "Per Unit Price",
       placeholder: "Enter per unit price",
-      gridClass: "col-span-4",
-    },
-    {
-      name: "vatRate",
-      type: "number",
-      label: "VAT Rate",
-      placeholder: "Enter VAT rate",
-      gridClass: "col-span-4",
-    },
-    {
-      name: "priceIncludeVat",
-      type: "checkbox",
-      label: "Price Include VAT",
       gridClass: "col-span-4",
     },
     {

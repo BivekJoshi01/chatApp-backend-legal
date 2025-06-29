@@ -4,24 +4,29 @@ import { Input } from "../../../../../components/RenderInput/Fields/input";
 import { Tabs, TabsList, TabsTrigger } from "../../../../../components/ui/tabs";
 import { BiSolidMessageSquareError } from "react-icons/bi";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../../../components/ui/popover";
+import { useDispatch, useSelector } from "react-redux";
+import { purchaseAddToCart } from "../../../../../redux/reducer/productPurchaseCart";
+import { RootState } from "../../../../../redux/store";
 
 const ProductCardUI: React.FC<any> = ({ pm }) => {
+    const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(0);
     const [remarks, setRemarks] = useState("");
-
     const [selectedTab, setSelectedTab] = useState(
         pm?.unitOfMeasurement?.unitCategory
     );
+
+    const cartItems = useSelector((state: RootState) => state.purchaseCart.items);
 
     const [productPrice, setProductPrice] = useState(() => {
         return pm?.unitOfMeasurement?.unitCategory === selectedTab
             ? pm?.salePrice
             : pm?.perUnitPrice;
     });
-    console.log(productPrice)
 
     const increaseQuantity = () => setQuantity((prev) => prev + 1);
-    const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+    const decreaseQuantity = () => setQuantity((prev) => Math.max(prev - 1, 0));
+
 
     const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -37,9 +42,29 @@ const ProductCardUI: React.FC<any> = ({ pm }) => {
         }
     };
 
+    const handleAddToCart = () => {
+        if (quantity < 1) return;
+
+        const cartItem = {
+            pm_id: pm._id,
+            productName: pm.productName,
+            quantity,
+            unit: selectedTab,
+            remarks,
+            price: productPrice,
+            totalPrice: productPrice * quantity
+        };
+
+        dispatch(purchaseAddToCart(cartItem));
+    };
+
+    const isInCart = cartItems.some(item => item.pm_id === pm._id);
+
     return (
-        <div className="max-w-sm rounded-2xl shadow-lg p-5 bg-white hover:shadow-xl transition duration-300">
-            {/* Product Name */}
+        <div
+            className={`max-w-sm rounded-2xl shadow-lg p-6 bg-white hover:shadow-xl transition duration-300 cursor-pointer ${isInCart ? 'ring-2 ring-primary' : ''
+                }`}
+        >
             <h2 className="text-lg font-semibold mb-3 text-gray-800 flex items-center gap-1.5">
                 {pm?.productName}
                 <Popover>
@@ -90,7 +115,7 @@ const ProductCardUI: React.FC<any> = ({ pm }) => {
                     <input
                         value={quantity}
                         onChange={handleQuantityChange}
-                        className="w-16 text-center bg-transparent outline-none text-gray-800 font-medium"
+                        className="w-6 text-center bg-transparent outline-none text-gray-800 font-medium"
                         min={0}
                     />
                     <button
@@ -101,9 +126,10 @@ const ProductCardUI: React.FC<any> = ({ pm }) => {
                     </button>
                 </div>
 
-                <Button>
+                <Button onClick={handleAddToCart} disabled={quantity < 1}>
                     Add to Cart
                 </Button>
+
             </div>
 
             {/* Remarks/Input Field */}

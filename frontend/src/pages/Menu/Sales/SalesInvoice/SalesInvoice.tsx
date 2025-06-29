@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../../../components/Header/Header";
 import HorizontalButtonCarousel from "./HorizontalButtonCarousel";
 import { useSearchProductManagementsHook } from "../../../../api/product/productManagement/productManagement-hook";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import SearchLayoutSalesFeild from "./SearchLayoutSalesFeild";
 import HorizontalProgressLoader from "../../../../components/Loader/HorizontalProgressLoader";
 import { CustomPaginationSearchTable } from "../../../../components/CustomPagination/CustomPaginationSearchTable";
@@ -11,7 +11,6 @@ import BillLayout from "./InvoiceLayout/BillLayout";
 
 const SalesInvoice: React.FC = () => {
   const [selectedProductGroupId, setSelectedProductGroupId] = useState(null);
-  console.log("🚀 ~ selectedProductGroupId:", selectedProductGroupId)
   const [pagination, setPagination] = useState<any>({
     pageSize: 10,
     pageNumber: 1,
@@ -30,15 +29,18 @@ const SalesInvoice: React.FC = () => {
     isPending,
   } = useSearchProductManagementsHook();
 
-useEffect(() => {
-  mutate({
-    formData: {
-      ...pagination,
-      productGroup: selectedProductGroupId,
-    }
-  });
-}, [mutate, pagination, selectedProductGroupId]);
+  useEffect(() => {
+    mutate({
+      formData: {
+        ...pagination,
+        productGroup: selectedProductGroupId,
+      },
+    });
+  }, [mutate, pagination, selectedProductGroupId]);
 
+  const onSubmit: SubmitHandler<any> = (formData) => {
+    mutate({ formData });
+  };
 
   return (
     <>
@@ -46,25 +48,34 @@ useEffect(() => {
         <></>
       </Header>
 
-      <div className="grid grid-cols-10 gap-3">
-        <div className="col-span-7 bg-background">
-          <HorizontalButtonCarousel setSelectedProductGroupId={setSelectedProductGroupId} />
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-8 bg-background">
+          <HorizontalButtonCarousel
+            setSelectedProductGroupId={setSelectedProductGroupId}
+          />
 
           <div className="bg-foreground p-2">
-            <SearchLayoutSalesFeild register={register} control={control} errors={errors} />
+            <SearchLayoutSalesFeild
+              register={register}
+              control={control}
+              errors={errors}
+              handleSubmit={handleSubmit}
+              onSubmit={onSubmit}
+            />
           </div>
 
-          <div className="p-2 grid grid-cols-12 gap-1">
-            {isPending ? <HorizontalProgressLoader /> :
+          <div className="p-2 grid grid-cols-12 gap-3">
+            {isPending ? (
+              <HorizontalProgressLoader />
+            ) : (
               productManagementData?.productManagements?.map((pm: any) => {
                 return (
-                  <div className="col-span-3" key={pm._id}>
+                  <div className="col-span-4" key={pm._id}>
                     <ProductCardUI pm={pm} />
                   </div>
-                )
+                );
               })
-            }
-
+            )}
           </div>
           <CustomPaginationSearchTable
             totalPages={productManagementData?.pages}
@@ -77,7 +88,7 @@ useEffect(() => {
           />
         </div>
 
-        <div className="col-span-3 border border-gray-200">
+        <div className="col-span-4 border border-gray-200">
           <BillLayout />
         </div>
       </div>

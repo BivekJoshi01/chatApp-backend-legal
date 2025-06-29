@@ -2,15 +2,15 @@ import React from 'react'
 import RenderInput from '../../../../components/RenderInput/RenderInput';
 import { Button } from '../../../../components/Button/button';
 
-const SearchLayoutSalesFeild: React.FC<any> = ({ register, errors, control }) => {
+const SearchLayoutSalesFeild: React.FC<any> = ({ register, errors, control, handleSubmit, onSubmit }) => {
 
     const inputFields: any[] = [
-        {
-            name: "productName",
-            type: "text",
-            placeholder: "Search by Product Name",
-            gridClass: "col-span-4 md:col-span-4",
-        },
+        // {
+        //     name: "productGroup",
+        //     type: "text",
+        //     placeholder: "Search by Product Name",
+        //     gridClass: "col-span-4 md:col-span-4",
+        // },
         {
             name: "productName",
             type: "text",
@@ -26,7 +26,8 @@ const SearchLayoutSalesFeild: React.FC<any> = ({ register, errors, control }) =>
                 errors={errors}
                 control={control}
             />
-            <Button>Search</Button>
+            <Button onClick={handleSubmit(onSubmit)}>Search</Button>
+
         </div>
     )
 }

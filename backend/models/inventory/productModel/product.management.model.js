@@ -12,8 +12,8 @@ const productManagementSchema = mongoose.Schema(
     salePrice: { type: Number, required: true },
     perUnitPrice: { type: Number },
 
-    vatRate: { type: Number, default: 0 },
-    priceIncludeVat: { type: Boolean, default: false },
+    // vatRate: { type: Number, default: 0 },
+    // priceIncludeVat: { type: Boolean, default: false },
 
     stockQuantity: { type: Number, default: 0 },
     minStockLevel: { type: Number, default: 0 },

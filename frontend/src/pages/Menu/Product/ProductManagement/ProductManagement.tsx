@@ -96,12 +96,6 @@ const ProductManagement: React.FC = () => {
         id: nanoid(),
         accessorKey: "perUnitPrice",
         header: "Per Unit Price",
-      },
-
-      {
-        id: nanoid(),
-        accessorKey: "vatRate",
-        header: "VAT %",
       }
     ],
     []

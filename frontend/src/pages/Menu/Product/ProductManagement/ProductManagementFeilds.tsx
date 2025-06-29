@@ -25,7 +25,6 @@ export const productManagemetSchema = yup.object().shape({
     .min(0, "Discount Percent must be at least 0")
     .max(100, "Discount Percent cannot exceed 100")
     .required("Discount Percent is required"),
-  vatRate: yup.number().min(0, "VAT Rate must be at least 0"),
   stockQuantity: yup.number().min(0, "Stock Quantity must be at least 0"),
   minStockLevel: yup.number().min(0, "Min Stock Level must be at least 0"),
   maxStockLevel: yup.number().min(0, "Max Stock Level must be at least 0"),
