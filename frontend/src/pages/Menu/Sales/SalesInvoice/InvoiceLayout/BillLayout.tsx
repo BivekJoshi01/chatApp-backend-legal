@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ComLogo from "../../../../../assets/Office/UniversalLogo.jpeg";
 import { Input } from "../../../../../components/RenderInput/Fields/input";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
-import { purchaseRemoveFromCart } from "../../../../../redux/reducer/productPurchaseCart";
-import { Delete } from "lucide-react";
 import { Button } from "../../../../../components/Button/button";
 import { PrintSaleBillLayout } from "../../SalesHelper/PrintSaleBillLayout";
 import { getBase64FromImage } from "../../../../../utils/getBase64FromImage";
+import BillSalesUI from "./BillSalesUI";
+import { useForm } from "react-hook-form";
+import { useAddSalesRecordHook } from "../../../../../api/buySell/sell/sell-hook";
 
 const BillLayout = () => {
-  const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.purchaseCart.items);
 
   const [isVATChecked, setIsVATChecked] = useState(true);
@@ -30,10 +30,6 @@ const BillLayout = () => {
 
   const grandTotal = subTotal + tax - discountValue;
 
-  const handleRemoveItem = (id: string) => {
-    dispatch(purchaseRemoveFromCart(id));
-  };
-
   const handleVATChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     if (!isNaN(val) && val >= 0) {
@@ -44,7 +40,6 @@ const BillLayout = () => {
   const handleCheckboxToggle = () => {
     setIsVATChecked((prev) => !prev);
     if (!isVATChecked) {
-      // When re-checking, reset VAT to 13 if it was 0
       setVatPercent(13);
     }
   };
@@ -59,131 +54,93 @@ const BillLayout = () => {
   const handleDiscountAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     setDiscountAmount(!isNaN(value) ? value : 0);
-    setDiscountPercent(0); // disable percent if amount is typed
+    setDiscountPercent(0);
   };
 
   const handleDiscountPercentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     setDiscountPercent(!isNaN(value) ? value : 0);
-    setDiscountAmount(0); // disable amount if percent is typed
+    setDiscountAmount(0);
   };
 
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    // resolver: yupResolver(validationSchema),
+  });
 
-const handlePrint = async () => {
-  const logoBase64 = await getBase64FromImage(ComLogo);
+  const { mutate: addMutate, isPending: isAdding } = useAddSalesRecordHook();
 
-  const billData = {
-    cartItems,
-    subTotal,
-    tax,
-    vatPercent,
-    isVATChecked,
-    discountAmount,
-    discountPercent,
-    discountValue,
-    isDISCOUNTChecked,
-    grandTotal
-  };
 
-  const htmlContent = PrintSaleBillLayout({ billData, logoBase64 });
+  const handlePrint = async () => {
+    const logoBase64 = await getBase64FromImage(ComLogo);
 
-  const printWindow = window.open("", "_blank");
-  if (printWindow) {
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-    printWindow.onload = () => {
-      printWindow.focus();
-      printWindow.print();
+    const billData = {
+      cartItems,
+      subTotal,
+      tax,
+      vatPercent,
+      isVATChecked,
+      discountAmount,
+      discountPercent,
+      discountValue,
+      isDISCOUNTChecked,
+      grandTotal
     };
-  }
-};
+    console.log("🚀 ~ handlePrint ~ billData:", billData)
+
+    // const htmlContent = PrintSaleBillLayout({ billData, logoBase64 });
+
+    // const printWindow = window.open("", "_blank");
+    // if (printWindow) {
+    //   printWindow.document.write(htmlContent);
+    //   printWindow.document.close();
+    //   printWindow.onload = () => {
+    //     printWindow.focus();
+    //     printWindow.print();
+    //   };
+    // }
+  };
+
+  const handleSubmitPrint = async (formData) => {
+    const billData = {
+      cartItems,
+      subTotal,
+      tax,
+      vatPercent,
+      isVATChecked,
+      discountAmount,
+      discountPercent,
+      discountValue,
+      isDISCOUNTChecked,
+      grandTotal
+    };
+
+    const finalPayload = {
+      ...formData, // Fields from the form
+      ...billData  // Calculated values
+    };
+
+    console.log("🧾 Submitting sale record:", finalPayload);
+
+    addMutate(finalPayload, {
+      onSuccess: () => {
+        handlePrint(); // ⬅️ Trigger print after successful API call
+        reset(); // ⬅️ Reset the form if needed
+      },
+      onError: (error) => {
+        console.error("❌ Error adding sales record:", error);
+      }
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-8 shadow rounded-lg text-gray-700">
-      {/* Header & Company Info... (same as before) */}
-      {/* <div className="flex items-center justify-between">
-        <div className="w-28 h-28">
-          <img
-            src={ComLogo}
-            alt="Company Logo"
-            className="object-contain w-full h-full"
-          />
-        </div>
-
-        <div className="text-right">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Universal Stationery Suppliers
-          </h1>
-          <p className="text-gray-600">Balambu 12, Kathmandu, Nepal</p>
-          <p className="text-gray-600">Email: universal@stationery.com</p>
-          <p className="text-gray-600">Phone: +977-01-5555555</p>
-          <p className="text-gray-600">www.universalstationery.com.np</p>
-        </div>
-      </div> */}
-
-      {/* Divider */}
-      {/* <div className="border-t border-gray-300 my-3"></div> */}
-      {/* Bill Info */}
-      <div className="flex justify-between gap-4 text-sm mb-6">
-        <p className="font-medium">Bill No: Q-2025-001</p>
-        <p>Date: 2025-02-02</p>
-      </div>
-
-      <Input />
-
-      {/* Table */}
-      <table className="w-full text-left border-collapse my-2">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-3 py-2">#</th>
-            <th className="border border-gray-300 px-3 py-2">Item</th>
-            <th className="border border-gray-300 px-3 py-2 text-right">
-              Unit
-            </th>
-            <th className="border border-gray-300 px-3 py-2 text-right">Qty</th>
-            <th className="border border-gray-300 px-3 py-2 text-right">
-              Rate (Rs)
-            </th>
-            <th className="border border-gray-300 px-3 py-2 text-right">
-              Total (Rs)
-            </th>
-            <th className="border border-gray-300 px-3 py-2 text-right">
-              Act.
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartItems?.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="border border-gray-300 px-3 py-2">{index + 1}</td>
-              <td className="border border-gray-300 px-3 py-2">
-                {item.productName}
-              </td>
-              <td className="border border-gray-300 px-3 py-2 text-right">
-                {item.unit}
-              </td>
-              <td className="border border-gray-300 px-3 py-2 text-right">
-                {item.quantity}
-              </td>
-              <td className="border border-gray-300 px-3 py-2 text-right">
-                {item.price}
-              </td>
-              <td className="border border-gray-300 px-3 py-2 text-right">
-                {item.totalPrice}
-              </td>
-              <td className="border border-gray-300 px-3 py-2 text-center">
-                <button
-                  onClick={() => handleRemoveItem(item.pm_id)}
-                  className="text-red-600 hover:text-red-800 text-sm"
-                >
-                  <Delete />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+      <BillSalesUI cartItems={cartItems} />
       {/* Totals */}
       <div className="flex mb-8">
         <div className="w-full">
@@ -246,18 +203,7 @@ const handlePrint = async () => {
           </div>
         </div>
       </div>
-
-      {/* Remarks */}
-      {/* <div className="mt-4">
-        {cartItems?.map((r, index) =>
-          r.remarks?.trim() ? (
-            <p key={index}>
-              {index + 1}. {r.remarks}
-            </p>
-          ) : null
-        )}
-      </div> */}
-      <Button className="w-full mt-6" onClick={handlePrint}>
+      <Button className="w-full mt-6" onClick={handleSubmit(handleSubmitPrint)}>
         Submit & Print
       </Button>
     </div>

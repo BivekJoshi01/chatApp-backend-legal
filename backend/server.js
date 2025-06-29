@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.routes.js";
 import coreRoutes from "./routes/core/core.route.js";
 import chatRoutes from "./routes/chat.routes.js";
 import inventoryRoutes from "./routes/inventory/inventory.route.js";
+import buySellRoutes from "./routes/buySell/buySell.routes.js";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
@@ -34,6 +35,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/core", coreRoutes);
 app.use("/api/inventory", inventoryRoutes);
+app.use("/api/buySell", buySellRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
