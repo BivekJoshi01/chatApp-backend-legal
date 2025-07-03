@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import Sales from "../../../models/inventory/salesModal/sales.model.js";
-// import { buildSearchConditions } from "../../../config/heplerConditions.js";
+import { buildSearchConditions } from "../../../config/heplerConditions.js";
 
 export const createSales = expressAsyncHandler(async (req, res) => {
   const sales = await Sales.create(req.body);
@@ -10,32 +10,32 @@ export const createSales = expressAsyncHandler(async (req, res) => {
   });
 });
 
-// export const getUnitOfMeasurements = expressAsyncHandler(async (req, res) => {
-//   const unitOfMeasurements = await UnitOfMeasurement.find();
-//   res.status(200).json(unitOfMeasurements);
-// });
+export const getAllSales = expressAsyncHandler(async (req, res) => {
+  const sales = await Sales.find();
+  res.status(200).json(sales);
+});
 
-// export const getUnitOfMeasurementPaginatedPost = expressAsyncHandler(
-//   async (req, res) => {
-//     const { pageSize = 10, pageNumber = 1, ...searchFields } = req.body;
+export const getAllSalesPaginatedPost = expressAsyncHandler(
+  async (req, res) => {
+    const { pageSize = 10, pageNumber = 1, ...searchFields } = req.body;
 
-//     const searchCondition = buildSearchConditions(searchFields);
+    const searchCondition = buildSearchConditions(searchFields);
 
-//     const count = await UnitOfMeasurement.countDocuments(searchCondition);
+    const count = await Sales.countDocuments(searchCondition);
 
-//     const units = await UnitOfMeasurement.find(searchCondition)
-//       .limit(Number(pageSize))
-//       .skip(Number(pageSize) * (Number(pageNumber) - 1))
-//       .sort({ createdAt: -1 });
+    const sales = await Sales.find(searchCondition)
+      .limit(Number(pageSize))
+      .skip(Number(pageSize) * (Number(pageNumber) - 1))
+      .sort({ createdAt: -1 });
 
-//     res.status(200).json({
-//       units,
-//       pageNumber: Number(pageNumber),
-//       pages: Math.ceil(count / Number(pageSize)),
-//       totalElements: count,
-//     });
-//   }
-// );
+    res.status(200).json({
+      sales,
+      pageNumber: Number(pageNumber),
+      pages: Math.ceil(count / Number(pageSize)),
+      totalElements: count,
+    });
+  }
+);
 
 // export const getUnitOfMeasurementById = expressAsyncHandler(
 //   async (req, res) => {
