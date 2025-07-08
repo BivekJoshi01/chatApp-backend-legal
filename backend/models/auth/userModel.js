@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 
 const userSchema = mongoose.Schema(
   {
-    name: { type: String, required: true },     // fixed: 'require' -> 'required'
+    name: { type: String, required: true },     // fixed 'require' -> 'required'
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     pic: {
@@ -32,6 +32,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("User", userSchema);
+// Fix OverwriteModelError by checking if the model is already compiled
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import ComLogo from "../../../../../assets/Office/UniversalLogo.jpeg";
 import { Input } from "../../../../../components/RenderInput/Fields/input";
 import { useSelector } from "react-redux";
@@ -10,6 +10,17 @@ import { useForm } from "react-hook-form";
 import { useAddSalesRecordHook } from "../../../../../api/buySell/sell/sell-hook";
 import { PrintSaleBillLayout } from "../../SalesHelper/PrintSaleBillLayout";
 import { PrintableSalesBillLayout } from "../../SalesHelper/PrintableSalesBillLayout";
+import CustomerSelect from "./CustomerSelect";
+
+export interface Customer {
+  _id: string;
+  userId: {
+    name: string;
+  };
+  phoneNumber?: string;
+  customerPic?: string;
+  isRetailer?: boolean;
+}
 
 const BillLayout = () => {
   const cartItems = useSelector((state: RootState) => state.purchaseCart.items);
@@ -20,6 +31,7 @@ const BillLayout = () => {
   const [vatPercent, setVatPercent] = useState(13);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountPercent, setDiscountPercent] = useState(0);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
   const subTotal = cartItems.reduce((acc, item) => acc + item.totalPrice, 0);
   const tax = isVATChecked ? (subTotal * vatPercent) / 100 : 0;
@@ -27,8 +39,8 @@ const BillLayout = () => {
     ? discountAmount > 0
       ? discountAmount
       : discountPercent > 0
-      ? (subTotal * discountPercent) / 100
-      : 0
+        ? (subTotal * discountPercent) / 100
+        : 0
     : 0;
   const grandTotal = subTotal + tax - discountValue;
 
@@ -67,10 +79,7 @@ const BillLayout = () => {
   };
 
   const {
-    register,
-    control,
     handleSubmit,
-    formState: { errors },
     reset,
   } = useForm();
 
@@ -92,10 +101,12 @@ const BillLayout = () => {
       grandTotal,
     };
 
+    const customerName = selectedCustomer?.userId?.name || "";
+
     const htmlContent =
       loggedUsersData?.role !== "SALES"
-        ? PrintSaleBillLayout({ billData, logoBase64 })
-        : PrintableSalesBillLayout({ billData, logoBase64 });
+        ? PrintSaleBillLayout({ billData, logoBase64, customerName })
+        : PrintableSalesBillLayout({ billData, logoBase64, customerName });
 
     const iframe = document.createElement("iframe");
     iframe.style.position = "fixed";
@@ -139,6 +150,8 @@ const BillLayout = () => {
     const finalPayload = {
       ...formData,
       ...billData,
+      customerId: selectedCustomer?._id || null,
+      customerName: selectedCustomer?.userId?.name || null,
     };
 
     addMutate(finalPayload, {
@@ -159,7 +172,7 @@ const BillLayout = () => {
           <p className="font-medium">Bill No: ....................</p>
           <p>Date: 2025-02-02</p>
         </div>
-        <Input />
+        <CustomerSelect setSelectedCustomer={setSelectedCustomer} selectedCustomer={selectedCustomer} />
         <BillSalesUI cartItems={cartItems} />
         <div className="flex mb-8">
           <div className="w-full">

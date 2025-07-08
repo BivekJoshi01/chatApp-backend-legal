@@ -1,6 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import Customer from "../../models/customerSupplierModel/customer.model.js";
 import { buildSearchConditions } from "../../config/heplerConditions.js";
+import User from "../../models/auth/userModel.js";
 
 export const createCustomer = expressAsyncHandler(async (req, res) => {
   const customer = await Customer.create(req.body);
@@ -20,7 +21,31 @@ export const getCustomers = expressAsyncHandler(async (req, res) => {
 
 export const getCustomerPaginatedPost = expressAsyncHandler(
   async (req, res) => {
-    const { pageSize = 10, pageNumber = 1, ...searchFields } = req.body;
+    const { pageSize = 10, pageNumber = 1, ...rawSearchFields } = req.body;
+
+    let searchFields = { ...rawSearchFields };
+
+    if (searchFields.userId?.name) {
+      const userMatches = await User.find({
+        name: new RegExp(searchFields.userId.name, "i"),
+      }).select("_id");
+
+      const userIds = userMatches.map((u) => u._id);
+
+      if (userIds.length) {
+        searchFields.userId = { $in: userIds };
+      } else {
+        // If no users match, short-circuit the search
+        return res.status(200).json({
+          customers: [],
+          pageNumber: Number(pageNumber),
+          pages: 0,
+          totalElements: 0,
+        });
+      }
+    } else {
+      delete searchFields.userId;
+    }
 
     const searchCondition = buildSearchConditions(searchFields);
 
@@ -42,3 +67,4 @@ export const getCustomerPaginatedPost = expressAsyncHandler(
     });
   }
 );
+

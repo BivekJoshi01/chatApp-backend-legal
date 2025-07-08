@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { addSalesRecord } from "./sell-api";
+import { addSalesRecord, searchSales } from "./sell-api";
 
 export const useAddSalesRecordHook = () => {
   return useMutation({
@@ -11,6 +11,23 @@ export const useAddSalesRecordHook = () => {
     },
     onSuccess: () => {
       toast.success("Sales record maintained successfully");
+    },
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      toast.error(message);
+    },
+  });
+};
+
+export const useSearchSalesHook = () => {
+  return useMutation({
+    mutationKey: ["searchSales"],
+    mutationFn: async ({ formData }: any): Promise<any> => {
+      const response = await searchSales(formData);
+      return response;
     },
     onError: (error: any) => {
       const message =

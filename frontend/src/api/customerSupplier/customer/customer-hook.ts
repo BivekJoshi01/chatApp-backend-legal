@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { addCustomer, searchCustomer } from "./customer-api";
+import { addCustomer, getAllCustomer, searchCustomer } from "./customer-api";
 
 export const useAddCustomerHook = () => {
 //   const queryClient = useQueryClient();
@@ -38,6 +38,16 @@ export const useSearchCustomerHook = () => {
         error.message ||
         "Something went wrong";
       toast.error(message);
+    },
+  });
+};
+
+export const useGetAllCustomersHook = () => {
+  return useQuery({
+    queryKey: ["getAllCustomer"],
+    queryFn: async () => {
+      const response = await getAllCustomer();
+      return response;
     },
   });
 };

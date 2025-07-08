@@ -127,7 +127,7 @@ const CustomTable = <T extends Record<string, any>>({
         renderDetailPanel={
           enableExpand && renderRowSubComponent
             ? ({ row }: { row: any }) => (
-              <div className="p-1">{renderRowSubComponent(row.original)}</div>
+              <div className="min-w-full">{renderRowSubComponent(row.original)}</div>
             )
             : undefined
         }

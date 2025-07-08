@@ -7,6 +7,15 @@ export const addSalesRecord = async (payload: any) => {
   );
   return data;
 };
+
+export const searchSales = async (formData: object) => {
+  const { data } = await axiosInstance.post(
+    "api/buySell/sales/search",
+    formData
+  );
+  return data;
+};
+
 // export const getAreaPaginated = async ({
 //   pageNumber,
 //   pageSize,

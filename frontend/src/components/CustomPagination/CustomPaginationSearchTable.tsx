@@ -52,8 +52,8 @@ export const CustomPaginationSearchTable: React.FC<Props> = ({
 
   const getButtonClass = (p: number | string) =>
     `flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 ${p === page
-      ? "text-primary-90 bg-primary-20 hover:bg-primary-30 hover:text-text"
-      : "text-primary-80 bg-primary-30 hover:bg-primary-20 hover:text-primary-80"
+      ? "text-primary-90 bg-primary-50 hover:bg-primary-30 hover:text-text"
+      : "text-primary-80 bg-primary-20 hover:bg-primary-20 hover:text-primary-80"
     }`;
 
   const options = [10, 20, 50, 100, 200];

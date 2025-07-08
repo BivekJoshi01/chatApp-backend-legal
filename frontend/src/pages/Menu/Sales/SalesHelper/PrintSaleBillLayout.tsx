@@ -14,9 +14,11 @@ interface BillData {
 export const PrintSaleBillLayout = ({
   billData,
   logoBase64,
+  customerName
 }: {
   billData: BillData;
   logoBase64: string;
+  customerName:string
 }) => {
   return `
     <html>
@@ -109,7 +111,7 @@ export const PrintSaleBillLayout = ({
         </div>
 
           <div class="info" style="display: flex; justify-content: space-between;">
-          <p>Bill To : <strong>Bivek Joshi</strong> (9865466989)</p>
+          <p>Bill To : <strong>${customerName}</strong></p>
           <p><strong>CustomerID: </strong> ATGHV65</p>
         </div>
 

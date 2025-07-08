@@ -14,9 +14,11 @@ interface BillData {
 export const PrintableSalesBillLayout = ({
   billData,
   logoBase64,
+  customerName,
 }: {
   billData: BillData;
   logoBase64: string;
+  customerName:string;
 }) => {
   return `
     <html>
@@ -70,7 +72,7 @@ export const PrintableSalesBillLayout = ({
           <div>Date: ${new Date().toLocaleDateString()}</div>
         </div>
         <div>
-          <div>Bill To: <b>Bivek Joshi</b></div>
+          <div>Bill To: <b>${customerName}</b></div>
         </div>
 
         <div class="divider"></div>
