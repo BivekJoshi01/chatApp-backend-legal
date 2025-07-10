@@ -16,7 +16,6 @@ const LetterHead = () => {
       </DrawerHeader>
 
       <div >
-        {/* Your main content goes here */}
         <p className="text-gray-700">
           This is the Letter Head drawer content. You can place forms or components here.
         </p>

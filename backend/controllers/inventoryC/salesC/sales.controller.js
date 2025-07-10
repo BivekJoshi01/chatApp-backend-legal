@@ -26,7 +26,15 @@ export const getAllSalesPaginatedPost = expressAsyncHandler(
     const sales = await Sales.find(searchCondition)
       .limit(Number(pageSize))
       .skip(Number(pageSize) * (Number(pageNumber) - 1))
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "customerId",
+        select:"customerId phoneNumber",
+        populate: {
+          path: "userId",
+          select: "name email", // choose fields you want
+        },
+      });
 
     res.status(200).json({
       sales,

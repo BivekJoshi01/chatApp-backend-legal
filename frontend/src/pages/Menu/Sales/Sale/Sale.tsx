@@ -6,8 +6,16 @@ import CustomTable from "../../../../components/CustomTable/CustomTable";
 import { CustomPaginationSearchTable } from "../../../../components/CustomPagination/CustomPaginationSearchTable";
 import { useForm } from "react-hook-form";
 import FilterSearch from "../../../../components/FilterSearch/FilterSearch";
+import { getBase64FromImage } from "../../../../utils/getBase64FromImage";
+import ComLogo from "../../../../assets/Office/UniversalLogo.jpeg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import { PrintSaleBillLayout } from "../SalesHelper/PrintSaleBillLayout";
+import { PrintableSalesBillLayout } from "../SalesHelper/PrintableSalesBillLayout";
 
 const Sale = () => {
+  const loggedUsersData = useSelector((state: RootState) => state.auth.user);
+
   const [pagination, setPagination] = useState<any>({
     pageSize: 10,
     pageNumber: 1,
@@ -40,64 +48,117 @@ const Sale = () => {
     mutate({ formData: { ...pagination } });
   }, [pagination]);
 
-const columns = useMemo<MRT_ColumnDef<any>[]>(
-  () => [
-    {
-      accessorKey: "customerName",
-      header: "Customer",
-    },
-    {
-      accessorKey: "subTotal",
-      header: "Sub Total",
-      Cell: ({ row }) => `Rs. ${row.original.subTotal?.toFixed(2)}`,
-    },
-    {
-      header: "Discount",
-      Cell: ({ row }) => {
-        const {
-          isDISCOUNTChecked,
-          discountPercent,
-          discountAmount,
-          discountValue,
-        } = row.original;
+  const handlePrint = async (row: any) => {
+    const logoBase64 = await getBase64FromImage(ComLogo);
+    const { customerName } = row?.original;
+    const billData = row?.original;
+    const htmlContent =
+      loggedUsersData?.role !== "SALES"
+        ? PrintSaleBillLayout({ billData, logoBase64, customerName })
+        : PrintableSalesBillLayout({ billData, logoBase64, customerName });
 
-        if (!isDISCOUNTChecked) return <span>-</span>;
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "0";
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(htmlContent);
+      doc.close();
 
-        return (
-          <div className="text-sm">
-            {discountPercent > 0 && (
-              <div>{discountPercent}% → Rs. {discountValue?.toFixed(2)}</div>
-            )}
-            {discountAmount > 0 && (
-              <div>Flat → Rs. {discountValue?.toFixed(2)}</div>
-            )}
-          </div>
-        );
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow?.focus();
+          iframe.contentWindow?.print();
+          document.body.removeChild(iframe);
+        }, 100);
+      };
+    }
+  }
+
+  const columns = useMemo<MRT_ColumnDef<any>[]>(
+    () => [
+      {
+        accessorKey: "customerName",
+        header: "Customer",
+        Cell: ({ row }) => {
+          const { customerId } = row?.original;
+          return (
+            <div className="flex flex-col">
+              <div>{customerId?.userId?.name}</div>
+              <div>{customerId?.userId?.email}</div>
+              <div>{customerId?.phoneNumber}</div>
+            </div>
+          )
+        },
       },
-    },
-    {
-      header: "VAT",
-      Cell: ({ row }) => {
-        const { isVATChecked, vatPercent, tax } = row.original;
-
-        if (!isVATChecked) return <span>-</span>;
-
-        return (
-          <div className="text-sm">
-            <div>{vatPercent}%</div>
-            <div>Rs. {tax?.toFixed(2)}</div>
-          </div>
-        );
+      {
+        accessorKey: "subTotal",
+        header: "Sub Total",
+        Cell: ({ row }) => `Rs. ${row.original.subTotal?.toFixed(2)}`,
       },
-    },
-    {
-      accessorKey: "grandTotal",
-      header: "Grand Total",
-      Cell: ({ row }) => `Rs. ${row.original.grandTotal?.toFixed(2)}`,
-    },
-  ],
-  []
-);
+      {
+        header: "Discount",
+        Cell: ({ row }) => {
+          const {
+            isDISCOUNTChecked,
+            discountPercent,
+            discountAmount,
+            discountValue,
+          } = row.original;
+
+          if (!isDISCOUNTChecked) return <span>-</span>;
+
+          return (
+            <div className="text-sm">
+              {discountPercent > 0 && (
+                <div>{discountPercent}% → Rs. {discountValue?.toFixed(2)}</div>
+              )}
+              {discountAmount > 0 && (
+                <div>Flat → Rs. {discountValue?.toFixed(2)}</div>
+              )}
+            </div>
+          );
+        },
+      },
+      {
+        header: "VAT",
+        Cell: ({ row }) => {
+          const { isVATChecked, vatPercent, tax } = row.original;
+
+          if (!isVATChecked) return <span>-</span>;
+
+          return (
+            <div className="text-sm">
+              <div>{vatPercent}%</div>
+              <div>Rs. {tax?.toFixed(2)}</div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "grandTotal",
+        header: "Grand Total",
+        Cell: ({ row }) => `Rs. ${row.original.grandTotal?.toFixed(2)}`,
+      },
+      {
+        header: "Receipt",
+        Cell: ({ row }) => {
+          return (
+            <div onClick={() => handlePrint(row)}>
+              View
+            </div>
+          )
+        },
+      },
+    ],
+    []
+  );
 
 
   return (
