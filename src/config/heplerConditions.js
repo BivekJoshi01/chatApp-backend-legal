@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import ProductManagement from "../models/inventory/productModel/product.management.model.js";
 
 export const buildSearchConditions = (fields) => {
   const condition = {};
@@ -8,7 +7,7 @@ export const buildSearchConditions = (fields) => {
     if (value === undefined || value === null || value === "") continue;
 
     // Check if this field exists in the schema
-    const schemaPath = ProductManagement.schema.paths[key];
+    const schemaPath = "";
 
     if (!schemaPath) {
       // Unknown field — skip it

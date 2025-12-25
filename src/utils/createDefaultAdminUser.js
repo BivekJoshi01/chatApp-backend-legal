@@ -18,7 +18,7 @@ export const createDefaultAdminUser = async () => {
   const newAdmin = new User({
     email: adminEmail,
     password: hashedPassword,
-    name: "Universal Stationery Suppliers Admin",
+    name: "Legal Remit",
     role: "ADMIN",
     isVerified: true,
     isFirstTimeLogin: true,
