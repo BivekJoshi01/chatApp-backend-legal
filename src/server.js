@@ -6,6 +6,7 @@ import colors from "colors";
 import userRoutes from "./routes/user.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import messageRoutes from "./routes/message.routes.js";
+import thirdPartyRoutes from "./routes/thirdParty.routes.js";
 import { Server } from "socket.io";
 
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -19,17 +20,17 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5100",
-    credentials: true,
-  })
-);
 // app.use(
 //   cors({
-//     origin: "*",
+//     origin: process.env.CLIENT_URL || "http://localhost:5000",
+//     credentials: true,
 //   })
 // );
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("API is Runnning Successfully");
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/third-party", thirdPartyRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

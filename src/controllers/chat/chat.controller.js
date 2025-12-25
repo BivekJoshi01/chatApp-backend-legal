@@ -1,74 +1,104 @@
 import expressAsyncHandler from "express-async-handler";
 import { Chat } from "../../models/chat/chatModel.js";
 import { User } from "../../models/auth/user.model.js";
+import { fetchThirdPartyUser } from "../../services/thirdParty.service.js";
+
 
 export const accessChat = expressAsyncHandler(async (req, res) => {
   const { userId } = req.body;
+  const token = req.headers.authorization?.split(" ")[1]; // Bearer token
 
-  if (!userId) {
-    console.log("UserId not provided with request");
-    return res.sendStatus(400);
-  }
+  if (!userId) return res.status(400).json({ message: "UserId not provided" });
+  if (!token) return res.status(401).json({ message: "Authorization token missing" });
 
-  let isChat = await Chat.find({
+  // Find chat containing both users
+  let chat = await Chat.findOne({
     isGroupChat: false,
-    $and: [
-      { users: { $elemMatch: { $eq: req.userId } } }, // FIXED
-      { users: { $elemMatch: { $eq: userId } } },
-    ],
-  })
-    .populate("users", "-password")
-    .populate("latestMessage");
+    users: { $all: [req.userId, userId] },
+  }).populate("latestMessage");
 
-  isChat = await User.populate(isChat, {
-    path: "latestMessage.sender",
-    select: "name pic email",
-  });
-
-  if (isChat.length > 0) {
-    return res.send(isChat[0]);
-  }
-
-  try {
-    const chatData = {
+  // If no chat exists, create one
+  if (!chat) {
+    chat = await Chat.create({
       chatName: "sender",
       isGroupChat: false,
-      users: [req.userId, userId], // FIXED
-    };
-
-    const createdChat = await Chat.create(chatData);
-
-    const fullChat = await Chat.findById(createdChat._id).populate(
-      "users",
-      "-password"
-    );
-
-    return res.status(200).send(fullChat);
-  } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+      users: [req.userId, userId],
+    });
   }
+
+  // Fetch third-party user info for all users in the chat
+  const usersInfo = await Promise.all(
+    chat.users.map(async (id) => {
+      try {
+        const res = await fetchThirdPartyUser(id, token);
+        return res.data; // return the actual user data
+      } catch (err) {
+        console.error("Error fetching user:", id, err.message);
+        return null;
+      }
+    })
+  );
+
+  return res.status(200).json({
+    chat,
+    users: usersInfo.filter(Boolean), // remove any failed calls
+  });
 });
 
 export const fetchChat = expressAsyncHandler(async (req, res) => {
   try {
+    const token = req.headers.authorization?.split(" ")[1]; // Bearer token
+
+    if (!token) {
+      return res.status(401).json({ message: "Authorization token missing" });
+    }
+
+    // Get all chats that include current user
     let chats = await Chat.find({
       users: { $elemMatch: { $eq: req.userId } },
     })
-      .populate("users", "-password")
-      .populate("groupAdmin", "-password")
-      .populate("latestMessage")
+      .populate("latestMessage") // if you have Message model
       .sort({ updatedAt: -1 });
 
-    chats = await User.populate(chats, {
-      path: "latestMessage.sender",
-      select: "name pic email",
-    });
+    // For each chat, fetch users info from third-party API
+    const chatsWithUsers = await Promise.all(
+      chats.map(async (chat) => {
+        // Fetch all users info
+        const usersInfo = await Promise.all(
+          chat.users.map(async (id) => {
+            try {
+              const response = await fetchThirdPartyUser(id, token);
+              return response.data; // exact user info
+            } catch (err) {
+              console.error("Error fetching user:", id, err.message);
+              return null;
+            }
+          })
+        );
 
-    res.status(200).send(chats);
+        // Fetch groupAdmin info if it exists
+        let groupAdminInfo = null;
+        if (chat.groupAdmin) {
+          try {
+            const response = await fetchThirdPartyUser(chat.groupAdmin, token);
+            groupAdminInfo = response.data;
+          } catch (err) {
+            console.error("Error fetching groupAdmin:", chat.groupAdmin, err.message);
+          }
+        }
+
+        return {
+          chat: chat.toObject(),
+          users: usersInfo.filter(Boolean), // remove failed calls
+          groupAdmin: groupAdminInfo,
+        };
+      })
+    );
+
+    res.status(200).json(chatsWithUsers);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    console.error("Error fetching chats:", error.message);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -82,7 +112,8 @@ export const createGroup = expressAsyncHandler(async (req, res) => {
   const users = JSON.parse(usersRaw);
 
   if (users.length < 2) {
-    return res.status(400)
+    return res
+      .status(400)
       .send("More than 2 users are required to form a group chat");
   }
 
