@@ -3,13 +3,13 @@ import { Chat } from "../../models/chat/chatModel.js";
 import { User } from "../../models/auth/user.model.js";
 import { fetchThirdPartyUser } from "../../services/thirdParty.service.js";
 
-
 export const accessChat = expressAsyncHandler(async (req, res) => {
   const { userId } = req.body;
   const token = req.headers.authorization?.split(" ")[1]; // Bearer token
 
   if (!userId) return res.status(400).json({ message: "UserId not provided" });
-  if (!token) return res.status(401).json({ message: "Authorization token missing" });
+  if (!token)
+    return res.status(401).json({ message: "Authorization token missing" });
 
   // Find chat containing both users
   let chat = await Chat.findOne({
@@ -20,7 +20,7 @@ export const accessChat = expressAsyncHandler(async (req, res) => {
   // If no chat exists, create one
   if (!chat) {
     chat = await Chat.create({
-      chatName: "sender",
+      chatName: "Legal Remit",
       isGroupChat: false,
       users: [req.userId, userId],
     });
@@ -83,7 +83,11 @@ export const fetchChat = expressAsyncHandler(async (req, res) => {
             const response = await fetchThirdPartyUser(chat.groupAdmin, token);
             groupAdminInfo = response.data;
           } catch (err) {
-            console.error("Error fetching groupAdmin:", chat.groupAdmin, err.message);
+            console.error(
+              "Error fetching groupAdmin:",
+              chat.groupAdmin,
+              err.message
+            );
           }
         }
 

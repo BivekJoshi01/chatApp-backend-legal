@@ -19,7 +19,7 @@ const safeFetchUser = async (userId, token) => {
   } catch (err) {
     // console.warn(`Failed to fetch user ${userId}:`, err.message);
     return {
-      _id: "0ab9f3a7-2d0d-4499-83e4-6fe348b09fa6",
+      _id: "a4608bcd-f971-414d-892c-8d8a1f52b9a5",
       firstName: "Legal",
       middleName: null,
       lastName: "Remit",
