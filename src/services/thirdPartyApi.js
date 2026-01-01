@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const thirdPartyApi = axios.create({
-  baseURL: process.env.THIRD_PARTY_BASE_URL,
+  baseURL: process.env.THIRD_PARTY_BASE_URL || "https://core.legalremit.com/",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

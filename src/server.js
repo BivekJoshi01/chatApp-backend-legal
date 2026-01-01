@@ -1,4 +1,3 @@
-
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -44,7 +43,7 @@ const server = app.listen(PORT, async () => {
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5100",
+    origin: process.env.CLIENT_URL || "https://core.legalremit.com",
   },
 });
 
