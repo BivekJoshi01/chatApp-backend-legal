@@ -11,10 +11,9 @@ const safeFetchUser = async (userId, token) => {
     }
 
     const { role, phoneNumber, userId: myUserId } = decoded;
-    // console.log("🚀 ~ safeFetchUser ~ myUserId:", myUserId);
 
     // 2️ If NOT admin → return from token (NO API CALL)
-    if (role !== "ADMIN" || userId === myUserId) {
+    if (role !== "ADMIN") {
       return {
         _id: userId,
         firstName: phoneNumber || "Legal Remit",
