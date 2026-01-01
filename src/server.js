@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import colors from "colors";
-import userRoutes from "./routes/user.routes.js";
+// import userRoutes from "./routes/user.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import thirdPartyRoutes from "./routes/thirdParty.routes.js";
@@ -12,7 +12,6 @@ import { Server } from "socket.io";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 import { connectDB } from "./config/db.js";
-import { createDefaultAdminUser } from "./utils/createDefaultAdminUser.js";
 
 dotenv.config();
 
@@ -36,7 +35,7 @@ app.get("/", (req, res) => {
   res.send("API is Runnning Successfully");
 });
 
-app.use("/api/user", userRoutes);
+// app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/third-party", thirdPartyRoutes);
@@ -48,7 +47,6 @@ const PORT = process.env.PORT || 8100;
 
 const server = app.listen(PORT, async () => {
   await connectDB();
-  await createDefaultAdminUser();
   console.log(`Server Started on PORT ${PORT}`.yellow.bold);
 });
 

@@ -1,31 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import Message from "../../models/chat/messageModel.js";
 import { Chat } from "../../models/chat/chatModel.js";
-import { fetchThirdPartyUser } from "../../services/thirdParty.service.js";
-
-/**
- * Safely fetch third-party user info.
- * Returns a placeholder object if fetch fails.
- */
-const safeFetchUser = async (userId, token) => {
-  try {
-    const res = await fetchThirdPartyUser(userId, token);
-    return {
-      _id: res.data.id,
-      firstName: res.data.firstName,
-      middleName: res.data.middleName,
-      lastName: res.data.lastName,
-    };
-  } catch (err) {
-    // console.warn(`Failed to fetch user ${userId}:`, err.message);
-    return {
-      _id: "a4608bcd-f971-414d-892c-8d8a1f52b9a5",
-      firstName: "Legal",
-      middleName: null,
-      lastName: "Remit",
-    };
-  }
-};
+import safeFetchUser from "../../services/safeFetchUser.js";
 
 // ------------------ Send Message ------------------
 export const sendMessage = expressAsyncHandler(async (req, res) => {
