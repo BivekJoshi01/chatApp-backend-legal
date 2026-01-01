@@ -1,23 +1,20 @@
 import expressAsyncHandler from "express-async-handler";
 import { Chat } from "../../models/chat/chatModel.js";
-import { User } from "../../models/auth/user.model.js";
-import { fetchThirdPartyUser } from "../../services/thirdParty.service.js";
+import safeFetchUser from "../../services/safeFetchUser.js";
 
 export const accessChat = expressAsyncHandler(async (req, res) => {
   const { userId } = req.body;
-  const token = req.headers.authorization?.split(" ")[1]; // Bearer token
+  const token = req.headers.authorization?.split(" ")[1];
 
-  if (!userId) return res.status(400).json({ message: "UserId not provided" });
-  if (!token)
-    return res.status(401).json({ message: "Authorization token missing" });
-
-  // Find chat containing both users
+  if (!userId) {
+    return res.status(400).json({ message: "UserId not provided" });
+  }
+  
   let chat = await Chat.findOne({
     isGroupChat: false,
     users: { $all: [req.userId, userId] },
   }).populate("latestMessage");
 
-  // If no chat exists, create one
   if (!chat) {
     chat = await Chat.create({
       chatName: "Legal Remit",
@@ -26,85 +23,51 @@ export const accessChat = expressAsyncHandler(async (req, res) => {
     });
   }
 
-  // Fetch third-party user info for all users in the chat
-  const usersInfo = await Promise.all(
-    chat.users.map(async (id) => {
-      try {
-        const res = await fetchThirdPartyUser(id, token);
-        return res.data; // return the actual user data
-      } catch (err) {
-        console.error("Error fetching user:", id, err.message);
-        return null;
-      }
-    })
+  //  Fetch users safely (admin → API, others → token)
+  const users = await Promise.all(
+    chat.users.map((id) => safeFetchUser(id, token))
   );
 
-  return res.status(200).json({
+  res.status(200).json({
     chat,
-    users: usersInfo.filter(Boolean), // remove any failed calls
+    users,
   });
 });
 
 export const fetchChat = expressAsyncHandler(async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1]; // Bearer token
+  const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token) {
-      return res.status(401).json({ message: "Authorization token missing" });
-    }
-
-    // Get all chats that include current user
-    let chats = await Chat.find({
-      users: { $elemMatch: { $eq: req.userId } },
-    })
-      .populate("latestMessage") // if you have Message model
-      .sort({ updatedAt: -1 });
-
-    // For each chat, fetch users info from third-party API
-    const chatsWithUsers = await Promise.all(
-      chats.map(async (chat) => {
-        // Fetch all users info
-        const usersInfo = await Promise.all(
-          chat.users.map(async (id) => {
-            try {
-              const response = await fetchThirdPartyUser(id, token);
-              return response.data; // exact user info
-            } catch (err) {
-              console.error("Error fetching user:", id, err.message);
-              return null;
-            }
-          })
-        );
-
-        // Fetch groupAdmin info if it exists
-        let groupAdminInfo = null;
-        if (chat.groupAdmin) {
-          try {
-            const response = await fetchThirdPartyUser(chat.groupAdmin, token);
-            groupAdminInfo = response.data;
-          } catch (err) {
-            console.error(
-              "Error fetching groupAdmin:",
-              chat.groupAdmin,
-              err.message
-            );
-          }
-        }
-
-        return {
-          chat: chat.toObject(),
-          users: usersInfo.filter(Boolean), // remove failed calls
-          groupAdmin: groupAdminInfo,
-        };
-      })
-    );
-
-    res.status(200).json(chatsWithUsers);
-  } catch (error) {
-    console.error("Error fetching chats:", error.message);
-    res.status(500).json({ message: "Server error" });
+  if (!token) {
+    return res.status(401).json({ message: "Authorization token missing" });
   }
+
+  const chats = await Chat.find({
+    users: { $elemMatch: { $eq: req.userId } },
+  })
+    .populate("latestMessage")
+    .sort({ updatedAt: -1 });
+
+  const chatsWithUsers = await Promise.all(
+    chats.map(async (chat) => {
+      const users = await Promise.all(
+        chat.users.map((id) => safeFetchUser(id, token))
+      );
+
+      const groupAdmin = chat.groupAdmin
+        ? await safeFetchUser(chat.groupAdmin, token)
+        : null;
+
+      return {
+        chat: chat.toObject(),
+        users,
+        groupAdmin,
+      };
+    })
+  );
+
+  res.status(200).json(chatsWithUsers);
 });
+
 
 export const createGroup = expressAsyncHandler(async (req, res) => {
   const { users: usersRaw, name } = req.body;
