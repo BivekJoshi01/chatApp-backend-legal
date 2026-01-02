@@ -1,21 +1,32 @@
-// models/messageModel.js
-import mongoose from "mongoose";
+import { DataTypes } from "sequelize";
+import { sequelize } from "../../config/db.js";
 
-const messageSchema = new mongoose.Schema(
+export const Message = sequelize.define(
+  "Message",
   {
-    // sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    senderId: {
-      type: String, // was ObjectId
-      required: true,
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    content: { type: String, trim: true },
-    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
+
+    senderId: {
+      type: DataTypes.STRING, 
+      allowNull: false,
+    },
+
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+
+    chatId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
+    tableName: "messages",
   }
 );
-
-const Message = mongoose.model("Message", messageSchema);
-
-export default Message;

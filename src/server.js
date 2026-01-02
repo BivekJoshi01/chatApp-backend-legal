@@ -8,7 +8,7 @@ import chatRoutes from "./routes/chat.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import { Server } from "socket.io";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
-import { connectDB } from "./config/db.js";
+import { connectDB, sequelize } from "./config/db.js";
 import { initializeSocket } from "./utils/socket.js";
 
 import thirdPartyRoutes from "./routes/thirdParty.routes.js";
@@ -37,6 +37,7 @@ const PORT = process.env.PORT || 8100;
 
 const server = app.listen(PORT, async () => {
   await connectDB();
+  await sequelize.sync({ alter: true });
   console.log(`Server Started on PORT ${PORT}`.yellow.bold);
 });
 

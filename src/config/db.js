@@ -1,23 +1,28 @@
-import mongoose from "mongoose";
-import { DB, ENVIROMENT } from "./config.js";
+import { Sequelize } from "sequelize";
+import { DB } from "./config.js";
 
-let DB_URL = "";
-if (ENVIROMENT === "dev") {
-  DB_URL = `${DB.PROTOCOL}://${DB.HOST}:${DB.PORT}/${DB.NAME}`;
-} else if (ENVIROMENT === "prod") {
-  DB_URL = `${DB.PROTOCOL}://${DB.USER}:${DB.PWD}@${DB.HOST}:${DB.PORT}/${DB.NAME}`;
-}
+export const sequelize = new Sequelize(
+  DB.NAME,
+  DB.USER,
+  DB.PWD,
+  {
+    host: DB.HOST,
+    port: DB.PORT,
+    dialect: "postgres",
+    logging: false,
+  }
+);
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(DB_URL, {
-      autoCreate: true,
-      autoIndex: true,
-    });
-    console.log(`Database connected: ${DB.HOST} ${DB.NAME}`.cyan.underline);
+    await sequelize.authenticate();
+    console.log(
+      `PostgreSQL connected: ${DB.HOST}/${DB.NAME}`.cyan.underline
+    );
   } catch (error) {
-    console.error(`Database connection error: ${error}`. red.bold);
+    console.error(
+      `PostgreSQL connection error: ${error.message}`.red.bold
+    );
     process.exit(1);
   }
 };
-

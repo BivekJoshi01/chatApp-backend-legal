@@ -1,5 +1,5 @@
 import expressAsyncHandler from "express-async-handler";
-import Message from "../../models/chat/messageModel.js";
+import { Message } from "../../models/chat/messageModel.js";
 import { Chat } from "../../models/chat/chatModel.js";
 import safeFetchUser from "../../services/safeFetchUser.js";
 

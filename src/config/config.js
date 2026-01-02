@@ -22,12 +22,12 @@
 // export default Config;
 
 export const DB = {
-  PROTOCOL: "mongodb",
-  HOST: "127.0.0.1",
-  NAME: "chatLegal",
-  USER: "",
-  PWD: "",
-  PORT: 27017,
+  HOST: "localhost",
+  PORT: 5432,
+  NAME: "chatlegal",
+  USER: "chat_user",
+  PWD: "StrongPassword123",
 };
 
 export const ENVIROMENT = "dev";
+

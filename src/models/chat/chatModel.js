@@ -1,26 +1,37 @@
-import mongoose from "mongoose";
+import { DataTypes } from "sequelize";
+import { sequelize } from "../../config/db.js";
 
-const chatSchema = new mongoose.Schema(
+export const Chat = sequelize.define(
+  "Chat",
   {
-    chatName: { type: String, trim: true },
-    isGroupChat: { type: Boolean, default: false },
-    users: [
-      {
-        type: String, // store user IDs as strings from third-party API
-        required: true,
-      },
-    ],
-    latestMessage: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Message", // keep if you have a Message model
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
+
+    chatName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    isGroupChat: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
     groupAdmin: {
-      type: String, // admin user ID as string
+      type: DataTypes.STRING, // third-party user ID
+      allowNull: true,
+    },
+
+    latestMessageId: {
+      type: DataTypes.UUID,
+      allowNull: true,
     },
   },
   {
     timestamps: true,
+    tableName: "chats",
   }
 );
-
-export const Chat = mongoose.model("Chat", chatSchema);
